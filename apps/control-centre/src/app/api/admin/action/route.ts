@@ -14,6 +14,22 @@ import {
   writeDatabase,
 } from '@nginda-warriors/shared/server';
 
+async function saveDatabaseAndSync(db: Parameters<typeof writeDatabase>[0], path: string = '/') {
+  writeDatabase(db);
+  const publicUrl = process.env.PUBLIC_WEBSITE_URL;
+  if (publicUrl) {
+    try {
+      await fetch(new URL('/api/revalidate', publicUrl), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path }),
+      });
+    } catch {
+      // Non-blocking sync call across internal service binding
+    }
+  }
+}
+
 export async function GET(req: NextRequest) {
   const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
   const session = verifyAdminSessionToken(token);
@@ -30,6 +46,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     session,
+    publicWebsiteUrl: process.env.PUBLIC_WEBSITE_URL || '/',
     database: {
       ...db,
       users: safeUsers,
@@ -98,7 +115,7 @@ export async function POST(req: NextRequest) {
         summary: `${existingIdx >= 0 ? 'Updated' : 'Added'} player #${playerRecord.jerseyNumber} ${playerRecord.fullName} (${playerRecord.publicationStatus})`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, player: playerRecord });
     }
 
@@ -116,7 +133,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Removed player profile ${target?.fullName || payload.id}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -158,7 +175,7 @@ export async function POST(req: NextRequest) {
         summary: `Saved ${staffRecord.category} profile: ${staffRecord.fullName} (${staffRecord.roleTitle})`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, staff: staffRecord });
     }
 
@@ -175,7 +192,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted staff record ${payload.id}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -234,7 +251,7 @@ export async function POST(req: NextRequest) {
         summary: `${idx >= 0 ? 'Updated' : 'Created'} fixture vs ${fixtureRecord.opponentName} (${fixtureRecord.publicationStatus})`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, fixture: fixtureRecord });
     }
 
@@ -252,7 +269,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted fixture: Nginda Warriors vs ${target?.opponentName || payload.id}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -278,7 +295,7 @@ export async function POST(req: NextRequest) {
         targetId: fixture.id,
         summary: `Cleared match score & result for vs ${fixture.opponentName}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, fixture });
     }
 
@@ -324,7 +341,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated score vs ${fixture.opponentName}: ${fixture.homeScore} - ${fixture.awayScore} (${fixture.matchStatus})`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, fixture });
     }
 
@@ -356,7 +373,7 @@ export async function POST(req: NextRequest) {
         summary: `Published match report for fixture vs ${fixture.opponentName}`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, fixture });
     }
 
@@ -377,7 +394,7 @@ export async function POST(req: NextRequest) {
         isStarting: payload.isStarting !== false,
         isCaptain: Boolean(payload.isCaptain),
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, fixture });
     }
 
@@ -411,7 +428,7 @@ export async function POST(req: NextRequest) {
         targetId: comp.id,
         summary: `Added competition ${comp.name} (${comp.seasonName})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, competition: comp });
     }
 
@@ -429,7 +446,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted competition ${target?.name || payload.id}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -488,7 +505,7 @@ export async function POST(req: NextRequest) {
         summary: `Saved standing #${row.position} ${row.clubName} (${row.points} PTS)`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, row });
     }
 
@@ -508,7 +525,7 @@ export async function POST(req: NextRequest) {
         module: 'standings',
         summary: `Calculated league standings from verified fulltime results (${rows.length} clubs)`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, rows });
     }
 
@@ -526,7 +543,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted standing row for ${target?.clubName || payload.id}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -543,7 +560,7 @@ export async function POST(req: NextRequest) {
         targetId: 'all',
         summary: 'Cleared all league standings rows',
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -589,7 +606,7 @@ export async function POST(req: NextRequest) {
         summary: `Saved article "${article.headline}" (status: ${article.publicationStatus})`,
       });
 
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, article });
     }
 
@@ -607,7 +624,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted news article "${target?.headline || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -637,7 +654,7 @@ export async function POST(req: NextRequest) {
         targetId: asset.id,
         summary: `Added ${asset.mediaType} "${asset.title}" to ${asset.category}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, asset });
     }
 
@@ -655,7 +672,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted media asset "${target?.title || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -683,7 +700,7 @@ export async function POST(req: NextRequest) {
         targetId: eventItem.id,
         summary: `Created event "${eventItem.title}" (${eventItem.publicationStatus})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, event: eventItem });
     }
 
@@ -701,7 +718,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted event "${target?.title || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -737,7 +754,7 @@ export async function POST(req: NextRequest) {
         targetId: sponsor.id,
         summary: `Saved sponsor ${sponsor.businessName} (Approved: ${sponsor.isApproved}, Status: ${sponsor.publicationStatus})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, sponsor });
     }
 
@@ -755,7 +772,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted sponsor "${target?.businessName || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -781,7 +798,7 @@ export async function POST(req: NextRequest) {
         targetId: inquiry.id,
         summary: `Updated inquiry from ${inquiry.businessName} to ${inquiry.inquiryStatus}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, inquiry });
     }
 
@@ -815,7 +832,7 @@ export async function POST(req: NextRequest) {
         targetId: pkg.id,
         summary: `Updated ${pkg.tierCode} sponsorship package (Price KES: ${pkg.priceKes ?? 'Unset'})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, package: pkg });
     }
 
@@ -833,7 +850,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted sponsorship package "${target?.tierCode || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -867,7 +884,7 @@ export async function POST(req: NextRequest) {
         targetId: campaign.id,
         summary: `Launched campaign "${campaign.title}" (Target: KES ${campaign.targetAmountKes})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, campaign });
     }
 
@@ -885,7 +902,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted fundraising campaign "${target?.title || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -927,7 +944,7 @@ export async function POST(req: NextRequest) {
         targetId: exp.id,
         summary: `Recorded expenditure of KES ${exp.amountKes} for ${exp.category}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, expenditure: exp });
     }
 
@@ -945,7 +962,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted expenditure record of KES ${target?.amountKes || ''} for ${target?.category || payload.id}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -974,7 +991,7 @@ export async function POST(req: NextRequest) {
         targetId: report.id,
         summary: `Published financial transparency report "${report.title}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, report });
     }
 
@@ -1008,7 +1025,7 @@ export async function POST(req: NextRequest) {
         targetId: product.id,
         summary: `Added merchandise product "${product.name}" (KES ${product.priceKes})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, product });
     }
 
@@ -1026,7 +1043,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted merchandise product "${target?.name || payload.id}"`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -1050,7 +1067,7 @@ export async function POST(req: NextRequest) {
         targetId: app.id,
         summary: `Updated trial application for ${app.fullName} to ${app.applicationStatus}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, application: app });
     }
 
@@ -1080,7 +1097,7 @@ export async function POST(req: NextRequest) {
         module: 'settings',
         summary: `Updated club branding, hero slides, or club information settings`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, clubSettings: db.clubSettings });
     }
 
@@ -1104,7 +1121,7 @@ export async function POST(req: NextRequest) {
         targetId: sec.sectionKey,
         summary: `Updated homepage section "${sec.title}" (Visible: ${sec.isVisible})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true, section: sec });
     }
 
@@ -1145,7 +1162,7 @@ export async function POST(req: NextRequest) {
         targetId: newUser.id,
         summary: `Created administrator ${newUser.email} with role ${newUser.roleCode}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       const { passwordHash: _pw, ...safeUser } = newUser;
       return NextResponse.json({ ok: true, user: safeUser });
     }
@@ -1180,7 +1197,7 @@ export async function POST(req: NextRequest) {
         targetId: target.id,
         summary: `Removed administrator ${target.email}`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -1198,7 +1215,7 @@ export async function POST(req: NextRequest) {
         module: 'notifications',
         summary: 'Marked all administrative notifications as read',
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 
@@ -1224,7 +1241,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.providerKey,
         summary: `Updated integration ${payload.providerKey} (Enabled: ${payload.isEnabled})`,
       });
-      writeDatabase(db);
+      await saveDatabaseAndSync(db);
       return NextResponse.json({ ok: true });
     }
 

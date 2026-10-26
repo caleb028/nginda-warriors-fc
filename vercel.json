@@ -1,0 +1,43 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "public-website": {
+      "root": "apps/public-website",
+      "framework": "nextjs",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "control-centre",
+          "format": "url",
+          "env": "CONTROL_CENTRE_URL"
+        }
+      ]
+    },
+    "control-centre": {
+      "root": "apps/control-centre",
+      "framework": "nextjs",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "public-website",
+          "format": "url",
+          "env": "PUBLIC_WEBSITE_URL"
+        }
+      ]
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/manage/(.*)",
+      "destination": {
+        "service": "control-centre"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "public-website"
+      }
+    }
+  ]
+}

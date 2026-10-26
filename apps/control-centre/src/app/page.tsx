@@ -130,6 +130,7 @@ export default function ControlCentreApp() {
   const [activeModule, setActiveModule] = useState<string>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [statusNotice, setStatusNotice] = useState<string>('');
+  const [publicWebsiteUrl, setPublicWebsiteUrl] = useState<string>('/');
 
   const loadState = async () => {
     try {
@@ -138,11 +139,14 @@ export default function ControlCentreApp() {
       setBootstrapped(Boolean(authData.bootstrapped));
       setSession(authData.session || null);
 
-      if (authData.authenticated) {
-        const dbRes = await fetch('/api/admin/database');
-        const dbData = await dbRes.json();
-        if (dbData.ok && dbData.database) {
-          setDatabase(dbData.database);
+      if (authData.session) {
+        const actionRes = await fetch('/api/admin/action');
+        const actionData = await actionRes.json();
+        if (actionData.ok && actionData.database) {
+          setDatabase(actionData.database);
+        }
+        if (actionData.publicWebsiteUrl) {
+          setPublicWebsiteUrl(actionData.publicWebsiteUrl);
         }
       }
     } catch {
@@ -376,7 +380,7 @@ export default function ControlCentreApp() {
 
             {/* View Public Website */}
             <a
-              href="http://localhost:3000"
+              href={publicWebsiteUrl || '/'}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition"

@@ -14,10 +14,25 @@ import {
   writeDatabase,
 } from '@nginda-warriors/shared/server';
 
+async function notifyControlCentre(event: { type: string; payload?: unknown }) {
+  const controlCentreUrl = process.env.CONTROL_CENTRE_URL;
+  if (!controlCentreUrl) return;
+  try {
+    await fetch(new URL('/api/admin/notify', controlCentreUrl), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(event),
+    });
+  } catch {
+    // Non-blocking notification over internal service binding
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { type, payload } = body;
+    await notifyControlCentre({ type, payload });
 
     if (type === 'sponsor_inquiry') {
       const parsed = SponsorInquirySchema.parse({
