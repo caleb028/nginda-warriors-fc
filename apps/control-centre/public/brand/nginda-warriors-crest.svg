@@ -1,0 +1,60 @@
+<svg width="480" height="480" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Nginda Warriors FC Official Crest (Est. 2024)</title>
+  <defs>
+    <path id="nginda-top-arc" d="M 32,120 A 88,88 0 1,1 208,120" />
+    <radialGradient id="crestInnerGlow" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#0C9A50" />
+      <stop offset="65%" stop-color="#08783E" />
+      <stop offset="100%" stop-color="#063B25" />
+    </radialGradient>
+    <linearGradient id="crestGoldRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF176" />
+      <stop offset="45%" stop-color="#F5D000" />
+      <stop offset="100%" stop-color="#D5AA00" />
+    </linearGradient>
+  </defs>
+  <circle cx="120" cy="120" r="116" fill="url(#crestGoldRing)" stroke="#063B25" stroke-width="4" />
+  <circle cx="120" cy="120" r="109" fill="#063B25" stroke="#F5D000" stroke-width="2.5" />
+  <circle cx="120" cy="120" r="105" fill="#08783E" />
+  <circle cx="120" cy="120" r="78" fill="url(#crestInnerGlow)" stroke="#F5D000" stroke-width="4" />
+  <g fill="#F5D000" opacity="0.95">
+    <path d="M31 142 C25 132, 28 122, 36 126 C33 134, 32 138, 31 142 Z" />
+    <path d="M35 156 C28 146, 31 136, 40 140 C37 148, 36 152, 35 156 Z" />
+    <path d="M43 170 C35 160, 38 150, 47 154 C44 162, 44 166, 43 170 Z" />
+    <path d="M54 182 C46 173, 49 163, 58 167 C55 175, 55 179, 54 182 Z" />
+    <path d="M209 142 C215 132, 212 122, 204 126 C207 134, 208 138, 209 142 Z" />
+    <path d="M205 156 C212 146, 209 136, 200 140 C203 148, 204 152, 205 156 Z" />
+    <path d="M197 170 C205 160, 202 150, 193 154 C196 162, 196 166, 197 170 Z" />
+    <path d="M186 182 C194 173, 191 163, 182 167 C185 175, 185 179, 186 182 Z" />
+    <polygon points="26,120 29,126 35,126 30,130 32,136 26,132 20,136 22,130 17,126 23,126" />
+    <polygon points="214,120 217,126 223,126 218,130 220,136 214,132 208,136 210,130 205,126 211,126" />
+  </g>
+  <text fill="#F5D000" font-family="'Barlow Condensed', 'Oswald', Impact, sans-serif" font-size="18.5" font-weight="900" letter-spacing="2.4">
+    <textPath href="#nginda-top-arc" startOffset="50%" text-anchor="middle">NGINDA WARRIORS FC</textPath>
+  </text>
+  <g stroke="#F5D000" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="72" y1="164" x2="168" y2="68" stroke-width="4.5" />
+    <polygon points="177,59 160,66 166,72 172,78" fill="#F5D000" stroke="#063B25" stroke-width="1.5" />
+    <line x1="168" y1="164" x2="72" y2="68" stroke-width="4.5" />
+    <polygon points="63,59 80,66 74,72 68,78" fill="#F5D000" stroke="#063B25" stroke-width="1.5" />
+  </g>
+  <g>
+    <path d="M120 46 C96 46, 86 64, 92 78 C102 68, 138 68, 148 78 C154 64, 144 46, 120 46 Z" fill="#F5D000" stroke="#063B25" stroke-width="2.5" />
+    <path d="M120 52 C104 52, 96 63, 100 72 C110 66, 130 66, 140 72 C144 63, 136 52, 120 52 Z" fill="#D5AA00" />
+    <path d="M90 84 C90 66, 150 66, 150 84 L154 114 C154 128, 138 140, 124 142 L124 118 L138 110 L138 98 L120 105 L102 98 L102 110 L116 118 L116 142 C102 140, 86 128, 86 114 Z" fill="#F5D000" stroke="#063B25" stroke-width="3" />
+    <polygon points="98,95 117,103 115,109 97,102" fill="#063B25" />
+    <polygon points="142,95 123,103 125,109 143,102" fill="#063B25" />
+    <rect x="117.5" y="65" width="5" height="38" rx="2.5" fill="#063B25" />
+  </g>
+  <g transform="translate(120, 158)">
+    <circle cx="0" cy="0" r="21" fill="#FFFFFF" stroke="#063B25" stroke-width="3" />
+    <polygon points="0,-9 9,-2 5,8 -5,8 -9,-2" fill="#063B25" />
+    <line x1="0" y1="-9" x2="0" y2="-20" stroke="#063B25" stroke-width="2.2" />
+    <line x1="9" y1="-2" x2="19" y2="-6" stroke="#063B25" stroke-width="2.2" />
+    <line x1="5" y1="8" x2="13" y2="16" stroke="#063B25" stroke-width="2.2" />
+    <line x1="-5" y1="8" x2="-13" y2="16" stroke="#063B25" stroke-width="2.2" />
+    <line x1="-9" y1="-2" x2="-19" y2="-6" stroke="#063B25" stroke-width="2.2" />
+  </g>
+  <rect x="66" y="192" width="108" height="26" rx="13" fill="#063B25" stroke="#F5D000" stroke-width="2.5" />
+  <text x="120" y="210" text-anchor="middle" fill="#F5D000" font-family="'Barlow Condensed', 'Oswald', Impact, sans-serif" font-size="16" font-weight="900" letter-spacing="2.5">EST. 2024</text>
+</svg>

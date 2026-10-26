@@ -1,0 +1,327 @@
+{
+  "users": [],
+  "clubSettings": {
+    "id": "bd0b337b-85b1-401d-baf4-2fce8d4fe870",
+    "clubName": "Nginda Warriors FC",
+    "shortName": "Nginda Warriors",
+    "establishedYear": 2024,
+    "tagline": "One Team. One Community. One Warrior Spirit.",
+    "crestUrl": "/brand/nginda-warriors-crest.svg",
+    "warriorGreen": "#08783E",
+    "deepForestGreen": "#063B25",
+    "crestYellow": "#F5D000",
+    "goldenAccent": "#D5AA00",
+    "softIvory": "#FFFDF2",
+    "lightGreenBg": "#EEF7EF",
+    "neutralGrey": "#F2F4F2",
+    "charcoal": "#17231C",
+    "headingFont": "Barlow Condensed",
+    "bodyFont": "Inter",
+    "contactEmail": "",
+    "contactPhone": "",
+    "whatsappNumber": "",
+    "physicalAddress": "Nginda, Murang’a County, Kenya",
+    "county": "Murang’a County",
+    "socialLinks": {
+      "facebook": "",
+      "instagram": "",
+      "twitter": "",
+      "youtube": "",
+      "tiktok": ""
+    },
+    "seoMetadata": {
+      "defaultTitle": "Nginda Warriors FC | Official Football Club Website (Est. 2024)",
+      "titleTemplate": "%s | Nginda Warriors FC",
+      "defaultDescription": "Official digital home of Nginda Warriors FC (Est. 2024). One Team. One Community. One Warrior Spirit. Follow fixtures, results, squad profiles, news, and partnership opportunities.",
+      "keywords": [
+        "Nginda Warriors FC",
+        "Kenyan Football",
+        "Muranga Football",
+        "Grassroots Football Kenya",
+        "Football Club Sponsorship Kenya"
+      ],
+      "canonicalBaseUrl": "https://ngindawarriorsfc.co.ke"
+    },
+    "heroSlides": [
+      {
+        "id": "ae9b2bff-2907-46da-ac72-5f299b0143ee",
+        "headline": "NGINDA WARRIORS FC",
+        "tagline": "One Team. One Community. One Warrior Spirit.",
+        "description": "Established in 2024 to unite our community through competitive football, discipline, youth empowerment, and sporting excellence.",
+        "imageUrl": "",
+        "primaryCtaLabel": "Explore Our Club",
+        "primaryCtaHref": "/about",
+        "secondaryCtaLabel": "Partner With Us",
+        "secondaryCtaHref": "/sponsors",
+        "isVisible": true,
+        "displayOrder": 1
+      }
+    ],
+    "clubInfo": {
+      "aboutSummary": "Nginda Warriors FC is a community-rooted football club established in 2024, built on discipline, competitive ambition, and local pride.",
+      "historyNarrative": "Founded in 2024, Nginda Warriors FC was established to provide structured, competitive football opportunities for local talent while bringing together supporters, families, and businesses under the Warrior spirit. Additional historical milestones are published here as approved by club leadership.",
+      "visionStatement": "To become a model community football institution recognized for sporting excellence, youth talent development, and transparent governance.",
+      "missionStatement": "To nurture football talent, compete with honour and discipline in every fixture, and strengthen community bonds through sport.",
+      "coreValues": [
+        {
+          "title": "Discipline & Integrity",
+          "description": "High standards of conduct on the pitch, in training, and in club governance."
+        },
+        {
+          "title": "Warrior Competitive Spirit",
+          "description": "Relentless effort, teamwork, and tactical courage from kickoff to the final whistle."
+        },
+        {
+          "title": "Community Unity",
+          "description": "Proudly representing Nginda and empowering youth through positive mentorship."
+        },
+        {
+          "title": "Financial & Operational Transparency",
+          "description": "Accountable stewardship of every supporter contribution and sponsor partnership."
+        }
+      ],
+      "honoursAndMilestones": [
+        {
+          "year": "2024",
+          "title": "Official Club Foundation",
+          "description": "Nginda Warriors FC officially established under the green-and-yellow Warrior crest."
+        }
+      ],
+      "homeGroundName": "",
+      "homeGroundAddress": "Nginda",
+      "homeGroundDescription": "Official home ground details and matchday visitor guidance are managed and published by club administration.",
+      "trainingGroundName": "",
+      "trainingGroundSchedule": "",
+      "trainingGroundDescription": "Training session schedules and ground locations are updated by the technical bench through the Control Centre.",
+      "communityImpactSummary": "Nginda Warriors FC invests in grassroots football development, youth mentorship, and community cohesion through organized sport.",
+      "developmentObjectives": [
+        "Provide structured coaching and safe training environments for emerging local footballers.",
+        "Compete with distinction in regional and national football competitions.",
+        "Build sustainable commercial partnerships with local and national businesses.",
+        "Maintain transparent financial stewardship for all club development initiatives."
+      ]
+    },
+    "updatedAt": "2026-10-25T08:36:07.041Z"
+  },
+  "websiteSections": [
+    {
+      "id": "b04b012f-febf-4601-89f7-de36df038a41",
+      "sectionKey": "match_centre",
+      "title": "MATCH CENTRE",
+      "subtitle": "Upcoming Fixture, Latest Result & Standings Snapshot",
+      "description": "Official match schedules, live scores updated by match officials, and verified results.",
+      "primaryCtaLabel": "View All Fixtures",
+      "primaryCtaHref": "/fixtures",
+      "isVisible": true,
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "1a9332d1-c1e9-4ba5-b449-d8bb4e95d2af",
+      "sectionKey": "featured_squad",
+      "title": "THE WARRIORS SQUAD",
+      "subtitle": "First Team Profiles & Technical Bench",
+      "description": "Meet the approved players and coaching staff representing Nginda Warriors FC.",
+      "primaryCtaLabel": "Full Squad Directory",
+      "primaryCtaHref": "/team",
+      "isVisible": true,
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "428e45eb-fc52-4e32-8675-09e11880a5b5",
+      "sectionKey": "latest_news",
+      "title": "CLUB NEWS & UPDATES",
+      "subtitle": "Official Announcements, Match Reports & Community Stories",
+      "description": "Stay informed with verified updates straight from Nginda Warriors FC.",
+      "primaryCtaLabel": "Read All News",
+      "primaryCtaHref": "/news",
+      "isVisible": true,
+      "displayOrder": 3,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "a190d60e-24b9-4503-8f25-df9cf7ae32d4",
+      "sectionKey": "community_impact",
+      "title": "COMMUNITY IMPACT",
+      "subtitle": "Building Talent & Opportunity Through Football",
+      "description": "Discover how Nginda Warriors FC empowers youth and unites our community.",
+      "primaryCtaLabel": "Support the Club",
+      "primaryCtaHref": "/support",
+      "isVisible": true,
+      "displayOrder": 4,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "ce78e455-5824-4624-8b3d-26769ac264f0",
+      "sectionKey": "sponsors_strip",
+      "title": "OFFICIAL PARTNERS & SPONSORS",
+      "subtitle": "Businesses Standing With The Warriors",
+      "description": "Partner with Nginda Warriors FC and grow alongside our vibrant football community.",
+      "primaryCtaLabel": "Partner With Us",
+      "primaryCtaHref": "/sponsors",
+      "isVisible": true,
+      "displayOrder": 5,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "1dc2850c-4603-4b4a-a924-a870a5ac5a5a",
+      "sectionKey": "final_cta",
+      "title": "STAND WITH THE WARRIORS.",
+      "subtitle": "One Team. One Community. One Warrior Spirit.",
+      "description": "Support local football, empower talent, and help build the future of Nginda Warriors FC.",
+      "primaryCtaLabel": "Support the Club",
+      "primaryCtaHref": "/support",
+      "secondaryCtaLabel": "Become a Sponsor",
+      "secondaryCtaHref": "/sponsors",
+      "isVisible": true,
+      "displayOrder": 6,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    }
+  ],
+  "seasons": [
+    {
+      "id": "82ab83cb-7574-46c3-9491-2c84dcf72d24",
+      "name": "2026/2027 Season",
+      "startDate": "2026-08-01",
+      "endDate": "2027-05-31",
+      "isCurrent": true
+    }
+  ],
+  "competitions": [],
+  "players": [],
+  "staff": [],
+  "fixtures": [],
+  "standings": [],
+  "articles": [],
+  "galleryAlbums": [],
+  "mediaAssets": [],
+  "events": [],
+  "sponsorshipPackages": [
+    {
+      "id": "f8ea12aa-30b5-43a9-8dbe-ebb838141b28",
+      "tierCode": "BRONZE",
+      "name": "Bronze Community Partner",
+      "priceKes": null,
+      "billingPeriod": "Per Season",
+      "description": "Entry-level partnership for local businesses supporting grassroots football in Nginda.",
+      "benefits": [
+        "Official recognition on the Nginda Warriors FC Sponsor Wall",
+        "Social media partner appreciation mention",
+        "Certificate of Official Club Partnership"
+      ],
+      "isFeatured": false,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "77dc8c81-9ad5-4c60-8903-061a352d443e",
+      "tierCode": "SILVER",
+      "name": "Silver Club Partner",
+      "priceKes": null,
+      "billingPeriod": "Per Season",
+      "description": "Enhanced brand visibility across digital matchday graphics and community events.",
+      "benefits": [
+        "Logo placement on the Official Website Sponsor Strip",
+        "Brand inclusion on digital matchday fixture and result graphics",
+        "Pitchside banner placement opportunity at home matches",
+        "Invitation to official club community events"
+      ],
+      "isFeatured": false,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "5bfbd9b6-4632-4fb5-bf89-c281eb0e59f3",
+      "tierCode": "GOLD",
+      "name": "Gold Official Partner",
+      "priceKes": null,
+      "billingPeriod": "Per Season",
+      "description": "High-impact commercial partnership supporting first-team operations and youth development.",
+      "benefits": [
+        "Prominent logo placement on training apparel or warm-up kits",
+        "Dedicated partnership announcement article on the official website",
+        "Priority branding at home fixtures and community outreach tournaments",
+        "Collaborative community CSR activation with club leadership"
+      ],
+      "isFeatured": true,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "c8d51aba-12bc-4f10-9302-3496567d56b0",
+      "tierCode": "MAIN_KIT",
+      "name": "Main Kit Sponsor (Principal Partner)",
+      "priceKes": null,
+      "billingPeriod": "Per Season / Multi-Season Agreement",
+      "description": "Flagship front-of-shirt partnership at the heart of the Nginda Warriors FC identity.",
+      "benefits": [
+        "Exclusive Front-of-Shirt branding on Official Home & Away Match Jerseys",
+        "Headline placement across the Official Website, Match Centre & Media Backdrops",
+        "Framed official signed team jersey & executive leadership partnership review",
+        "Full custom commercial & community impact activation programme"
+      ],
+      "isFeatured": true,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    }
+  ],
+  "sponsors": [],
+  "sponsorInquiries": [],
+  "agreements": [],
+  "fundraisingCampaigns": [],
+  "donations": [],
+  "expenditureRecords": [],
+  "transparencyReports": [],
+  "fanMemberships": [],
+  "recruitmentApplications": [],
+  "products": [],
+  "orders": [],
+  "fanVotes": [],
+  "contactMessages": [],
+  "notifications": [],
+  "auditLogs": [],
+  "integrationSettings": [
+    {
+      "id": "dce98bea-5db7-4d02-b1d7-dbad70241874",
+      "providerKey": "safaricom_daraja",
+      "displayName": "Safaricom Daraja M-Pesa API (STK Push & Paybill/Till)",
+      "isEnabled": false,
+      "environment": "sandbox",
+      "publicConfig": {
+        "paybillNumber": "",
+        "tillNumber": "",
+        "accountPrefix": "WARRIORS"
+      },
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "440ecfca-7aa8-47b7-801a-7e68dd798ee1",
+      "providerKey": "supabase_cloud",
+      "displayName": "Supabase PostgreSQL, Auth & Media Storage",
+      "isEnabled": false,
+      "environment": "production",
+      "publicConfig": {
+        "projectUrl": ""
+      },
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    },
+    {
+      "id": "8bc3938d-6236-4893-8cbf-13520179877e",
+      "providerKey": "whatsapp_commerce",
+      "displayName": "WhatsApp Merchandise Ordering & Supporter Desk",
+      "isEnabled": true,
+      "environment": "production",
+      "publicConfig": {
+        "orderPhone": ""
+      },
+      "updatedAt": "2026-10-25T08:36:07.041Z"
+    }
+  ]
+}

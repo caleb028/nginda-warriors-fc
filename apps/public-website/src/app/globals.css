@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700;1,800;1,900&family=Kanit:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Pedals';
+  src: local('Pedals'), local('Pedals Regular'), local('Pedals Bold'), local('Pedals-Bold'), local('Pedals Italic');
+  font-weight: 100 900;
+  font-style: normal, italic;
+  font-display: swap;
+}
+
+:root {
+  /* Minimal Strategic Accents */
+  --warrior-green: #08783E;
+  --deep-forest-green: #063B25;
+  --crest-yellow: #F5D000;
+  --golden-accent: #D5AA00;
+
+  /* Primary White-Dominant Canvas */
+  --canvas-white: #FFFFFF;
+  --soft-surface: #F8FAFC;
+  --card-surface: #FFFFFF;
+  --border-light: #E2E8F0;
+  --charcoal: #0F172A;
+  --text-muted: #64748B;
+
+  /* Athletic Speed Display Typography (Pedals Style: Italic, Chamfered, Dynamic) */
+  --font-heading: 'Pedals', 'Chakra Petch', 'Kanit', 'Barlow Condensed', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #0F172A;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Pedals Athletic Speed Font Styling */
+h1, h2, h3, h4, .font-athletic, .font-pedals {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Subtle focus ring */
+*:focus-visible {
+  outline: 2px solid var(--warrior-green);
+  outline-offset: 2px;
+}
+
+/* Crisp light pitch grid for sports texture */
+.pitch-grid-bg {
+  background-image: radial-gradient(rgba(8, 120, 62, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
