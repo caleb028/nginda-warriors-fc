@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
-import { PublicShell } from '@/components/PublicShell';
+import { PublicShell } from '../components/PublicShell';
 
 export const dynamic = 'force-dynamic';
 

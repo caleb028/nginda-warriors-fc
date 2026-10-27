@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
-import { MerchandiseCatalogClient } from '@/components/MerchandiseCatalogClient';
+import { MerchandiseCatalogClient } from '../../components/MerchandiseCatalogClient';
 import { ShoppingBag } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';

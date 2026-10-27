@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
-import { SponsorInquiryForm } from '@/components/SponsorInquiryForm';
+import { SponsorInquiryForm } from '../../components/SponsorInquiryForm';
 import { CheckCircle2, Download, Shield, Sparkles, Trophy } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';

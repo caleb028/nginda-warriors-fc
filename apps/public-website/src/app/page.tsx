@@ -4,10 +4,10 @@ import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/ser
 import {
   HomepageHeroSlideshow,
   MatchKickoffCountdown,
-} from '@/components/HomepageHeroAndCountdown';
-import { WarriorsTVHub } from '@/components/WarriorsTVHub';
-import { SupporterHubClient } from '@/components/SupporterHubClient';
-import { TacticalPitchBoard } from '@/components/TacticalPitchBoard';
+} from '../components/HomepageHeroAndCountdown';
+import { WarriorsTVHub } from '../components/WarriorsTVHub';
+import { SupporterHubClient } from '../components/SupporterHubClient';
+import { TacticalPitchBoard } from '../components/TacticalPitchBoard';
 import {
   ArrowRight,
   Award,

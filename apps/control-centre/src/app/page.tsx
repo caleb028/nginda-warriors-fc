@@ -6,10 +6,10 @@ import {
   ClubCrest,
   NgindaDatabaseSchema,
 } from '@nginda-warriors/shared';
-import { AuthAndBootstrapGate } from '@/components/AuthAndBootstrapGate';
-import { FootballModules } from '@/components/FootballModules';
-import { ContentAndBrandModules } from '@/components/ContentAndBrandModules';
-import { CommercialAndCommunityModules } from '@/components/CommercialAndCommunityModules';
+import { AuthAndBootstrapGate } from '../components/AuthAndBootstrapGate';
+import { FootballModules } from '../components/FootballModules';
+import { ContentAndBrandModules } from '../components/ContentAndBrandModules';
+import { CommercialAndCommunityModules } from '../components/CommercialAndCommunityModules';
 import {
   Activity,
   Award,

@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ClubCrest, Player, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
-import { MotmVoteWidget } from '@/components/MotmVoteWidget';
-import { TacticalPitchBoard, TacticalPitchPlayer } from '@/components/TacticalPitchBoard';
+import { MotmVoteWidget } from '../../../components/MotmVoteWidget';
+import { TacticalPitchBoard, TacticalPitchPlayer } from '../../../components/TacticalPitchBoard';
 import { ArrowLeft, Calendar, Clock, FileText, MapPin, Shield, Users } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
