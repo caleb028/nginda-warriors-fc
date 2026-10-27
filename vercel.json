@@ -28,6 +28,12 @@
   },
   "rewrites": [
     {
+      "source": "/manage",
+      "destination": {
+        "service": "control-centre"
+      }
+    },
+    {
       "source": "/manage/(.*)",
       "destination": {
         "service": "control-centre"
