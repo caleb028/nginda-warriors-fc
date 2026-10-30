@@ -2,6 +2,7 @@
   "name": "nginda-warriors-fc-platform",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@10.9.3",
   "description": "Nginda Warriors FC — Official Public Website & Separate Private Admin Control Centre Monorepo",
   "workspaces": [
     "apps/public-website",

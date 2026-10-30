@@ -1,7 +1,7 @@
 {
   "users": [],
   "clubSettings": {
-    "id": "e9f641a1-30c0-4abe-93b6-b0ad4f7b9358",
+    "id": "69aa526b-e194-47b9-ae10-65876f3fa6f0",
     "clubName": "Nginda Warriors FC",
     "shortName": "Nginda Warriors",
     "establishedYear": 2024,
@@ -44,7 +44,7 @@
     },
     "heroSlides": [
       {
-        "id": "6d0624c6-6e0c-480d-8003-fb1ca89ff297",
+        "id": "e279f370-c3ce-4a8a-b495-9a11137c4283",
         "headline": "NGINDA WARRIORS FC",
         "tagline": "One Team. One Community. One Warrior Spirit.",
         "description": "Established in 2024 to unite our community through competitive football, discipline, youth empowerment, and sporting excellence.",
@@ -101,11 +101,11 @@
         "Maintain transparent financial stewardship for all club development initiatives."
       ]
     },
-    "updatedAt": "2026-10-30T15:57:38.909Z"
+    "updatedAt": "2026-10-30T17:24:37.638Z"
   },
   "websiteSections": [
     {
-      "id": "778854e4-ac18-4f57-9ff3-3370d256f5c4",
+      "id": "d20494a9-4056-4501-be7a-d814860a189d",
       "sectionKey": "match_centre",
       "title": "MATCH CENTRE",
       "subtitle": "Upcoming Fixture, Latest Result & Standings Snapshot",
@@ -115,10 +115,10 @@
       "isVisible": true,
       "displayOrder": 1,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "523aa922-ea8c-4c81-a41b-cf7b9d4e4220",
+      "id": "e5d90ac1-4fb1-43e1-9131-3367f03f924c",
       "sectionKey": "featured_squad",
       "title": "THE WARRIORS SQUAD",
       "subtitle": "First Team Profiles & Technical Bench",
@@ -128,10 +128,10 @@
       "isVisible": true,
       "displayOrder": 2,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "553f3bb1-ed0d-4919-bea4-716251a67135",
+      "id": "e508c6a1-51e6-49fb-9800-7ba3f5148acd",
       "sectionKey": "latest_news",
       "title": "CLUB NEWS & UPDATES",
       "subtitle": "Official Announcements, Match Reports & Community Stories",
@@ -141,10 +141,10 @@
       "isVisible": true,
       "displayOrder": 3,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "7c0b0c67-b315-4eb7-b512-e59b00fafc9b",
+      "id": "57f4507c-2fd3-4dbc-a671-5b807ac39a19",
       "sectionKey": "community_impact",
       "title": "COMMUNITY IMPACT",
       "subtitle": "Building Talent & Opportunity Through Football",
@@ -154,10 +154,10 @@
       "isVisible": true,
       "displayOrder": 4,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "99e5d4d1-8c23-413c-96a4-38db3187de42",
+      "id": "4c1f2a2a-74ee-4483-be3a-aeb48da6a0ee",
       "sectionKey": "sponsors_strip",
       "title": "OFFICIAL PARTNERS & SPONSORS",
       "subtitle": "Businesses Standing With The Warriors",
@@ -167,10 +167,10 @@
       "isVisible": true,
       "displayOrder": 5,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "ce76f1c3-8a20-4831-a296-6175df6ee568",
+      "id": "e81d860f-b2f1-4fbd-a266-5bd911995760",
       "sectionKey": "final_cta",
       "title": "STAND WITH THE WARRIORS.",
       "subtitle": "One Team. One Community. One Warrior Spirit.",
@@ -182,12 +182,12 @@
       "isVisible": true,
       "displayOrder": 6,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     }
   ],
   "seasons": [
     {
-      "id": "1ef35686-6104-491f-b1c5-2f32161dcad6",
+      "id": "4abc5b7d-5259-4449-b014-90eba8a9915c",
       "name": "2026/2027 Season",
       "startDate": "2026-08-01",
       "endDate": "2027-05-31",
@@ -205,7 +205,7 @@
   "events": [],
   "sponsorshipPackages": [
     {
-      "id": "c4c9872b-7c4c-4d98-92f0-ac628e945269",
+      "id": "f06881d4-8824-4443-924f-ae906ca29be2",
       "tierCode": "BRONZE",
       "name": "Bronze Community Partner",
       "priceKes": null,
@@ -218,10 +218,10 @@
       ],
       "isFeatured": false,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "86d5e536-ba9b-4cf9-9da5-9f506aae33a9",
+      "id": "01a7ee8b-dd0b-4b0b-9624-3a3c043bbb0f",
       "tierCode": "SILVER",
       "name": "Silver Club Partner",
       "priceKes": null,
@@ -235,10 +235,10 @@
       ],
       "isFeatured": false,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "d1d0310f-92cc-4f53-854b-ef81632f0756",
+      "id": "586c1655-f20c-411b-b654-910d09a318af",
       "tierCode": "GOLD",
       "name": "Gold Official Partner",
       "priceKes": null,
@@ -252,10 +252,10 @@
       ],
       "isFeatured": true,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "734fafd2-90de-4943-89f5-9ae2d74efba4",
+      "id": "195c51e6-1635-492b-a364-b857633c7e52",
       "tierCode": "MAIN_KIT",
       "name": "Main Kit Sponsor (Principal Partner)",
       "priceKes": null,
@@ -269,7 +269,7 @@
       ],
       "isFeatured": true,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     }
   ],
   "sponsors": [],
@@ -289,7 +289,7 @@
   "auditLogs": [],
   "integrationSettings": [
     {
-      "id": "48f2f923-8b9e-4372-bd0c-a4f55e039a40",
+      "id": "76da94ea-ca07-4462-ae74-fd5f8b8932e2",
       "providerKey": "safaricom_daraja",
       "displayName": "Safaricom Daraja M-Pesa API (STK Push & Paybill/Till)",
       "isEnabled": false,
@@ -299,10 +299,10 @@
         "tillNumber": "",
         "accountPrefix": "WARRIORS"
       },
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "4882dcaf-209b-4cdd-91d2-a6512463bfc5",
+      "id": "1f180046-8a25-4df9-8d75-9b669a94516d",
       "providerKey": "supabase_cloud",
       "displayName": "Supabase PostgreSQL, Auth & Media Storage",
       "isEnabled": false,
@@ -310,10 +310,10 @@
       "publicConfig": {
         "projectUrl": ""
       },
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     },
     {
-      "id": "39cc7546-240a-4229-bc20-26c8ed346104",
+      "id": "7e83bee5-ff14-45a3-b025-cbdc3de31d76",
       "providerKey": "whatsapp_commerce",
       "displayName": "WhatsApp Merchandise Ordering & Supporter Desk",
       "isEnabled": true,
@@ -321,7 +321,7 @@
       "publicConfig": {
         "orderPhone": ""
       },
-      "updatedAt": "2026-10-30T15:57:38.909Z"
+      "updatedAt": "2026-10-30T17:24:37.638Z"
     }
   ]
 }

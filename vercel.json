@@ -4,8 +4,8 @@
     "public-website": {
       "root": "apps/public-website",
       "framework": "nextjs",
-      "installCommand": "node -e \"process.exit(0)\"",
-      "buildCommand": "next build",
+      "installCommand": "cd ../.. && npm install",
+      "buildCommand": "npm run build",
       "bindings": [
         {
           "type": "service",
@@ -18,8 +18,8 @@
     "control-centre": {
       "root": "apps/control-centre",
       "framework": "nextjs",
-      "installCommand": "node -e \"process.exit(0)\"",
-      "buildCommand": "next build",
+      "installCommand": "cd ../.. && npm install",
+      "buildCommand": "npm run build",
       "bindings": [
         {
           "type": "service",
