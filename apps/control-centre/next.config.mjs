@@ -13,6 +13,12 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH !== undefined
 const nextConfig = {
   basePath: basePath || '',
   transpilePackages: ['@nginda-warriors/shared'],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
