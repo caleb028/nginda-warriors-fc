@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { createUuid, maskPhoneNumber, slugify } from './utils';
 
 import {
@@ -72,12 +73,61 @@ export function getSharedDatabaseFilePath(): string {
   if (process.env.NGINDA_SHARED_DB_PATH) {
     return process.env.NGINDA_SHARED_DB_PATH;
   }
+
+  // Vercel / AWS Lambda Serverless environment: filesystem outside /tmp is strictly read-only
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    const tmpDataDir = path.join('/tmp', 'nginda-data');
+    try {
+      if (!fs.existsSync(tmpDataDir)) {
+        fs.mkdirSync(tmpDataDir, { recursive: true });
+      }
+    } catch {}
+
+    const tmpFile = path.join(tmpDataDir, 'nginda-warriors-db.json');
+    if (!fs.existsSync(tmpFile)) {
+      const rootDir = resolveMonorepoRoot();
+      const candidates = [
+        path.join(rootDir, 'data', 'nginda-warriors-db.json'),
+        path.join(process.cwd(), 'data', 'nginda-warriors-db.json'),
+        path.join(process.cwd(), '..', 'data', 'nginda-warriors-db.json'),
+        path.join(process.cwd(), '..', '..', 'data', 'nginda-warriors-db.json'),
+      ];
+      let copied = false;
+      for (const cand of candidates) {
+        if (fs.existsSync(cand)) {
+          try {
+            fs.copyFileSync(cand, tmpFile);
+            copied = true;
+            break;
+          } catch {}
+        }
+      }
+      if (!copied) {
+        try {
+          const initial = createInitialDatabaseState();
+          fs.writeFileSync(tmpFile, JSON.stringify(initial, null, 2), 'utf8');
+        } catch {}
+      }
+    }
+    return tmpFile;
+  }
+
   const rootDir = resolveMonorepoRoot();
   const dataDir = path.join(rootDir, 'data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+  try {
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    return path.join(dataDir, 'nginda-warriors-db.json');
+  } catch {
+    const tmpDir = path.join(os.tmpdir(), 'nginda-data');
+    try {
+      if (!fs.existsSync(tmpDir)) {
+        fs.mkdirSync(tmpDir, { recursive: true });
+      }
+    } catch {}
+    return path.join(tmpDir, 'nginda-warriors-db.json');
   }
-  return path.join(dataDir, 'nginda-warriors-db.json');
 }
 
 export function getSupabaseServerClient(): any | null {
@@ -441,8 +491,24 @@ export function createInitialDatabaseState(): NgindaDatabaseSchema {
 export function readDatabase(): NgindaDatabaseSchema {
   const filePath = getSharedDatabaseFilePath();
   if (!fs.existsSync(filePath)) {
+    // Check bundled data if available
+    const rootDir = resolveMonorepoRoot();
+    const bundledCandidate = path.join(rootDir, 'data', 'nginda-warriors-db.json');
+    if (fs.existsSync(bundledCandidate)) {
+      try {
+        const raw = fs.readFileSync(bundledCandidate, 'utf8');
+        const data = JSON.parse(raw) as NgindaDatabaseSchema;
+        try {
+          fs.writeFileSync(filePath, raw, 'utf8');
+        } catch {}
+        return data;
+      } catch {}
+    }
+
     const initial = createInitialDatabaseState();
-    fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
+    } catch {}
     return initial;
   }
   try {
@@ -450,16 +516,26 @@ export function readDatabase(): NgindaDatabaseSchema {
     return JSON.parse(raw) as NgindaDatabaseSchema;
   } catch {
     const initial = createInitialDatabaseState();
-    fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
+    } catch {}
     return initial;
   }
 }
 
 export function writeDatabase(db: NgindaDatabaseSchema): void {
   const filePath = getSharedDatabaseFilePath();
-  const tempPath = `${filePath}.tmp`;
-  fs.writeFileSync(tempPath, JSON.stringify(db, null, 2), 'utf8');
-  fs.renameSync(tempPath, filePath);
+  try {
+    const tempPath = `${filePath}.tmp`;
+    fs.writeFileSync(tempPath, JSON.stringify(db, null, 2), 'utf8');
+    fs.renameSync(tempPath, filePath);
+  } catch (err) {
+    try {
+      fs.writeFileSync(filePath, JSON.stringify(db, null, 2), 'utf8');
+    } catch (e) {
+      console.warn('writeDatabase fallback warning:', e);
+    }
+  }
 }
 
 export function recordAuditLog(

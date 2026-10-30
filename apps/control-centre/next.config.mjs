@@ -4,9 +4,14 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const isVercel = Boolean(process.env.VERCEL);
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH !== undefined 
+  ? process.env.NEXT_PUBLIC_BASE_PATH 
+  : (isVercel ? '/manage' : '');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  basePath: basePath || '',
   transpilePackages: ['@nginda-warriors/shared'],
   webpack: (config, { isServer }) => {
     config.resolve.alias = {

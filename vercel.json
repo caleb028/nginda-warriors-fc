@@ -28,19 +28,25 @@
   },
   "rewrites": [
     {
+      "source": "/api/admin/:path*",
+      "destination": {
+        "service": "control-centre"
+      }
+    },
+    {
       "source": "/manage",
       "destination": {
         "service": "control-centre"
       }
     },
     {
-      "source": "/manage/(.*)",
+      "source": "/manage/:path*",
       "destination": {
         "service": "control-centre"
       }
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": {
         "service": "public-website"
       }

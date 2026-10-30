@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ClubCrest } from '@nginda-warriors/shared';
 import { KeyRound, Lock, ShieldCheck, UserCheck } from 'lucide-react';
+import { adminApiUrl } from '../utils/api';
 
 export function AuthAndBootstrapGate({
   bootstrapped,
@@ -26,7 +27,7 @@ export function AuthAndBootstrapGate({
     setErrorMsg('');
 
     try {
-      const res = await fetch('/api/admin/auth', {
+      const res = await fetch(adminApiUrl('/api/admin/auth'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(

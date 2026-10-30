@@ -1,80 +1,96 @@
 # NGINDA WARRIORS FC — DEPLOYMENT GUIDE
-## Deploying Two Separate Applications to Vercel + Supabase
 
-This platform is architected to deploy as **two independent Vercel projects** connected to a shared Supabase PostgreSQL backend while maintaining separate domains, environments, and authorization boundaries.
-
----
-
-## 1. Domain Architecture
-
-| Application | Suggested Production Domain | Vercel Root Directory |
-|---|---|---|
-| **Application A: Public Website** | `https://ngindawarriorsfc.co.ke` | `apps/public-website` |
-| **Application B: Control Centre** | `https://manage.ngindawarriorsfc.co.ke` | `apps/control-centre` |
+This repository is engineered to support both **Unified Multi-Service Deployment** (deploying as a single Vercel project with automated routing) and **Independent Project Deployment** (deploying as two separate Vercel projects).
 
 ---
 
-## 2. Supabase Backend Setup
+## Architecture Overview
 
-1. Create a new Supabase project at [https://supabase.com](https://supabase.com).
-2. Open the **SQL Editor** in the Supabase Dashboard.
-3. Paste and run `supabase/migrations/0001_nginda_warriors_schema.sql` from this repository.
-   - Creates all **37 normalized tables**
-   - Configures the Owner Super Admin protection trigger
-   - Enables **Row Level Security (RLS)** policies so the public `anon` role can ONLY read published/approved records and cannot view private recruitment applications, sponsor inquiries, admin accounts, or draft content.
-4. Note your **Project URL**, **Anon Public Key**, and **Service Role Secret Key** from `Project Settings > API`.
+```
+                                      ┌────────────────────────────────────────┐
+                                      │           Vercel Deployment            │
+                                      └───────────────────┬────────────────────┘
+                                                          │
+                                   ┌──────────────────────┴──────────────────────┐
+                                   ▼                                             ▼
+                        ┌──────────────────────┐                      ┌──────────────────────┐
+                        │    public-website    │                      │    control-centre    │
+                        │ (Public Club Portal) │                      │ (Admin SaaS Center)  │
+                        │   Path: / (root)     │                      │   Path: /manage      │
+                        └──────────┬───────────┘                      └──────────┬───────────┘
+                                   │                                             │
+                                   └──────────────────────┬──────────────────────┘
+                                                          ▼
+                                            ┌───────────────────────────┐
+                                            │ Shared Engine / Supabase  │
+                                            │ PostgreSQL / File System  │
+                                            └───────────────────────────┘
+```
 
 ---
 
-## 3. Deploying Application A: Nginda Warriors FC Official Website
+## Option 1: Unified Multi-Service Deployment (Recommended)
 
+Using the preconfigured `vercel.json`, this monorepo deploys directly as a **single Vercel project**:
+
+- **Public Website Portal**: Served on `https://<your-domain>/`
+- **Admin Control Centre**: Served on `https://<your-domain>/manage`
+- **Admin API Handlers**: Routed directly to the control centre backend
+
+### Deployment Steps:
 1. In the Vercel Dashboard, click **Add New > Project** and select this Git repository.
-2. Configure Project Settings:
-   - **Project Name**: `nginda-warriors-fc-public`
-   - **Framework Preset**: `Next.js`
-   - **Root Directory**: `apps/public-website`
-3. Environment Variables:
+2. Keep the **Root Directory** as `.` (leave it blank or root default).
+3. Vercel automatically detects `vercel.json` and builds both services:
+   - `public-website` (`apps/public-website`)
+   - `control-centre` (`apps/control-centre`)
+4. Configure your environment variables in the Vercel project settings:
+   ```env
+   NEXT_PUBLIC_SITE_URL=https://<your-domain>
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-secret-key
+   ADMIN_JWT_SECRET=generate-a-strong-random-64-character-jwt-secret
+   SUPER_ADMIN_SETUP_TOKEN=your-one-time-owner-setup-token
+   ```
+5. Click **Deploy**.
+6. Visit `https://<your-domain>/manage` to complete the initial Super Admin Ownership Bootstrap.
+
+---
+
+## Option 2: Deploying as Two Independent Vercel Projects
+
+If you prefer deploying the public portal and the admin center to completely separate domains or subdomains (e.g. `ngindawarriorsfc.co.ke` and `manage.ngindawarriorsfc.co.ke`):
+
+### Application A: Public Website
+1. In Vercel, click **Add New > Project** and select the repository.
+2. In Project Settings, set **Root Directory** to `apps/public-website`.
+3. Set Environment Variables:
    ```env
    NEXT_PUBLIC_SITE_URL=https://ngindawarriorsfc.co.ke
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
    ```
-4. Click **Deploy**.
-5. Under **Settings > Domains**, attach your production domain `ngindawarriorsfc.co.ke`.
+4. Attach domain `ngindawarriorsfc.co.ke`.
 
----
-
-## 4. Deploying Application B: Nginda Warriors Control Centre
-
-1. In Vercel, click **Add New > Project** and import the same repository again.
-2. Configure Project Settings:
-   - **Project Name**: `nginda-warriors-control-centre`
-   - **Framework Preset**: `Next.js`
-   - **Root Directory**: `apps/control-centre`
-3. Environment Variables (Strictly Private Server Secrets):
+### Application B: Control Centre
+1. In Vercel, click **Add New > Project** and import the same repository.
+2. In Project Settings, set **Root Directory** to `apps/control-centre`.
+3. Set Environment Variables:
    ```env
    NEXT_PUBLIC_ADMIN_URL=https://manage.ngindawarriorsfc.co.ke
+   NEXT_PUBLIC_BASE_PATH=""
    NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    SUPABASE_SERVICE_ROLE_KEY=your-service-role-secret-key
    ADMIN_JWT_SECRET=generate-a-strong-random-64-character-jwt-secret
    SUPER_ADMIN_SETUP_TOKEN=your-one-time-owner-setup-token
-   DARAJA_ENVIRONMENT=production
-   DARAJA_CONSUMER_KEY=your-daraja-consumer-key
-   DARAJA_CONSUMER_SECRET=your-daraja-consumer-secret
-   DARAJA_SHORTCODE=your-shortcode
-   DARAJA_PASSKEY=your-passkey
-   DARAJA_CALLBACK_URL=https://ngindawarriorsfc.co.ke/api/mpesa/callback
    ```
-4. Click **Deploy**.
-5. Under **Settings > Domains**, attach your administrative domain `manage.ngindawarriorsfc.co.ke`.
-6. Visit `https://manage.ngindawarriorsfc.co.ke` and complete the initial **Super Admin Ownership Bootstrap**!
+4. Attach domain `manage.ngindawarriorsfc.co.ke`.
 
 ---
 
-## 5. Security & Verification Checklist
+## Supabase PostgreSQL Setup
 
-- [x] `apps/control-centre/src/app/robots.ts` disallows search engine indexing (`Disallow: /`).
-- [x] Privileged secrets (`SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_JWT_SECRET`, `DARAJA_CONSUMER_SECRET`) are never exposed in public client bundles (never prefixed with `NEXT_PUBLIC_`).
-- [x] Owner Super Admin account is protected from accidental deletion or privilege demotion.
-- [x] Donor phone numbers are masked on public transparency views.
-- [x] Minor applicant safeguarding validation is strictly enforced.
+1. Create a project at [supabase.com](https://supabase.com).
+2. Open the **SQL Editor**.
+3. Run `supabase/migrations/0001_nginda_warriors_schema.sql` to instantiate the 37 normalized tables and Row Level Security (RLS) policies.
+4. Copy your project URL and API keys from `Project Settings > API`.

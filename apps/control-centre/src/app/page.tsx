@@ -10,6 +10,7 @@ import { AuthAndBootstrapGate } from '../components/AuthAndBootstrapGate';
 import { FootballModules } from '../components/FootballModules';
 import { ContentAndBrandModules } from '../components/ContentAndBrandModules';
 import { CommercialAndCommunityModules } from '../components/CommercialAndCommunityModules';
+import { adminApiUrl } from '../utils/api';
 import {
   Activity,
   Award,
@@ -134,13 +135,13 @@ export default function ControlCentreApp() {
 
   const loadState = async () => {
     try {
-      const authRes = await fetch('/api/admin/auth');
+      const authRes = await fetch(adminApiUrl('/api/admin/auth'));
       const authData = await authRes.json();
       setBootstrapped(Boolean(authData.bootstrapped));
       setSession(authData.session || null);
 
       if (authData.session) {
-        const actionRes = await fetch('/api/admin/action');
+        const actionRes = await fetch(adminApiUrl('/api/admin/action'));
         const actionData = await actionRes.json();
         if (actionData.ok && actionData.database) {
           setDatabase(actionData.database);
@@ -161,7 +162,7 @@ export default function ControlCentreApp() {
   const handleMutate = async (action: string, payload: Record<string, unknown>) => {
     try {
       setStatusNotice('Applying changes...');
-      const res = await fetch('/api/admin/action', {
+      const res = await fetch(adminApiUrl('/api/admin/action'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, payload }),
@@ -180,7 +181,7 @@ export default function ControlCentreApp() {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/admin/auth', {
+    await fetch(adminApiUrl('/api/admin/auth'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'logout' }),
