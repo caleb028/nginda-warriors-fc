@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { PreventZoom } from '../components/PreventZoom';
 
 export const metadata: Metadata = {
   title: 'NGINDA WARRIORS CONTROL CENTRE | Private Club Management System',
@@ -27,7 +28,10 @@ export default function ControlCentreRootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <PreventZoom />
+        {children}
+      </body>
     </html>
   );
 }

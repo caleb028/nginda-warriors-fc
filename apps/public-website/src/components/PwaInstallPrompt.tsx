@@ -15,8 +15,19 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
   const [isIos, setIsIos] = useState(false);
   const [showIosGuide, setShowIosGuide] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
 
   useEffect(() => {
+    // Restrict strictly to mobile and tablet users (phones, iPads, Android tablets) and NOT desktop computers
+    const ua = window.navigator.userAgent.toLowerCase();
+    const isMobileUA = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/.test(ua);
+    const isTouchDevice = typeof navigator !== 'undefined' && (navigator.maxTouchPoints > 0 || 'ontouchstart' in window);
+    const isTabletOrMobileScreen = typeof window !== 'undefined' && window.innerWidth <= 1024;
+    const isDeviceEligible = isMobileUA || (isTouchDevice && isTabletOrMobileScreen);
+
+    setIsMobileOrTablet(isDeviceEligible);
+    if (!isDeviceEligible) return;
+
     // Check if already in standalone / installed mode
     const isStandaloneMode =
       window.matchMedia('(display-mode: standalone)').matches ||
@@ -31,7 +42,6 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
     }
 
     // Detect iOS
-    const ua = window.navigator.userAgent.toLowerCase();
     const isIosDevice = /iphone|ipad|ipod/.test(ua);
     setIsIos(isIosDevice);
 
@@ -51,6 +61,18 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
 
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
+
+  // Scroll lock when iOS installation guide modal is open
+  useEffect(() => {
+    if (showIosGuide) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showIosGuide]);
 
   const handleInstallClick = async () => {
     if (isIos) {
@@ -72,7 +94,7 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
     localStorage.setItem('nginda_pwa_dismissed', String(Date.now()));
   };
 
-  if (isStandalone || !showPrompt) return null;
+  if (!isMobileOrTablet || isStandalone || !showPrompt) return null;
 
   return (
     <>

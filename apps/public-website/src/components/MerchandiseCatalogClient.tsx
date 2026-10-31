@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ClubCrest, MerchandiseProduct } from '@nginda-warriors/shared';
 import { CheckCircle2, MessageCircle } from 'lucide-react';
 
@@ -19,6 +19,18 @@ export function MerchandiseCatalogClient({
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [orderNotice, setOrderNotice] = useState('');
+
+  // Automatic DOM scroll guards (locks background scrolling when order modal is open)
+  useEffect(() => {
+    if (selectedProduct) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedProduct]);
 
   const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,7 +144,7 @@ export function MerchandiseCatalogClient({
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <form
             onSubmit={handleOrder}
-            className="bg-[#0D1410] rounded-2xl max-w-md w-full p-6 border-2 border-[#08783E] space-y-4 text-white shadow-2xl"
+            className="bg-[#0D1410] rounded-2xl max-w-md w-full p-6 border-2 border-[#08783E] space-y-4 text-white shadow-2xl max-h-[92dvh] overflow-y-auto no-scrollbar"
           >
             <h3 className="font-athletic text-2xl font-black uppercase text-white">
               Order: {selectedProduct.name}

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { ClubCrest, ClubSettings } from '@nginda-warriors/shared';
 import { ArrowRight, ChevronLeft, ChevronRight, Clock, Shield, Sparkles } from 'lucide-react';
 
@@ -148,6 +149,29 @@ export function HomepageHeroSlideshow({
             </p>
           </div>
         </div>
+
+        {/* Looping Scroll Indicator (Hero Section) */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="hidden sm:flex flex-col items-center justify-center pt-8 pb-3"
+        >
+          <span className="text-[11px] font-athletic font-bold uppercase tracking-widest text-[#F5D000] mb-2 drop-shadow-sm">
+            Scroll to Explore
+          </span>
+          <div className="w-5 h-9 rounded-full border-2 border-[#F5D000]/40 flex items-start justify-center p-1 relative overflow-hidden bg-black/40 backdrop-blur-xs">
+            <motion.div
+              animate={{ y: [-12, 16, -12] }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="w-1.5 h-2.5 bg-[#F5D000] rounded-full shadow-[0_0_8px_#F5D000]"
+            />
+          </div>
+        </motion.div>
       </div>
     </section>
   );

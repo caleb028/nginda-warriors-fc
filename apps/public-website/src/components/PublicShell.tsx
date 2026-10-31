@@ -57,6 +57,36 @@ export function PublicShell({
   const [locale, setLocale] = useState<SupportedLocale>('en');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // High-performance passive window scroll listener for header morphing
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 40);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Automatic DOM scroll guards (locks background scrolling when drawer or modal is open)
+  useEffect(() => {
+    if (mobileMenuOpen || searchOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen, searchOpen]);
 
   const t = PUBLIC_TRANSLATIONS[locale];
 
@@ -94,10 +124,20 @@ export function PublicShell({
         }
         className="min-h-screen flex flex-col bg-black text-white overflow-x-hidden w-full selection:bg-[#08783E] selection:text-white"
       >
-        {/* Main Official Club Header - Sleek Modern Pitch Black */}
-        <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-md text-white shadow-xl border-b border-[#1E2B23]">
+        {/* Main Official Club Header - Dynamic Scroll Morphing Header */}
+        <header
+          className={`sticky top-0 z-50 text-white transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isScrolled
+              ? 'bg-[#123D2A]/95 backdrop-blur-md shadow-lg border-b border-[#D4A72C]/20 py-2.5 sm:py-3'
+              : 'bg-gradient-to-b from-[#0B2519]/90 via-[#0B2519]/50 to-transparent border-b border-transparent py-4 sm:py-5 backdrop-blur-xs'
+          }`}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-20">
+            <div
+              className={`flex items-center justify-between transition-all duration-300 ${
+                isScrolled ? 'h-14 sm:h-16' : 'h-18 sm:h-20'
+              }`}
+            >
               {/* Official Club Logo Only (Brand identity without navbar text / est. year) */}
               <Link
                 href="/"
@@ -105,10 +145,12 @@ export function PublicShell({
                 aria-label={settings.clubName}
               >
                 <ClubCrest
-                  size={64}
+                  size={isScrolled ? 56 : 64}
                   customCrestUrl={settings.crestUrl}
                   alt={`${settings.clubName} Official Crest`}
-                  className="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-md"
+                  className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 drop-shadow-md ${
+                    isScrolled ? 'h-12 sm:h-14' : 'h-14 sm:h-16'
+                  }`}
                 />
               </Link>
 

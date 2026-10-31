@@ -133,6 +133,18 @@ export default function ControlCentreApp() {
   const [statusNotice, setStatusNotice] = useState<string>('');
   const [publicWebsiteUrl, setPublicWebsiteUrl] = useState<string>('/');
 
+  // Automatic DOM scroll guards for mobile admin sidebar drawer
+  useEffect(() => {
+    if (sidebarOpen && typeof window !== 'undefined' && window.innerWidth < 1024) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [sidebarOpen]);
+
   const loadState = async () => {
     try {
       const authRes = await fetch(adminApiUrl('/api/admin/auth'));

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Play, Sparkles, Tag, Video, X } from 'lucide-react';
 
@@ -22,6 +22,18 @@ export function WarriorsTVHub({
 }) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [activeVideo, setActiveVideo] = useState<VideoClip | null>(null);
+
+  // Automatic DOM scroll guards (locks background scrolling when video player modal is open)
+  useEffect(() => {
+    if (activeVideo) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeVideo]);
 
   const categories = ['All', 'Tunnel Cam', 'Highlights', 'Press Conference', 'Training'];
 

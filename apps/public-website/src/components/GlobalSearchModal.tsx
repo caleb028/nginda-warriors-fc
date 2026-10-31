@@ -102,6 +102,18 @@ export function GlobalSearchModal({
 }) {
   const [query, setQuery] = useState('');
 
+  // Automatic DOM scroll guards (locks background scrolling when search modal is open)
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   // Handle Ctrl+K shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -166,7 +178,7 @@ export function GlobalSearchModal({
         </div>
 
         {/* Search Results */}
-        <div className="p-3 max-h-96 overflow-y-auto space-y-1">
+        <div className="p-3 max-h-[65vh] overflow-y-auto no-scrollbar space-y-1">
           {results.length > 0 ? (
             results.map((item) => (
               <Link

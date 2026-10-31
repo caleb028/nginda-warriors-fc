@@ -8,6 +8,7 @@ import {
 import { WarriorsTVHub } from '../components/WarriorsTVHub';
 import { SupporterHubClient } from '../components/SupporterHubClient';
 import { TacticalPitchBoard } from '../components/TacticalPitchBoard';
+import { MotionReveal, StaggerContainer, StaggerItem } from '../components/MotionReveal';
 import {
   ArrowRight,
   Award,
@@ -121,27 +122,30 @@ export default function PublicHomePage() {
       {isSectionVisible('match_centre') && (
         <section className="py-16 bg-[#070C09] text-white border-b border-[#1E2B23]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-              <div>
-                <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
-                  AFRICA/NAIROBI TIME (EAT) • OFFICIAL MATCH HUB
-                </span>
-                <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase tracking-wide text-white mt-1">
-                  {matchMeta.title}
-                </h2>
+            <MotionReveal y={24} once={false}>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+                <div>
+                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                    AFRICA/NAIROBI TIME (EAT) • OFFICIAL MATCH HUB
+                  </span>
+                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase tracking-wide text-white mt-1">
+                    {matchMeta.title}
+                  </h2>
+                </div>
+                <Link
+                  href="/fixtures"
+                  className="inline-flex items-center gap-2 text-sm font-pedals font-athletic font-bold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000] transition"
+                >
+                  <span>View Full Fixtures & Results</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <Link
-                href="/fixtures"
-                className="inline-flex items-center gap-2 text-sm font-pedals font-athletic font-bold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000] transition"
-              >
-                <span>View Full Fixtures & Results</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            </MotionReveal>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-6" once={false}>
               {/* Card A: Next Fixture / Live Match */}
-              <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] shadow-xl p-6 flex flex-col justify-between">
+              <StaggerItem className="h-full">
+                <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] shadow-xl p-6 flex flex-col justify-between h-full">
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <span className="px-3 py-1 rounded-full bg-[#08783E] text-white font-pedals font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
@@ -434,7 +438,8 @@ export default function PublicHomePage() {
                   </Link>
                 </div>
               </div>
-            </div>
+              </StaggerItem>
+            </StaggerContainer>
           </div>
         </section>
       )}
@@ -450,32 +455,34 @@ export default function PublicHomePage() {
       {isSectionVisible('featured_squad') && (
         <section className="py-16 bg-[#070C09] text-white border-b border-[#1E2B23]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-              <div>
-                <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
-                  FIRST TEAM DIRECTORY • EST. {clubSettings.establishedYear}
-                </span>
-                <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
-                  {squadMeta.title}
-                </h2>
+            <MotionReveal y={24} once={false}>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+                <div>
+                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                    FIRST TEAM DIRECTORY • EST. {clubSettings.establishedYear}
+                  </span>
+                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
+                    {squadMeta.title}
+                  </h2>
+                </div>
+                <Link
+                  href="/team"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-bold text-sm uppercase tracking-wider transition shadow-md"
+                >
+                  <span>Explore Full Squad</span>
+                  <ArrowRight className="w-4 h-4 text-[#F5D000]" />
+                </Link>
               </div>
-              <Link
-                href="/team"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-bold text-sm uppercase tracking-wider transition shadow-md"
-              >
-                <span>Explore Full Squad</span>
-                <ArrowRight className="w-4 h-4 text-[#F5D000]" />
-              </Link>
-            </div>
+            </MotionReveal>
 
             {featuredPlayers.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" once={false} stagger={0.12}>
                 {featuredPlayers.slice(0, 4).map((player) => (
-                  <Link
-                    key={player.id}
-                    href={`/team/${player.slug}`}
-                    className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] hover:border-[#08783E] shadow-xl transition flex flex-col"
-                  >
+                  <StaggerItem key={player.id} className="h-full">
+                    <Link
+                      href={`/team/${player.slug}`}
+                      className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] hover:border-[#F5D000]/60 shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                    >
                     <div className="relative h-64 bg-[#080D0A] flex items-center justify-center overflow-hidden">
                       <span className="absolute top-3 right-4 font-pedals font-athletic text-6xl font-black text-[#15201A] select-none">
                         #{player.jerseyNumber}
@@ -529,9 +536,10 @@ export default function PublicHomePage() {
                         </div>
                       </div>
                     </div>
-                  </Link>
+                    </Link>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             ) : (
               <div className="rounded-2xl bg-[#0D1410] border-2 border-dashed border-[#1E2B23] p-10 text-center shadow-md">
                 <Users className="w-12 h-12 text-slate-500 mx-auto mb-3" />
@@ -562,32 +570,34 @@ export default function PublicHomePage() {
       {isSectionVisible('latest_news') && (
         <section className="py-16 bg-black text-white border-b border-[#1E2B23]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-              <div>
-                <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
-                  OFFICIAL CLUB MEDIA DESK
-                </span>
-                <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
-                  {newsMeta.title}
-                </h2>
+            <MotionReveal y={24} once={false}>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+                <div>
+                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                    OFFICIAL CLUB MEDIA DESK
+                  </span>
+                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
+                    {newsMeta.title}
+                  </h2>
+                </div>
+                <Link
+                  href="/news"
+                  className="inline-flex items-center gap-2 text-sm font-pedals font-athletic font-bold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000] transition"
+                >
+                  <span>All Club News & Notices</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <Link
-                href="/news"
-                className="inline-flex items-center gap-2 text-sm font-pedals font-athletic font-bold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000] transition"
-              >
-                <span>All Club News & Notices</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            </MotionReveal>
 
             {articles.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" once={false} stagger={0.15}>
                 {articles.slice(0, 3).map((article) => (
-                  <Link
-                    key={article.id}
-                    href={`/news/${article.slug}`}
-                    className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] shadow-xl hover:border-[#08783E] transition flex flex-col"
-                  >
+                  <StaggerItem key={article.id} className="h-full">
+                    <Link
+                      href={`/news/${article.slug}`}
+                      className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] shadow-xl hover:border-[#F5D000]/60 transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                    >
                     <div className="h-48 bg-[#080D0A] relative flex items-center justify-center overflow-hidden">
                       {article.featuredImageUrl ? (
                         <img
@@ -619,9 +629,10 @@ export default function PublicHomePage() {
                         Read Full Story <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
-                  </Link>
+                    </Link>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             ) : (
               <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] p-10 text-center">
                 <Newspaper className="w-12 h-12 text-slate-500 mx-auto mb-3" />
@@ -642,7 +653,7 @@ export default function PublicHomePage() {
         <section className="py-16 bg-[#070C09] text-white border-b border-[#1E2B23]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              <div className="lg:col-span-6 space-y-5">
+              <MotionReveal y={24} once={false} className="lg:col-span-6 space-y-5">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider">
                   <HeartHandshake className="w-3.5 h-3.5 text-[#F5D000]" />
                   <span>MORE THAN A FOOTBALL CLUB</span>
@@ -664,9 +675,10 @@ export default function PublicHomePage() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </MotionReveal>
 
-              <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <StaggerContainer className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5" once={false} stagger={0.12}>
+                <StaggerItem>
                 <div className="p-6 rounded-2xl bg-[#0D1410] border border-[#1E2B23] border-t-4 border-t-[#08783E] shadow-xl">
                   <Trophy className="w-8 h-8 text-[#4ADE80] mb-3" />
                   <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
@@ -682,7 +694,9 @@ export default function PublicHomePage() {
                     Apply for Player Trials <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
+                </StaggerItem>
 
+                <StaggerItem>
                 <div className="p-6 rounded-2xl bg-[#0D1410] border border-[#1E2B23] border-t-4 border-t-[#F5D000] shadow-xl">
                   <Shield className="w-8 h-8 text-[#F5D000] mb-3" />
                   <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
@@ -698,7 +712,8 @@ export default function PublicHomePage() {
                     View Transparency Ledger <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
-              </div>
+                </StaggerItem>
+              </StaggerContainer>
             </div>
           </div>
         </section>
@@ -708,31 +723,31 @@ export default function PublicHomePage() {
       {isSectionVisible('sponsors_strip') && (
         <section className="py-14 bg-black text-white border-b border-[#1E2B23]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-              <div>
-                <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
-                  COMMERCIAL PARTNERSHIPS
-                </span>
-                <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white">
-                  {sponsorsMeta.title}
-                </h2>
+            <MotionReveal y={20} once={false}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div>
+                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                    COMMERCIAL PARTNERSHIPS
+                  </span>
+                  <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white">
+                    {sponsorsMeta.title}
+                  </h2>
+                </div>
+                <Link
+                  href="/sponsors"
+                  className="inline-flex items-center gap-2 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000]"
+                >
+                  <span>View Sponsorship Packages</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              <Link
-                href="/sponsors"
-                className="inline-flex items-center gap-2 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000]"
-              >
-                <span>View Sponsorship Packages</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            </MotionReveal>
 
             {approvedSponsors.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4" once={false} stagger={0.08}>
                 {approvedSponsors.map((sponsor) => (
-                  <div
-                    key={sponsor.id}
-                    className="p-5 rounded-xl bg-[#0D1410] border border-[#1E2B23] flex flex-col items-center justify-center text-center shadow-md"
-                  >
+                  <StaggerItem key={sponsor.id}>
+                    <div className="p-5 rounded-xl bg-[#0D1410] border border-[#1E2B23] flex flex-col items-center justify-center text-center shadow-md h-full">
                     {sponsor.logoUrl ? (
                       <img
                         src={sponsor.logoUrl}
@@ -746,9 +761,10 @@ export default function PublicHomePage() {
                     <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 mt-1">
                       {sponsor.tierCode.replace('_', ' ')}
                     </span>
-                  </div>
+                    </div>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             ) : (
               <div className="rounded-xl bg-[#0D1410] border border-[#1E2B23] p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
                 <div>
@@ -775,29 +791,33 @@ export default function PublicHomePage() {
       {/* 6.5 SUPPORTER HUB - Sleek Pitch Surface */}
       <section id="supporters-hub" className="py-20 bg-[#070C09] text-white border-b border-[#1E2B23]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-black text-xs uppercase tracking-wider">
-              WARRIORS SUPPORTERS HUB
-            </span>
-            <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-3">
-              EMPOWERED BY OUR FANS
-            </h2>
-            <p className="text-sm sm:text-base text-slate-300 mt-2">
-              Generate your official digital club membership pass, predict upcoming match scorelines, and crown the Warrior of the Month.
-            </p>
-          </div>
-          <SupporterHubClient
-            players={players}
-            nextOpponent={nextMatch?.opponentName || null}
-            nextMatchDate={nextMatch ? formatNairobiDateTime(nextMatch.kickoffAt) : null}
-          />
+          <MotionReveal y={24} once={false}>
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-black text-xs uppercase tracking-wider">
+                WARRIORS SUPPORTERS HUB
+              </span>
+              <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-3">
+                EMPOWERED BY OUR FANS
+              </h2>
+              <p className="text-sm sm:text-base text-slate-300 mt-2">
+                Generate your official digital club membership pass, predict upcoming match scorelines, and crown the Warrior of the Month.
+              </p>
+            </div>
+          </MotionReveal>
+          <MotionReveal y={28} delay={0.15} once={false}>
+            <SupporterHubClient
+              players={players}
+              nextOpponent={nextMatch?.opponentName || null}
+              nextMatchDate={nextMatch ? formatNairobiDateTime(nextMatch.kickoffAt) : null}
+            />
+          </MotionReveal>
         </div>
       </section>
 
       {/* 7. FINAL CALL TO ACTION ("STAND WITH THE WARRIORS.") - Deep Black Pitch */}
       {isSectionVisible('final_cta') && (
         <section className="py-20 bg-black text-white border-b border-[#1E2B23] relative overflow-hidden">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <MotionReveal y={28} scale={0.98} once={false} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <div className="flex justify-center">
               <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
                 <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
@@ -833,7 +853,7 @@ export default function PublicHomePage() {
                 <span>Join Our Community</span>
               </Link>
             </div>
-          </div>
+          </MotionReveal>
         </section>
       )}
     </div>

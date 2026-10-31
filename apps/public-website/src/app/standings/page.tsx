@@ -43,7 +43,7 @@ export default function LeagueStandingsPage() {
               </span>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto no-scrollbar">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-[#080D0A] text-slate-300 font-pedals font-athletic text-sm font-black uppercase border-b border-[#1E2B23]">
