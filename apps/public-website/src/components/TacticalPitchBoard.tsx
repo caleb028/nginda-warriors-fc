@@ -106,7 +106,7 @@ export function TacticalPitchBoard({
             </h3>
           </div>
           <p className="text-xs text-white/70">
-            Interactive visual team lineup & tactical formation board
+            Tactical setup directed by Team Gaffer Peter Gitau
           </p>
         </div>
 

@@ -552,6 +552,37 @@ export default function PublicHomePage() {
               </div>
             )}
 
+            {/* Team Gaffer Spotlight Banner */}
+            <div className="mt-12 rounded-2xl bg-[#141414] border-2 border-[#262626] hover:border-[#FDE100] transition-all p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
+              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden bg-black shrink-0 border-2 border-[#FDE100] shadow-lg">
+                <img
+                  src="/uploads/peter-gitau-head-coach.png"
+                  alt="Team Gaffer Peter Gitau"
+                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform"
+                />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider mb-2">
+                  <span>HEAD COACH & TEAM GAFFER</span>
+                </div>
+                <h3 className="font-athletic text-3xl sm:text-4xl font-black uppercase text-white">
+                  Peter Gitau
+                </h3>
+                <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                  “Our warrior spirit begins on the training pitch. We demand discipline, rapid transitions, and relentless passion for the jersey. We play fearless football for the pride of Nginda.”
+                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-4">
+                  <Link
+                    href="/team"
+                    className="inline-flex items-center gap-2 text-xs font-athletic font-black uppercase tracking-wider text-[#FDE100] hover:text-[#FFE600] transition"
+                  >
+                    <span>View Technical Bench & Squad</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             {/* Tactical Pitch Board */}
             {players.length > 0 && (
               <div className="mt-14">

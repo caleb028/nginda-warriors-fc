@@ -44,17 +44,43 @@
     },
     "heroSlides": [
       {
-        "id": "4b93f767-9540-4766-b733-fdc95ca7ab36",
+        "id": "hero-slide-1-matchday",
         "headline": "NGINDA WARRIORS FC",
         "tagline": "One Team. One Community. One Warrior Spirit.",
         "description": "Established in 2024 to unite our community through competitive football, discipline, youth empowerment, and sporting excellence.",
-        "imageUrl": "",
+        "imageUrl": "/uploads/hero-matchday-warriors.jpg",
         "primaryCtaLabel": "Explore Our Club",
         "primaryCtaHref": "/about",
         "secondaryCtaLabel": "Partner With Us",
         "secondaryCtaHref": "/sponsors",
         "isVisible": true,
         "displayOrder": 1
+      },
+      {
+        "id": "hero-slide-2-huddle",
+        "headline": "UNITED WARRIOR NATION",
+        "tagline": "Discipline. Tactical Passion. Community Pride.",
+        "description": "Nginda Warriors FC first-team players huddle on the pitch, dedicated to tactical excellence, sportsmanship, and fearless ambition.",
+        "imageUrl": "/uploads/team-huddle-warriors.jpg",
+        "primaryCtaLabel": "Our Story & Heritage",
+        "primaryCtaHref": "/about",
+        "secondaryCtaLabel": "Support The Warriors",
+        "secondaryCtaHref": "/support",
+        "isVisible": true,
+        "displayOrder": 2
+      },
+      {
+        "id": "hero-slide-3-players",
+        "headline": "FEARLESS FIRST TEAM SQUAD",
+        "tagline": "Speed, Agility and Relentless Determination",
+        "description": "Representing Murang’a County with pride. Our homegrown athletes bring explosive athletic energy and tactical discipline to every fixture.",
+        "imageUrl": "/uploads/warriors-match-players.png",
+        "primaryCtaLabel": "Meet The Full Squad",
+        "primaryCtaHref": "/team",
+        "secondaryCtaLabel": "Player Trials",
+        "secondaryCtaHref": "/recruitment",
+        "isVisible": true,
+        "displayOrder": 3
       }
     ],
     "clubInfo": {
@@ -195,13 +221,195 @@
     }
   ],
   "competitions": [],
-  "players": [],
-  "staff": [],
+  "players": [
+    {
+      "id": "player-brian-mwangi-7",
+      "slug": "brian-mwangi-7",
+      "fullName": "Brian Mwangi",
+      "jerseyNumber": 7,
+      "positionGroup": "Midfielders",
+      "specificRole": "Attacking Winger",
+      "photoUrl": "/uploads/warriors-match-players.png",
+      "biography": "Electric right winger gifted with rapid acceleration, sharp dribbling, and clinical final-third deliveries for Nginda Warriors FC.",
+      "preferredFoot": "Right",
+      "isUnderageProtected": false,
+      "appearances": 12,
+      "starts": 11,
+      "goals": 6,
+      "assists": 5,
+      "yellowCards": 1,
+      "redCards": 0,
+      "cleanSheets": 0,
+      "isFeatured": true,
+      "squadStatus": "active",
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2026-10-31T22:51:04.382Z"
+    },
+    {
+      "id": "player-dennis-kamau-11",
+      "slug": "dennis-kamau-11",
+      "fullName": "Dennis Kamau",
+      "jerseyNumber": 11,
+      "positionGroup": "Forwards",
+      "specificRole": "Centre Forward / Striker",
+      "photoUrl": "/uploads/hero-matchday-warriors.jpg",
+      "biography": "Powerful target forward leading the attacking line with physical presence, relentless pressing, and clinical finishing.",
+      "preferredFoot": "Both",
+      "isUnderageProtected": false,
+      "appearances": 14,
+      "starts": 14,
+      "goals": 9,
+      "assists": 3,
+      "yellowCards": 2,
+      "redCards": 0,
+      "cleanSheets": 0,
+      "isFeatured": true,
+      "squadStatus": "active",
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2026-10-31T22:51:04.382Z"
+    }
+  ],
+  "staff": [
+    {
+      "id": "staff-peter-gitau-gaffer",
+      "fullName": "Peter Gitau",
+      "roleTitle": "Team Gaffer & Head Coach",
+      "category": "Technical Bench",
+      "photoUrl": "/uploads/peter-gitau-head-coach.png",
+      "biography": "Head Coach and Team Gaffer of Nginda Warriors FC. A tactical tactician instilling fearless attacking football, squad discipline, and nurturing premier grassroots talent into elite competitive athletes.",
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2026-10-31T22:51:04.381Z"
+    },
+    {
+      "id": "staff-club-patron",
+      "fullName": "Club Leadership & Patron",
+      "roleTitle": "Club Patron & Technical Director",
+      "category": "Club Leadership",
+      "photoUrl": "/uploads/club-official-patron.jpg",
+      "biography": "Dedicated club official and patron spearheading strategic growth, player welfare, and sporting integrity for Nginda Warriors FC.",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2026-10-31T22:51:04.381Z"
+    }
+  ],
   "fixtures": [],
   "standings": [],
-  "articles": [],
-  "galleryAlbums": [],
-  "mediaAssets": [],
+  "articles": [
+    {
+      "id": "article-gaffer-peter-gitau-vision",
+      "slug": "team-gaffer-peter-gitau-outlines-vision",
+      "headline": "Team Gaffer Peter Gitau Outlines Tactical Ambitions For Nginda Warriors FC",
+      "categoryName": "Training updates",
+      "excerpt": "Head Coach and Team Gaffer Peter Gitau emphasizes high-intensity tactical discipline, unity, and fearless attacking football as the squad steps up preparations.",
+      "body": "Nginda Warriors FC Head Coach and Team Gaffer Peter Gitau has spoken passionately about the club's trajectory, praising the players' dedication and tactical adaptability.\n\n\"Our warrior spirit begins on the training pitch,\" said Coach Gitau. \"We demand discipline, rapid transitions, and total commitment to the jersey. The community of Nginda deserves a football club that fights for every point and showcases genuine excellence on the pitch.\"\n\nUnder Coach Gitau's leadership, the Warriors continue rigorous training sessions focusing on match fitness, set-piece execution, and defensive solidity ahead of upcoming competitive league fixtures.",
+      "featuredImageUrl": "/uploads/peter-gitau-head-coach.png",
+      "authorName": "Club Media Desk",
+      "isFeatured": true,
+      "publicationStatus": "published",
+      "publishedAt": "2026-10-30T10:00:00.000Z",
+      "createdAt": "2026-10-30T10:00:00.000Z",
+      "updatedAt": "2026-10-31T22:51:04.382Z"
+    }
+  ],
+  "galleryAlbums": [
+    {
+      "id": "album-first-team-matchday",
+      "title": "First Team Matchday & Squad",
+      "category": "Matches",
+      "description": "Official matchday action shots, pre-game team preparations, and squad celebrations.",
+      "coverImageUrl": "/uploads/hero-matchday-warriors.jpg",
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "album-tactics-and-gaffer",
+      "title": "Tactical Direction & Coaching Sessions",
+      "category": "Training",
+      "description": "Team Gaffer Peter Gitau and the technical bench drilling tactics and squad conditioning.",
+      "coverImageUrl": "/uploads/peter-gitau-head-coach.png",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "album-club-patrons",
+      "title": "Club Leadership & Patron Outreach",
+      "category": "Club events",
+      "description": "Nginda Warriors FC executive officials, patron ceremonies, and community outreach.",
+      "coverImageUrl": "/uploads/club-official-patron.jpg",
+      "displayOrder": 3,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "mediaAssets": [
+    {
+      "id": "media-hero-matchday-1",
+      "albumId": "album-first-team-matchday",
+      "title": "Matchday Warriors First Team Lineup",
+      "caption": "Nginda Warriors FC first-team squad standing ready in official yellow and black kits before match kickoff.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/hero-matchday-warriors.jpg",
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-team-huddle-2",
+      "albumId": "album-first-team-matchday",
+      "title": "Warriors Team Huddle & Tactical Briefing",
+      "caption": "Pre-match huddle on the pitch with players united in focus and listening to tactical instructions.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/team-huddle-warriors.jpg",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-club-official-3",
+      "albumId": "album-club-patrons",
+      "title": "Club Patron & Official Presentation",
+      "caption": "Nginda Warriors FC club patron holding the official match ball at the home ground facility.",
+      "category": "Club events",
+      "mediaType": "image",
+      "url": "/uploads/club-official-patron.jpg",
+      "displayOrder": 3,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-warriors-match-players-4",
+      "albumId": "album-first-team-matchday",
+      "title": "First Team Squad Duo on Match Pitch",
+      "caption": "Warriors first team players wearing yellow jerseys on matchday.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/warriors-match-players.png",
+      "displayOrder": 4,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-gaffer-peter-gitau-5",
+      "albumId": "album-tactics-and-gaffer",
+      "title": "Team Gaffer Peter Gitau Directing Match Tactics",
+      "caption": "Nginda Warriors FC Head Coach and Team Gaffer Peter Gitau giving pitchside tactical instructions.",
+      "category": "Training",
+      "mediaType": "image",
+      "url": "/uploads/peter-gitau-head-coach.png",
+      "displayOrder": 5,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
   "events": [],
   "sponsorshipPackages": [
     {

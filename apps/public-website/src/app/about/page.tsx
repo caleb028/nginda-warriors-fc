@@ -149,21 +149,39 @@ export default function AboutClubPage() {
 
           {leadership.length > 0 || technicalBench.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[...leadership, ...technicalBench].map((member) => (
+              {[...technicalBench, ...leadership].map((member) => (
                 <div
                   key={member.id}
-                  className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-md"
+                  className="bg-[#141414] rounded-2xl overflow-hidden border border-[#262626] shadow-xl flex flex-col justify-between group hover:border-[#FDE100] transition-all"
                 >
-                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 text-[11px] font-extrabold uppercase tracking-wider mb-3">
-                    {member.category}
-                  </span>
-                  <h3 className="font-athletic text-2xl font-bold uppercase text-white">
-                    {member.fullName}
-                  </h3>
-                  <p className="text-xs font-extrabold uppercase text-[#FDE100] mt-0.5">
-                    {member.roleTitle}
-                  </p>
-                  <p className="text-sm text-slate-300 mt-3">{member.biography}</p>
+                  {member.photoUrl ? (
+                    <div className="relative h-64 bg-[#0D0D0D] overflow-hidden">
+                      <img
+                        src={member.photoUrl}
+                        alt={member.fullName}
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+                        {member.roleTitle}
+                      </div>
+                    </div>
+                  ) : null}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      {!member.photoUrl && (
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 text-[11px] font-extrabold uppercase tracking-wider mb-3">
+                          {member.category}
+                        </span>
+                      )}
+                      <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
+                        {member.fullName}
+                      </h3>
+                      <p className="text-xs font-black uppercase text-[#FDE100] mt-0.5">
+                        {member.roleTitle}
+                      </p>
+                      <p className="text-sm text-slate-300 mt-3 leading-relaxed">{member.biography}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

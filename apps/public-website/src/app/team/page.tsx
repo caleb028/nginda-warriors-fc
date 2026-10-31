@@ -162,15 +162,33 @@ export default function TeamSquadPage() {
               {technicalBench.map((coach) => (
                 <div
                   key={coach.id}
-                  className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl"
+                  className="bg-[#141414] rounded-2xl overflow-hidden border border-[#262626] shadow-xl flex flex-col justify-between group hover:border-[#FDE100] transition-all"
                 >
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 font-athletic font-bold text-xs uppercase tracking-wider">
-                    {coach.roleTitle}
-                  </span>
-                  <h3 className="font-athletic text-2xl font-black uppercase text-white mt-3">
-                    {coach.fullName}
-                  </h3>
-                  <p className="text-sm text-slate-300 mt-2">{coach.biography}</p>
+                  {coach.photoUrl ? (
+                    <div className="relative h-72 bg-[#0D0D0D] overflow-hidden">
+                      <img
+                        src={coach.photoUrl}
+                        alt={coach.fullName}
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+                        {coach.roleTitle}
+                      </div>
+                    </div>
+                  ) : null}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      {!coach.photoUrl && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 font-athletic font-bold text-xs uppercase tracking-wider">
+                          {coach.roleTitle}
+                        </span>
+                      )}
+                      <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors mt-1">
+                        {coach.fullName}
+                      </h3>
+                      <p className="text-sm text-slate-300 mt-2 leading-relaxed">{coach.biography}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -194,15 +212,33 @@ export default function TeamSquadPage() {
               {clubLeadership.map((official) => (
                 <div
                   key={official.id}
-                  className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl"
+                  className="bg-[#141414] rounded-2xl overflow-hidden border border-[#262626] shadow-xl flex flex-col justify-between group hover:border-[#FDE100] transition-all"
                 >
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#1A1A1A] text-slate-300 border border-[#262626] font-athletic font-bold text-xs uppercase tracking-wider">
-                    {official.roleTitle}
-                  </span>
-                  <h3 className="font-athletic text-2xl font-black uppercase text-white mt-3">
-                    {official.fullName}
-                  </h3>
-                  <p className="text-sm text-slate-300 mt-2">{official.biography}</p>
+                  {official.photoUrl ? (
+                    <div className="relative h-72 bg-[#0D0D0D] overflow-hidden">
+                      <img
+                        src={official.photoUrl}
+                        alt={official.fullName}
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-[#1A1A1A] text-slate-200 border border-[#262626] font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
+                        {official.roleTitle}
+                      </div>
+                    </div>
+                  ) : null}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      {!official.photoUrl && (
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#1A1A1A] text-slate-300 border border-[#262626] font-athletic font-bold text-xs uppercase tracking-wider">
+                          {official.roleTitle}
+                        </span>
+                      )}
+                      <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors mt-1">
+                        {official.fullName}
+                      </h3>
+                      <p className="text-sm text-slate-300 mt-2 leading-relaxed">{official.biography}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

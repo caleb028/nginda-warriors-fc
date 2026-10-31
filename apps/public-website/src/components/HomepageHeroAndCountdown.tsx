@@ -58,9 +58,9 @@ export function HomepageHeroSlideshow({
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Hero Copy */}
-          <div className="lg:col-span-8 space-y-6">
+          <div className="lg:col-span-7 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] text-xs font-athletic font-extrabold tracking-widest uppercase">
               <Sparkles className="w-3.5 h-3.5 text-[#FDE100]" />
               <span>OFFICIAL DIGITAL PLATFORM • EST. {settings.establishedYear}</span>
@@ -134,18 +134,49 @@ export function HomepageHeroSlideshow({
             )}
           </div>
 
-          {/* Right Official Crest Showcase */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center">
-            <div className="relative p-6 sm:p-8 rounded-3xl bg-[#0A0A0A]/95 border-2 border-[#262626] shadow-2xl group hover:border-[#FDE100] transition-all flex items-center justify-center">
-              <ClubCrest
-                size={220}
-                customCrestUrl={settings.crestUrl}
-                alt={`${settings.clubName} Official Crest`}
-                className="w-auto h-auto max-h-56 max-w-full drop-shadow-xl"
-              />
+          {/* Right Official Matchday Photograph Showcase (First Picture Seen On Site) */}
+          <div className="order-first lg:order-last lg:col-span-5 flex flex-col items-center justify-center w-full">
+            <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-[#0A0A0A] border-2 border-[#262626] shadow-2xl group hover:border-[#FDE100] transition-all">
+              <div className="relative aspect-[4/5] sm:aspect-[3/4] w-full overflow-hidden bg-black flex items-center justify-center">
+                {activeSlide.imageUrl ? (
+                  <img
+                    src={activeSlide.imageUrl}
+                    alt={activeSlide.headline || settings.clubName}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="p-8 flex items-center justify-center">
+                    <ClubCrest
+                      size={200}
+                      customCrestUrl={settings.crestUrl}
+                      alt={`${settings.clubName} Official Crest`}
+                      className="w-auto h-auto max-h-56 max-w-full drop-shadow-xl"
+                    />
+                  </div>
+                )}
+
+                {/* Floating Official Crest Emblem in Top-Right Corner */}
+                <div className="absolute top-3.5 right-3.5 p-2 rounded-2xl bg-black/85 backdrop-blur-md border border-[#FDE100]/40 shadow-xl flex items-center justify-center z-10">
+                  <ClubCrest
+                    size={46}
+                    customCrestUrl={settings.crestUrl}
+                    alt={`${settings.clubName} Crest`}
+                  />
+                </div>
+
+                {/* Bottom Overlay & Badge */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 z-10">
+                  <span className="inline-block px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md">
+                    OFFICIAL MATCHDAY SQUAD • EST. {settings.establishedYear}
+                  </span>
+                  <p className="mt-1 text-xs font-athletic font-bold uppercase tracking-wider text-slate-200">
+                    Nginda Warriors FC First Team
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="mt-4 text-xs font-athletic font-black uppercase tracking-widest text-[#FDE100] text-center">
-              OFFICIAL CLUB IDENTITY • EST. {settings.establishedYear}
+            <p className="mt-3 text-xs font-athletic font-black uppercase tracking-widest text-[#FDE100] text-center">
+              OFFICIAL CLUB IDENTITY • MURANG’A COUNTY
             </p>
           </div>
         </div>
