@@ -120,21 +120,21 @@ export default function PublicHomePage() {
 
       {/* 2. MATCH CENTRE + LATEST RESULT + LEAGUE POSITION - Sleek Pitch Surface */}
       {isSectionVisible('match_centre') && (
-        <section className="py-16 bg-[#070C09] text-white border-b border-[#1E2B23]">
+        <section className="py-16 bg-[#0A0A0A] text-white border-b border-[#262626]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <MotionReveal y={24} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
-                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
                     AFRICA/NAIROBI TIME (EAT) • OFFICIAL MATCH HUB
                   </span>
-                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase tracking-wide text-white mt-1">
+                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase tracking-wide text-white mt-1">
                     {matchMeta.title}
                   </h2>
                 </div>
                 <Link
                   href="/fixtures"
-                  className="inline-flex items-center gap-2 text-sm font-pedals font-athletic font-bold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000] transition"
+                  className="inline-flex items-center gap-2 text-sm font-athletic font-bold uppercase tracking-wider text-[#FDE100] hover:text-[#FDE100] transition"
                 >
                   <span>View Full Fixtures & Results</span>
                   <ArrowRight className="w-4 h-4" />
@@ -145,10 +145,10 @@ export default function PublicHomePage() {
             <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-6" once={false}>
               {/* Card A: Next Fixture / Live Match */}
               <StaggerItem className="h-full">
-                <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] shadow-xl p-6 flex flex-col justify-between h-full">
+                <div className="rounded-2xl bg-[#141414] border border-[#262626] shadow-xl p-6 flex flex-col justify-between h-full">
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-[#08783E] text-white font-pedals font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+                    <span className="px-3 py-1 rounded-full bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
                       {nextMatch &&
                       ['live_first_half', 'halftime', 'live_second_half'].includes(
                         nextMatch.matchStatus
@@ -169,12 +169,12 @@ export default function PublicHomePage() {
                         {nextMatch.competitionName} • {nextMatch.seasonName}
                       </div>
 
-                      <div className="grid grid-cols-3 items-center gap-2 py-3 bg-[#080D0A] rounded-xl px-4 border border-[#18231C]">
+                      <div className="grid grid-cols-3 items-center gap-2 py-3 bg-[#0D0D0D] rounded-xl px-4 border border-[#262626]">
                         <div className="text-center">
                           <div className="flex justify-center mb-1.5">
                             <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />
                           </div>
-                          <p className="font-pedals font-athletic font-bold text-sm uppercase leading-tight text-white">
+                          <p className="font-athletic font-bold text-sm uppercase leading-tight text-white">
                             { nextMatch.isHome ? clubSettings.shortName : nextMatch.opponentName }
                           </p>
                         </div>
@@ -182,18 +182,18 @@ export default function PublicHomePage() {
                         <div className="text-center">
                           {typeof nextMatch.homeScore === 'number' &&
                           typeof nextMatch.awayScore === 'number' ? (
-                            <div className="font-pedals font-athletic text-4xl font-black text-white">
+                            <div className="font-athletic text-4xl font-black text-white">
                               {nextMatch.homeScore} - {nextMatch.awayScore}
                             </div>
                           ) : (
-                            <div className="font-pedals font-athletic text-xl font-black text-[#F5D000] px-3 py-1 rounded bg-[#0D1410] border border-[#1E2B23] inline-block shadow-sm">
+                            <div className="font-athletic text-xl font-black text-[#FDE100] px-3 py-1 rounded bg-[#141414] border border-[#262626] inline-block shadow-sm">
                               VS
                             </div>
                           )}
                         </div>
 
                         <div className="text-center">
-                          <div className="w-12 h-12 mx-auto mb-1.5 rounded-full bg-[#121B16] border border-[#1E2B23] flex items-center justify-center font-pedals font-athletic font-black text-lg text-slate-200">
+                          <div className="w-12 h-12 mx-auto mb-1.5 rounded-full bg-[#1A1A1A] border border-[#262626] flex items-center justify-center font-athletic font-black text-lg text-slate-200">
                             {(nextMatch.isHome
                               ? nextMatch.opponentName
                               : clubSettings.shortName
@@ -201,7 +201,7 @@ export default function PublicHomePage() {
                               .slice(0, 2)
                               .toUpperCase()}
                           </div>
-                          <p className="font-pedals font-athletic font-bold text-sm uppercase leading-tight text-white">
+                          <p className="font-athletic font-bold text-sm uppercase leading-tight text-white">
                             {nextMatch.isHome ? nextMatch.opponentName : clubSettings.shortName}
                           </p>
                         </div>
@@ -209,11 +209,11 @@ export default function PublicHomePage() {
 
                       <div className="space-y-1.5 text-xs text-slate-300">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-[#F5D000]" />
+                          <Calendar className="w-4 h-4 text-[#FDE100]" />
                           <span>{formatNairobiDateTime(nextMatch.kickoffAt)} (EAT)</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-[#F5D000]" />
+                          <MapPin className="w-4 h-4 text-[#FDE100]" />
                           <span>{nextMatch.venue}</span>
                         </div>
                       </div>
@@ -225,7 +225,7 @@ export default function PublicHomePage() {
                   ) : (
                     <div className="py-10 text-center space-y-2">
                       <Calendar className="w-10 h-10 text-slate-500 mx-auto opacity-80" />
-                      <p className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                      <p className="font-athletic text-xl font-bold uppercase text-white">
                         Next Fixture Announcement Pending
                       </p>
                       <p className="text-xs text-slate-400 max-w-xs mx-auto">
@@ -236,23 +236,23 @@ export default function PublicHomePage() {
                 </div>
 
                 {nextMatch && (
-                  <div className="mt-5 pt-4 border-t border-[#18231C]">
+                  <div className="mt-5 pt-4 border-t border-[#262626]">
                     <Link
                       href={`/fixtures/${nextMatch.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-sm uppercase tracking-wider transition shadow-sm"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-sm uppercase tracking-wider transition shadow-sm"
                     >
                       <span>Open Match Centre</span>
-                      <ArrowRight className="w-4 h-4 text-[#F5D000]" />
+                      <ArrowRight className="w-4 h-4 text-[#FDE100]" />
                     </Link>
                   </div>
                 )}
               </div>
 
               {/* Card B: Latest Verified Result */}
-              <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] shadow-xl p-6 flex flex-col justify-between">
+              <div className="rounded-2xl bg-[#141414] border border-[#262626] shadow-xl p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-[#121B16] border border-[#1E2B23] text-slate-300 font-pedals font-athletic font-bold text-xs uppercase tracking-wider">
+                    <span className="px-3 py-1 rounded-full bg-[#1A1A1A] border border-[#262626] text-slate-300 font-athletic font-bold text-xs uppercase tracking-wider">
                       LATEST VERIFIED RESULT
                     </span>
                     {latestResult && (
@@ -269,24 +269,24 @@ export default function PublicHomePage() {
                         {formatNairobiDateTime(latestResult.kickoffAt)}
                       </p>
 
-                      <div className="bg-[#080D0A] rounded-xl p-4 border border-[#18231C]">
+                      <div className="bg-[#0D0D0D] rounded-xl p-4 border border-[#262626]">
                         <div className="flex items-center justify-between py-1.5">
-                          <span className="font-pedals font-athletic text-lg font-bold uppercase text-white">
+                          <span className="font-athletic text-lg font-bold uppercase text-white">
                             {latestResult.isHome
                               ? clubSettings.clubName
                               : latestResult.opponentName}
                           </span>
-                          <span className="font-pedals font-athletic text-3xl font-black text-[#4ADE80]">
+                          <span className="font-athletic text-3xl font-black text-[#FDE100]">
                             {latestResult.homeScore ?? 0}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between py-1.5 border-t border-[#18231C]">
-                          <span className="font-pedals font-athletic text-lg font-bold uppercase text-white">
+                        <div className="flex items-center justify-between py-1.5 border-t border-[#262626]">
+                          <span className="font-athletic text-lg font-bold uppercase text-white">
                             {latestResult.isHome
                               ? latestResult.opponentName
                               : clubSettings.clubName}
                           </span>
-                          <span className="font-pedals font-athletic text-3xl font-black text-[#4ADE80]">
+                          <span className="font-athletic text-3xl font-black text-[#FDE100]">
                             {latestResult.awayScore ?? 0}
                           </span>
                         </div>
@@ -296,7 +296,7 @@ export default function PublicHomePage() {
                         ['goal', 'penalty_goal'].includes(e.eventType)
                       ).length > 0 && (
                         <div className="text-xs text-slate-300 space-y-1">
-                          <p className="font-bold uppercase text-[#F5D000]">Goal Scorers:</p>
+                          <p className="font-bold uppercase text-[#FDE100]">Goal Scorers:</p>
                           <p>
                             {latestResult.events
                               .filter((e) => ['goal', 'penalty_goal'].includes(e.eventType))
@@ -315,7 +315,7 @@ export default function PublicHomePage() {
                   ) : (
                     <div className="py-10 text-center space-y-2">
                       <Trophy className="w-10 h-10 text-slate-500 mx-auto opacity-80" />
-                      <p className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                      <p className="font-athletic text-xl font-bold uppercase text-white">
                         No Verified Results Published Yet
                       </p>
                       <p className="text-xs text-slate-400 max-w-xs mx-auto">
@@ -326,28 +326,28 @@ export default function PublicHomePage() {
                 </div>
 
                 {latestResult && (
-                  <div className="mt-5 pt-4 border-t border-[#18231C]">
+                  <div className="mt-5 pt-4 border-t border-[#262626]">
                     <Link
                       href={`/fixtures/${latestResult.id}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#121B16] hover:bg-[#1A2620] text-white border border-[#1E2B23] hover:border-[#08783E] font-pedals font-athletic font-bold text-sm uppercase tracking-wider transition"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-white border border-[#262626] hover:border-[#262626] font-athletic font-bold text-sm uppercase tracking-wider transition"
                     >
                       <span>Read Full Match Report</span>
-                      <ArrowRight className="w-4 h-4 text-[#F5D000]" />
+                      <ArrowRight className="w-4 h-4 text-[#FDE100]" />
                     </Link>
                   </div>
                 )}
               </div>
 
               {/* Card C: League Position Snapshot */}
-              <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] shadow-xl p-6 flex flex-col justify-between">
+              <div className="rounded-2xl bg-[#141414] border border-[#262626] shadow-xl p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-[#121B16] border border-[#1E2B23] text-slate-300 font-pedals font-athletic font-bold text-xs uppercase tracking-wider">
+                    <span className="px-3 py-1 rounded-full bg-[#1A1A1A] border border-[#262626] text-slate-300 font-athletic font-bold text-xs uppercase tracking-wider">
                       LEAGUE POSITION
                     </span>
                     <Link
                       href="/standings"
-                      className="text-xs font-bold text-[#F5D000] hover:underline"
+                      className="text-xs font-bold text-[#FDE100] hover:underline"
                     >
                       Full Table →
                     </Link>
@@ -358,12 +358,12 @@ export default function PublicHomePage() {
                       <p className="text-xs text-slate-400 font-semibold">
                         {ngindaStanding.competitionName} • {ngindaStanding.seasonName}
                       </p>
-                      <div className="grid grid-cols-4 gap-2 bg-[#080D0A] p-4 rounded-xl border border-[#18231C] text-center">
+                      <div className="grid grid-cols-4 gap-2 bg-[#0D0D0D] p-4 rounded-xl border border-[#262626] text-center">
                         <div>
                           <span className="block text-[10px] uppercase text-slate-400 font-bold">
                             POS
                           </span>
-                          <span className="font-pedals font-athletic text-3xl font-black text-[#F5D000]">
+                          <span className="font-athletic text-3xl font-black text-[#FDE100]">
                             #{ngindaStanding.position}
                           </span>
                         </div>
@@ -371,7 +371,7 @@ export default function PublicHomePage() {
                           <span className="block text-[10px] uppercase text-slate-400 font-bold">
                             PLAYED
                           </span>
-                          <span className="font-pedals font-athletic text-3xl font-black text-white">
+                          <span className="font-athletic text-3xl font-black text-white">
                             {ngindaStanding.played}
                           </span>
                         </div>
@@ -379,7 +379,7 @@ export default function PublicHomePage() {
                           <span className="block text-[10px] uppercase text-slate-400 font-bold">
                             GD
                           </span>
-                          <span className="font-pedals font-athletic text-3xl font-black text-white">
+                          <span className="font-athletic text-3xl font-black text-white">
                             {ngindaStanding.goalDifference > 0
                               ? `+${ngindaStanding.goalDifference}`
                               : ngindaStanding.goalDifference}
@@ -389,7 +389,7 @@ export default function PublicHomePage() {
                           <span className="block text-[10px] uppercase text-slate-400 font-bold">
                             POINTS
                           </span>
-                          <span className="font-pedals font-athletic text-3xl font-black text-[#4ADE80]">
+                          <span className="font-athletic text-3xl font-black text-[#FDE100]">
                             {ngindaStanding.points}
                           </span>
                         </div>
@@ -401,8 +401,8 @@ export default function PublicHomePage() {
                             key={row.id}
                             className={`flex items-center justify-between px-3 py-1.5 rounded ${
                               row.isNgindaWarriors
-                                ? 'bg-[#08783E]/20 text-[#F5D000] font-extrabold border border-[#08783E]/40'
-                                : 'bg-[#080D0A] text-slate-300'
+                                ? 'bg-[#FDE100]/15 text-[#FDE100] font-extrabold border border-[#262626]'
+                                : 'bg-[#0D0D0D] text-slate-300'
                             }`}
                           >
                             <span>
@@ -418,7 +418,7 @@ export default function PublicHomePage() {
                   ) : (
                     <div className="py-10 text-center space-y-2">
                       <Award className="w-10 h-10 text-slate-500 mx-auto opacity-80" />
-                      <p className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                      <p className="font-athletic text-xl font-bold uppercase text-white">
                         Verified Standings Pending
                       </p>
                       <p className="text-xs text-slate-400 max-w-xs mx-auto">
@@ -428,13 +428,13 @@ export default function PublicHomePage() {
                   )}
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-[#18231C]">
+                <div className="mt-5 pt-4 border-t border-[#262626]">
                   <Link
                     href="/standings"
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#121B16] hover:bg-[#1A2620] text-slate-200 border border-[#1E2B23] font-pedals font-athletic font-bold text-sm uppercase tracking-wider transition"
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] text-slate-200 border border-[#262626] font-athletic font-bold text-sm uppercase tracking-wider transition"
                   >
                     <span>View Competition Standings</span>
-                    <ArrowRight className="w-4 h-4 text-[#F5D000]" />
+                    <ArrowRight className="w-4 h-4 text-[#FDE100]" />
                   </Link>
                 </div>
               </div>
@@ -445,7 +445,7 @@ export default function PublicHomePage() {
       )}
 
       {/* 2.5 WARRIORS+ TV - Deep Black Surface */}
-      <section id="warriors-tv" className="py-20 bg-black text-white border-b border-[#1E2B23]">
+      <section id="warriors-tv" className="py-20 bg-black text-white border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <WarriorsTVHub videos={publishedVideos} />
         </div>
@@ -453,24 +453,24 @@ export default function PublicHomePage() {
 
       {/* 3. FEATURED SQUAD - Sleek Pitch Surface */}
       {isSectionVisible('featured_squad') && (
-        <section className="py-16 bg-[#070C09] text-white border-b border-[#1E2B23]">
+        <section className="py-16 bg-[#0A0A0A] text-white border-b border-[#262626]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <MotionReveal y={24} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
-                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
                     FIRST TEAM DIRECTORY • EST. {clubSettings.establishedYear}
                   </span>
-                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
+                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
                     {squadMeta.title}
                   </h2>
                 </div>
                 <Link
                   href="/team"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-bold text-sm uppercase tracking-wider transition shadow-md"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-sm uppercase tracking-wider transition shadow-md"
                 >
                   <span>Explore Full Squad</span>
-                  <ArrowRight className="w-4 h-4 text-[#F5D000]" />
+                  <ArrowRight className="w-4 h-4 text-[#FDE100]" />
                 </Link>
               </div>
             </MotionReveal>
@@ -481,10 +481,10 @@ export default function PublicHomePage() {
                   <StaggerItem key={player.id} className="h-full">
                     <Link
                       href={`/team/${player.slug}`}
-                      className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] hover:border-[#F5D000]/60 shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                      className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100]/60 shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
                     >
-                    <div className="relative h-64 bg-[#080D0A] flex items-center justify-center overflow-hidden">
-                      <span className="absolute top-3 right-4 font-pedals font-athletic text-6xl font-black text-[#15201A] select-none">
+                    <div className="relative h-64 bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
+                      <span className="absolute top-3 right-4 font-athletic text-6xl font-black text-[#15201A] select-none">
                         #{player.jerseyNumber}
                       </span>
                       {player.photoUrl ? (
@@ -496,22 +496,22 @@ export default function PublicHomePage() {
                       ) : (
                         <ClubCrest size={96} customCrestUrl={clubSettings.crestUrl} />
                       )}
-                      <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#08783E] text-white font-pedals font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+                      <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
                         #{player.jerseyNumber} • {player.positionGroup.slice(0, -1)}
                       </div>
                     </div>
                     <div className="p-5 flex-1 flex flex-col justify-between">
                       <div>
-                        <h3 className="font-pedals font-athletic text-2xl font-black uppercase text-white group-hover:text-[#F5D000] transition-colors">
+                        <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
                           {player.fullName}
                         </h3>
                         <p className="text-xs font-semibold text-slate-400 mt-0.5">
                           {player.specificRole} • Preferred Foot: {player.preferredFoot}
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-[#18231C] grid grid-cols-3 text-center text-xs">
+                      <div className="mt-4 pt-3 border-t border-[#262626] grid grid-cols-3 text-center text-xs">
                         <div>
-                          <span className="block font-pedals font-athletic text-lg font-black text-[#4ADE80]">
+                          <span className="block font-athletic text-lg font-black text-[#FDE100]">
                             {player.appearances}
                           </span>
                           <span className="text-[10px] uppercase text-slate-400 font-bold">
@@ -519,7 +519,7 @@ export default function PublicHomePage() {
                           </span>
                         </div>
                         <div>
-                          <span className="block font-pedals font-athletic text-lg font-black text-[#F5D000]">
+                          <span className="block font-athletic text-lg font-black text-[#FDE100]">
                             {player.goals}
                           </span>
                           <span className="text-[10px] uppercase text-slate-400 font-bold">
@@ -527,7 +527,7 @@ export default function PublicHomePage() {
                           </span>
                         </div>
                         <div>
-                          <span className="block font-pedals font-athletic text-lg font-black text-[#4ADE80]">
+                          <span className="block font-athletic text-lg font-black text-[#FDE100]">
                             {player.assists}
                           </span>
                           <span className="text-[10px] uppercase text-slate-400 font-bold">
@@ -541,9 +541,9 @@ export default function PublicHomePage() {
                 ))}
               </StaggerContainer>
             ) : (
-              <div className="rounded-2xl bg-[#0D1410] border-2 border-dashed border-[#1E2B23] p-10 text-center shadow-md">
+              <div className="rounded-2xl bg-[#141414] border-2 border-dashed border-[#262626] p-10 text-center shadow-md">
                 <Users className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+                <h3 className="font-athletic text-2xl font-bold uppercase text-white">
                   Official Squad Profiles Being Prepared
                 </h3>
                 <p className="text-sm text-slate-400 max-w-xl mx-auto mt-1">
@@ -568,21 +568,21 @@ export default function PublicHomePage() {
 
       {/* 4. LATEST NEWS - Deep Black Surface */}
       {isSectionVisible('latest_news') && (
-        <section className="py-16 bg-black text-white border-b border-[#1E2B23]">
+        <section className="py-16 bg-black text-white border-b border-[#262626]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <MotionReveal y={24} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
-                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
                     OFFICIAL CLUB MEDIA DESK
                   </span>
-                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
+                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
                     {newsMeta.title}
                   </h2>
                 </div>
                 <Link
                   href="/news"
-                  className="inline-flex items-center gap-2 text-sm font-pedals font-athletic font-bold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000] transition"
+                  className="inline-flex items-center gap-2 text-sm font-athletic font-bold uppercase tracking-wider text-[#FDE100] hover:text-[#FDE100] transition"
                 >
                   <span>All Club News & Notices</span>
                   <ArrowRight className="w-4 h-4" />
@@ -596,9 +596,9 @@ export default function PublicHomePage() {
                   <StaggerItem key={article.id} className="h-full">
                     <Link
                       href={`/news/${article.slug}`}
-                      className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] shadow-xl hover:border-[#F5D000]/60 transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                      className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] shadow-xl hover:border-[#FDE100]/60 transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
                     >
-                    <div className="h-48 bg-[#080D0A] relative flex items-center justify-center overflow-hidden">
+                    <div className="h-48 bg-[#0D0D0D] relative flex items-center justify-center overflow-hidden">
                       {article.featuredImageUrl ? (
                         <img
                           src={article.featuredImageUrl}
@@ -608,7 +608,7 @@ export default function PublicHomePage() {
                       ) : (
                         <ClubCrest size={76} customCrestUrl={clubSettings.crestUrl} />
                       )}
-                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#08783E] text-white font-pedals font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
                         {article.categoryName}
                       </span>
                     </div>
@@ -618,14 +618,14 @@ export default function PublicHomePage() {
                           {formatNairobiDateTime(article.publishedAt || article.createdAt)} • By{' '}
                           {article.authorName}
                         </p>
-                        <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white group-hover:text-[#F5D000] transition-colors line-clamp-2">
+                        <h3 className="font-athletic text-2xl font-bold uppercase text-white group-hover:text-[#FDE100] transition-colors line-clamp-2">
                           {article.headline}
                         </h3>
                         <p className="text-sm text-slate-300 mt-2 line-clamp-3">
                           {article.excerpt}
                         </p>
                       </div>
-                      <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#F5D000]">
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-athletic font-extrabold uppercase tracking-wider text-[#FDE100]">
                         Read Full Story <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
@@ -634,9 +634,9 @@ export default function PublicHomePage() {
                 ))}
               </StaggerContainer>
             ) : (
-              <div className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] p-10 text-center">
+              <div className="rounded-2xl bg-[#141414] border border-[#262626] p-10 text-center">
                 <Newspaper className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+                <h3 className="font-athletic text-2xl font-bold uppercase text-white">
                   No Published News Articles Yet
                 </h3>
                 <p className="text-sm text-slate-400 max-w-lg mx-auto mt-1">
@@ -650,15 +650,15 @@ export default function PublicHomePage() {
 
       {/* 5. COMMUNITY IMPACT - Pitch Surface */}
       {isSectionVisible('community_impact') && (
-        <section className="py-16 bg-[#070C09] text-white border-b border-[#1E2B23]">
+        <section className="py-16 bg-[#0A0A0A] text-white border-b border-[#262626]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               <MotionReveal y={24} once={false} className="lg:col-span-6 space-y-5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider">
-                  <HeartHandshake className="w-3.5 h-3.5 text-[#F5D000]" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] text-xs font-athletic font-extrabold uppercase tracking-wider">
+                  <HeartHandshake className="w-3.5 h-3.5 text-[#FDE100]" />
                   <span>MORE THAN A FOOTBALL CLUB</span>
                 </span>
-                <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white">
+                <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white">
                   {communityMeta.title}
                 </h2>
                 <p className="text-base text-slate-300 leading-relaxed">
@@ -668,9 +668,9 @@ export default function PublicHomePage() {
                   {clubSettings.clubInfo.developmentObjectives.map((objective, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0D1410] border border-[#1E2B23] shadow-sm"
+                      className="flex items-start gap-3 p-3.5 rounded-xl bg-[#141414] border border-[#262626] shadow-sm"
                     >
-                      <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-5 h-5 text-[#FDE100] shrink-0 mt-0.5" />
                       <span className="text-sm font-medium text-slate-200">{objective}</span>
                     </div>
                   ))}
@@ -679,9 +679,9 @@ export default function PublicHomePage() {
 
               <StaggerContainer className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-5" once={false} stagger={0.12}>
                 <StaggerItem>
-                <div className="p-6 rounded-2xl bg-[#0D1410] border border-[#1E2B23] border-t-4 border-t-[#08783E] shadow-xl">
-                  <Trophy className="w-8 h-8 text-[#4ADE80] mb-3" />
-                  <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+                <div className="p-6 rounded-2xl bg-[#141414] border border-[#262626] border-t-4 border-t-[#FDE100] shadow-xl">
+                  <Trophy className="w-8 h-8 text-[#FDE100] mb-3" />
+                  <h3 className="font-athletic text-2xl font-bold uppercase text-white">
                     Youth Talent Pathway
                   </h3>
                   <p className="text-sm text-slate-300 mt-2 leading-relaxed">
@@ -689,7 +689,7 @@ export default function PublicHomePage() {
                   </p>
                   <Link
                     href="/recruitment"
-                    className="inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-bold uppercase tracking-wider text-[#F5D000] mt-4 hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-athletic font-bold uppercase tracking-wider text-[#FDE100] mt-4 hover:underline"
                   >
                     Apply for Player Trials <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
@@ -697,9 +697,9 @@ export default function PublicHomePage() {
                 </StaggerItem>
 
                 <StaggerItem>
-                <div className="p-6 rounded-2xl bg-[#0D1410] border border-[#1E2B23] border-t-4 border-t-[#F5D000] shadow-xl">
-                  <Shield className="w-8 h-8 text-[#F5D000] mb-3" />
-                  <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+                <div className="p-6 rounded-2xl bg-[#141414] border border-[#262626] border-t-4 border-t-[#FDE100] shadow-xl">
+                  <Shield className="w-8 h-8 text-[#FDE100] mb-3" />
+                  <h3 className="font-athletic text-2xl font-bold uppercase text-white">
                     Financial Transparency
                   </h3>
                   <p className="text-sm text-slate-300 mt-2 leading-relaxed">
@@ -707,7 +707,7 @@ export default function PublicHomePage() {
                   </p>
                   <Link
                     href="/transparency"
-                    className="inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-bold uppercase tracking-wider text-[#F5D000] mt-4 hover:underline"
+                    className="inline-flex items-center gap-1.5 text-xs font-athletic font-bold uppercase tracking-wider text-[#FDE100] mt-4 hover:underline"
                   >
                     View Transparency Ledger <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
@@ -721,21 +721,21 @@ export default function PublicHomePage() {
 
       {/* 6. APPROVED SPONSORS STRIP - Deep Black Surface */}
       {isSectionVisible('sponsors_strip') && (
-        <section className="py-14 bg-black text-white border-b border-[#1E2B23]">
+        <section className="py-14 bg-black text-white border-b border-[#262626]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <MotionReveal y={20} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                  <span className="text-xs font-pedals font-athletic font-extrabold uppercase tracking-widest text-[#F5D000]">
+                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
                     COMMERCIAL PARTNERSHIPS
                   </span>
-                  <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white">
+                  <h2 className="font-athletic text-3xl font-black uppercase text-white">
                     {sponsorsMeta.title}
                   </h2>
                 </div>
                 <Link
                   href="/sponsors"
-                  className="inline-flex items-center gap-2 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#4ADE80] hover:text-[#F5D000]"
+                  className="inline-flex items-center gap-2 text-xs font-athletic font-extrabold uppercase tracking-wider text-[#FDE100] hover:text-[#FDE100]"
                 >
                   <span>View Sponsorship Packages</span>
                   <ArrowRight className="w-4 h-4" />
@@ -747,7 +747,7 @@ export default function PublicHomePage() {
               <StaggerContainer className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4" once={false} stagger={0.08}>
                 {approvedSponsors.map((sponsor) => (
                   <StaggerItem key={sponsor.id}>
-                    <div className="p-5 rounded-xl bg-[#0D1410] border border-[#1E2B23] flex flex-col items-center justify-center text-center shadow-md h-full">
+                    <div className="p-5 rounded-xl bg-[#141414] border border-[#262626] flex flex-col items-center justify-center text-center shadow-md h-full">
                     {sponsor.logoUrl ? (
                       <img
                         src={sponsor.logoUrl}
@@ -755,10 +755,10 @@ export default function PublicHomePage() {
                         className="h-14 object-contain mb-2"
                       />
                     ) : null}
-                    <p className="font-pedals font-athletic font-bold text-base uppercase text-white">
+                    <p className="font-athletic font-bold text-base uppercase text-white">
                       {sponsor.businessName}
                     </p>
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 mt-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 mt-1">
                       {sponsor.tierCode.replace('_', ' ')}
                     </span>
                     </div>
@@ -766,9 +766,9 @@ export default function PublicHomePage() {
                 ))}
               </StaggerContainer>
             ) : (
-              <div className="rounded-xl bg-[#0D1410] border border-[#1E2B23] p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
+              <div className="rounded-xl bg-[#141414] border border-[#262626] p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
                 <div>
-                  <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+                  <h3 className="font-athletic text-2xl font-bold uppercase text-white">
                     Official Partnership Opportunities Open for 2026/2027
                   </h3>
                   <p className="text-sm text-slate-300 mt-1">
@@ -777,10 +777,10 @@ export default function PublicHomePage() {
                 </div>
                 <Link
                   href="/sponsors"
-                  className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-bold text-sm uppercase tracking-wider transition shadow-sm"
+                  className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-sm uppercase tracking-wider transition shadow-sm"
                 >
                   <span>Become an Official Sponsor</span>
-                  <ArrowRight className="w-4 h-4 text-[#F5D000]" />
+                  <ArrowRight className="w-4 h-4 text-[#FDE100]" />
                 </Link>
               </div>
             )}
@@ -789,14 +789,14 @@ export default function PublicHomePage() {
       )}
 
       {/* 6.5 SUPPORTER HUB - Sleek Pitch Surface */}
-      <section id="supporters-hub" className="py-20 bg-[#070C09] text-white border-b border-[#1E2B23]">
+      <section id="supporters-hub" className="py-20 bg-[#0A0A0A] text-white border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <MotionReveal y={24} once={false}>
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-black text-xs uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider">
                 WARRIORS SUPPORTERS HUB
               </span>
-              <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-3">
+              <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-3">
                 EMPOWERED BY OUR FANS
               </h2>
               <p className="text-sm sm:text-base text-slate-300 mt-2">
@@ -816,14 +816,14 @@ export default function PublicHomePage() {
 
       {/* 7. FINAL CALL TO ACTION ("STAND WITH THE WARRIORS.") - Deep Black Pitch */}
       {isSectionVisible('final_cta') && (
-        <section className="py-20 bg-black text-white border-b border-[#1E2B23] relative overflow-hidden">
+        <section className="py-20 bg-black text-white border-b border-[#262626] relative overflow-hidden">
           <MotionReveal y={28} scale={0.98} once={false} className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <div className="flex justify-center">
-              <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
+              <div className="p-2.5 rounded-2xl bg-[#0A0A0A] border border-[#262626] shadow-md flex items-center justify-center">
                 <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
               </div>
             </div>
-            <h2 className="font-pedals font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight text-white">
+            <h2 className="font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight text-white">
               {finalCtaMeta.title || 'STAND WITH THE WARRIORS.'}
             </h2>
             <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
@@ -833,21 +833,21 @@ export default function PublicHomePage() {
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/support"
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-lg uppercase tracking-wider shadow-md transition"
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-lg uppercase tracking-wider shadow-md transition"
               >
-                <HeartHandshake className="w-5 h-5 text-[#F5D000]" />
+                <HeartHandshake className="w-5 h-5 text-[#FDE100]" />
                 <span>Support the Club</span>
               </Link>
               <Link
                 href="/sponsors"
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-[#0D1410] hover:bg-[#141E18] text-white border-2 border-[#1E2B23] hover:border-[#08783E] font-pedals font-athletic font-bold text-lg uppercase tracking-wider transition shadow-sm"
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-[#141414] hover:bg-[#1A1A1A] text-white border-2 border-[#262626] hover:border-[#262626] font-athletic font-bold text-lg uppercase tracking-wider transition shadow-sm"
               >
-                <Shield className="w-5 h-5 text-[#4ADE80]" />
+                <Shield className="w-5 h-5 text-[#FDE100]" />
                 <span>Become a Sponsor</span>
               </Link>
               <Link
                 href="/membership"
-                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-[#121B16] hover:bg-[#1A2620] text-slate-200 border border-[#1E2B23] font-pedals font-athletic font-bold text-lg uppercase tracking-wider transition"
+                className="inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-[#1A1A1A] hover:bg-[#222222] text-slate-200 border border-[#262626] font-athletic font-bold text-lg uppercase tracking-wider transition"
               >
                 <Users className="w-5 h-5 text-slate-400" />
                 <span>Join Our Community</span>

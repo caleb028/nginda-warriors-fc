@@ -73,32 +73,32 @@ export default function SingleMatchCentrePage({
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Match Scoreboard Header */}
-      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
+      <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/fixtures"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#F5D000] hover:underline mb-6"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FDE100] hover:underline mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to All Fixtures & Results</span>
           </Link>
 
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#4ADE80] font-bold uppercase mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#FDE100] font-bold uppercase mb-6">
             <span>
               {fixture.competitionName} • {fixture.seasonName}
             </span>
-            <span className="px-3 py-1 rounded-full bg-[#08783E] text-white font-athletic font-black shadow-sm">
+            <span className="px-3 py-1 rounded-full bg-[#FDE100] text-black font-athletic font-black shadow-sm">
               {fixture.matchStatus.replace(/_/g, ' ').toUpperCase()}
             </span>
           </div>
 
-          <div className="grid grid-cols-3 items-center gap-4 bg-[#0D1410] border-2 border-[#1E2B23] rounded-2xl p-6 sm:p-8 text-center shadow-2xl">
+          <div className="grid grid-cols-3 items-center gap-4 bg-[#141414] border-2 border-[#262626] rounded-2xl p-6 sm:p-8 text-center shadow-2xl">
             <div>
               <div className="flex justify-center mb-3">
                 {fixture.isHome ? (
                   <ClubCrest size={76} customCrestUrl={clubSettings.crestUrl} />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-[#141E18] border-2 border-[#F5D000] flex items-center justify-center font-athletic font-black text-2xl text-[#F5D000]">
+                  <div className="w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#FDE100] flex items-center justify-center font-athletic font-black text-2xl text-[#FDE100]">
                     {fixture.opponentName.slice(0, 2).toUpperCase()}
                   </div>
                 )}
@@ -111,11 +111,11 @@ export default function SingleMatchCentrePage({
 
             <div>
               {typeof fixture.homeScore === 'number' && typeof fixture.awayScore === 'number' ? (
-                <div className="font-athletic text-5xl sm:text-7xl font-black text-[#F5D000]">
+                <div className="font-athletic text-5xl sm:text-7xl font-black text-[#FDE100]">
                   {fixture.homeScore} : {fixture.awayScore}
                 </div>
               ) : (
-                <div className="font-athletic text-3xl sm:text-5xl font-black text-[#F5D000]">
+                <div className="font-athletic text-3xl sm:text-5xl font-black text-[#FDE100]">
                   VS
                 </div>
               )}
@@ -134,7 +134,7 @@ export default function SingleMatchCentrePage({
                 {!fixture.isHome ? (
                   <ClubCrest size={76} customCrestUrl={clubSettings.crestUrl} />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-[#141E18] border-2 border-[#F5D000] flex items-center justify-center font-athletic font-black text-2xl text-[#F5D000]">
+                  <div className="w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#FDE100] flex items-center justify-center font-athletic font-black text-2xl text-[#FDE100]">
                     {fixture.opponentName.slice(0, 2).toUpperCase()}
                   </div>
                 )}
@@ -148,11 +148,11 @@ export default function SingleMatchCentrePage({
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-300">
             <span className="inline-flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 text-[#F5D000]" />
+              <MapPin className="w-4 h-4 text-[#FDE100]" />
               Venue: {fixture.venue}
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-[#F5D000]" />
+              <Calendar className="w-4 h-4 text-[#FDE100]" />
               Timezone: {fixture.timezone}
             </span>
           </div>
@@ -169,9 +169,9 @@ export default function SingleMatchCentrePage({
           />
 
           {/* Match Timeline & Events */}
-          <div className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-xl text-white">
-            <div className="flex items-center gap-2 text-[#4ADE80] font-athletic font-bold uppercase text-sm mb-3">
-              <Clock className="w-4 h-4 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl text-white">
+            <div className="flex items-center gap-2 text-[#FDE100] font-athletic font-bold uppercase text-sm mb-3">
+              <Clock className="w-4 h-4 text-[#FDE100]" />
               <span>Official Match Events</span>
             </div>
             <h3 className="font-athletic text-2xl font-black uppercase text-white mb-4">
@@ -183,10 +183,10 @@ export default function SingleMatchCentrePage({
                 {sortedEvents.map((ev) => (
                   <div
                     key={ev.id}
-                    className="flex items-center justify-between p-3 rounded-xl bg-[#080D0A] border border-[#18231C] text-sm"
+                    className="flex items-center justify-between p-3 rounded-xl bg-[#0D0D0D] border border-[#262626] text-sm"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="px-2.5 py-1 rounded bg-[#08783E] text-white font-athletic font-black text-sm shadow-xs">
+                      <span className="px-2.5 py-1 rounded bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-sm shadow-xs">
                         {ev.minute}&apos;{ev.addedTime ? `+${ev.addedTime}` : ''}
                       </span>
                       <div>
@@ -202,7 +202,7 @@ export default function SingleMatchCentrePage({
                         )}
                       </div>
                     </div>
-                    <span className="px-2.5 py-0.5 rounded bg-[#141E18] text-[#F5D000] border border-[#1E2B23] text-xs font-bold uppercase">
+                    <span className="px-2.5 py-0.5 rounded bg-[#1A1A1A] text-[#FDE100] border border-[#262626] text-xs font-bold uppercase">
                       {ev.eventType.replace(/_/g, ' ')}
                     </span>
                   </div>
@@ -217,16 +217,16 @@ export default function SingleMatchCentrePage({
 
           {/* Official Match Report */}
           {fixture.report && (
-            <div className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-xl space-y-3 text-white">
-              <div className="flex items-center gap-2 text-[#4ADE80] font-athletic font-bold uppercase text-sm">
-                <FileText className="w-4 h-4 text-[#F5D000]" />
+            <div className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl space-y-3 text-white">
+              <div className="flex items-center gap-2 text-[#FDE100] font-athletic font-bold uppercase text-sm">
+                <FileText className="w-4 h-4 text-[#FDE100]" />
                 <span>Verified Match Report</span>
               </div>
               <h3 className="font-athletic text-3xl font-black uppercase text-white">
                 {fixture.report.headline}
               </h3>
               <p className="text-sm font-semibold text-slate-300">{fixture.report.summary}</p>
-              <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-line pt-2 border-t border-[#18231C]">
+              <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-line pt-2 border-t border-[#262626]">
                 {fixture.report.body}
               </div>
             </div>
@@ -235,9 +235,9 @@ export default function SingleMatchCentrePage({
 
         {/* Right Column: Lineups & Man of the Match Voting */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-xl text-white">
-            <div className="flex items-center gap-2 text-[#4ADE80] font-athletic font-bold uppercase text-sm mb-2">
-              <Users className="w-4 h-4 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl text-white">
+            <div className="flex items-center gap-2 text-[#FDE100] font-athletic font-bold uppercase text-sm mb-2">
+              <Users className="w-4 h-4 text-[#FDE100]" />
               <span>Team Sheet</span>
             </div>
             <h3 className="font-athletic text-2xl font-black uppercase text-white mb-4">
@@ -247,19 +247,19 @@ export default function SingleMatchCentrePage({
             {starters.length > 0 ? (
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs font-extrabold uppercase text-[#F5D000] mb-2">
+                  <p className="text-xs font-extrabold uppercase text-[#FDE100] mb-2">
                     Starting XI
                   </p>
                   <ul className="space-y-1.5 text-sm">
                     {starters.map((p) => (
                       <li
                         key={p.id}
-                        className="flex items-center justify-between py-1 px-2.5 rounded bg-[#080D0A] border border-[#18231C]"
+                        className="flex items-center justify-between py-1 px-2.5 rounded bg-[#0D0D0D] border border-[#262626]"
                       >
                         <span className="font-bold text-white">
                           #{p.jerseyNumber} {p.playerName}{' '}
                           {p.isCaptain && (
-                            <span className="px-1.5 py-0.2 rounded bg-[#F5D000] text-slate-950 text-[10px] font-black">
+                            <span className="px-1.5 py-0.2 rounded bg-[#FDE100] text-slate-950 text-[10px] font-black">
                               C
                             </span>
                           )}
@@ -272,14 +272,14 @@ export default function SingleMatchCentrePage({
 
                 {substitutes.length > 0 && (
                   <div>
-                    <p className="text-xs font-extrabold uppercase text-[#F5D000] mb-2">
+                    <p className="text-xs font-extrabold uppercase text-[#FDE100] mb-2">
                       Substitutes
                     </p>
                     <ul className="space-y-1.5 text-sm">
                       {substitutes.map((p) => (
                         <li
                           key={p.id}
-                          className="flex items-center justify-between py-1 px-2.5 rounded bg-[#080D0A] border border-[#18231C]"
+                          className="flex items-center justify-between py-1 px-2.5 rounded bg-[#0D0D0D] border border-[#262626]"
                         >
                           <span className="font-medium text-slate-300">
                             #{p.jerseyNumber} {p.playerName}

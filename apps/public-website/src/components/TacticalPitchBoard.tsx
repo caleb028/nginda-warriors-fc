@@ -95,13 +95,13 @@ export function TacticalPitchBoard({
   const coordinates = FORMATIONS[formation];
 
   return (
-    <div className="w-full bg-[#063B25] text-white rounded-2xl overflow-hidden shadow-2xl border border-[#08783E]/40">
+    <div className="w-full bg-[#0A0A0A] text-white rounded-2xl overflow-hidden shadow-2xl border border-[#262626]">
       {/* Header bar with formation switcher */}
-      <div className="bg-[#042819] px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-[#08783E]/30">
+      <div className="bg-[#0D0D0D] px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-[#262626]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#F5D000] animate-pulse" />
-            <h3 className="font-athletic text-xl uppercase tracking-wider text-[#F5D000]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FDE100] animate-pulse" />
+            <h3 className="font-athletic text-xl uppercase tracking-wider text-[#FDE100]">
               Tactical Pitch Formation
             </h3>
           </div>
@@ -120,7 +120,7 @@ export function TacticalPitchBoard({
               onClick={() => setFormation(fmt)}
               className={`px-3 py-1 rounded text-xs font-bold transition-all ${
                 formation === fmt
-                  ? 'bg-[#F5D000] text-[#063B25] shadow-md font-athletic'
+                  ? 'bg-[#FDE100] text-black shadow-md font-athletic'
                   : 'bg-white/10 hover:bg-white/20 text-white font-medium'
               }`}
             >
@@ -137,7 +137,7 @@ export function TacticalPitchBoard({
           className="relative w-full max-w-[500px] aspect-[7/10] rounded-xl overflow-hidden shadow-inner border-2 border-white/40"
           style={{
             background:
-              'repeating-linear-gradient(0deg, #075a30, #075a30 40px, #086d3b 40px, #086d3b 80px)',
+              'repeating-linear-gradient(0deg, #0A1C12, #0A1C12 40px, #0C2317 40px, #0C2317 80px)',
           }}
         >
           {/* Pitch markings SVG */}
@@ -240,8 +240,8 @@ export function TacticalPitchBoard({
                   <div
                     className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-athletic font-extrabold text-sm sm:text-base border-2 shadow-lg transition-all ${
                       isSelected
-                        ? 'bg-[#F5D000] text-[#063B25] border-white ring-4 ring-[#F5D000]/60 scale-110'
-                        : 'bg-[#063B25] text-[#F5D000] border-[#F5D000] group-hover:border-white'
+                        ? 'bg-[#FDE100] text-black border-white ring-4 ring-[#FDE100]/60 scale-110'
+                        : 'bg-[#0A0A0A] text-[#FDE100] border-[#FDE100] group-hover:border-white'
                     }`}
                   >
                     {player ? player.jerseyNumber : coord.role}
@@ -251,8 +251,8 @@ export function TacticalPitchBoard({
                   <div
                     className={`mt-1 px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-bold tracking-tight whitespace-nowrap shadow uppercase ${
                       isSelected
-                        ? 'bg-[#F5D000] text-[#063B25]'
-                        : 'bg-[#042819]/90 text-white border border-white/20'
+                        ? 'bg-[#FDE100] text-black'
+                        : 'bg-[#0D0D0D]/90 text-white border border-white/20'
                     }`}
                   >
                     {player ? player.fullName.split(' ').pop() : coord.role}
@@ -266,7 +266,7 @@ export function TacticalPitchBoard({
         {/* Selected Player Profile Card & Substitute Bench */}
         <div className="w-full lg:w-80 flex flex-col gap-6">
           {/* Active Player Card */}
-          <div className="bg-[#042819] p-5 rounded-xl border border-[#08783E]/40 relative shadow-xl">
+          <div className="bg-[#0D0D0D] p-5 rounded-xl border border-[#262626] relative shadow-xl">
             {selectedPlayer ? (
               <div>
                 <button
@@ -277,14 +277,14 @@ export function TacticalPitchBoard({
                   <X className="w-4 h-4" />
                 </button>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-full bg-[#F5D000] text-[#063B25] flex items-center justify-center font-athletic text-2xl font-black shadow">
+                  <div className="w-12 h-12 rounded-full bg-[#FDE100] text-black flex items-center justify-center font-athletic text-2xl font-black shadow">
                     #{selectedPlayer.jerseyNumber}
                   </div>
                   <div>
                     <h4 className="font-athletic text-xl font-bold uppercase text-white leading-tight">
                       {selectedPlayer.fullName}
                     </h4>
-                    <span className="inline-block px-2 py-0.5 rounded bg-[#08783E] text-[10px] font-bold text-white uppercase tracking-wider">
+                    <span className="inline-block px-2 py-0.5 rounded bg-[#FDE100] text-[10px] font-bold text-white uppercase tracking-wider">
                       {getPlayerDisplayPosition(selectedPlayer)}
                     </span>
                   </div>
@@ -299,19 +299,19 @@ export function TacticalPitchBoard({
                 <div className="grid grid-cols-3 gap-2 bg-black/20 p-2.5 rounded-lg text-center mb-4 border border-white/10">
                   <div>
                     <div className="text-[10px] text-white/60 uppercase">Apps</div>
-                    <div className="font-athletic text-lg font-bold text-[#F5D000]">
+                    <div className="font-athletic text-lg font-bold text-[#FDE100]">
                       {selectedPlayer.appearances}
                     </div>
                   </div>
                   <div>
                     <div className="text-[10px] text-white/60 uppercase">Goals</div>
-                    <div className="font-athletic text-lg font-bold text-[#F5D000]">
+                    <div className="font-athletic text-lg font-bold text-[#FDE100]">
                       {selectedPlayer.goals}
                     </div>
                   </div>
                   <div>
                     <div className="text-[10px] text-white/60 uppercase">Assists</div>
-                    <div className="font-athletic text-lg font-bold text-[#F5D000]">
+                    <div className="font-athletic text-lg font-bold text-[#FDE100]">
                       {selectedPlayer.assists}
                     </div>
                   </div>
@@ -319,14 +319,14 @@ export function TacticalPitchBoard({
 
                 <Link
                   href={`/team/${selectedPlayer.slug}`}
-                  className="block text-center py-2 px-4 rounded bg-[#F5D000] text-[#063B25] font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition"
+                  className="block text-center py-2 px-4 rounded bg-[#FDE100] text-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition"
                 >
                   View Full Bio & Stats &rarr;
                 </Link>
               </div>
             ) : (
               <div className="text-center py-6 text-white/60">
-                <User className="w-10 h-10 mx-auto mb-2 text-[#F5D000]/60" />
+                <User className="w-10 h-10 mx-auto mb-2 text-[#FDE100]/60" />
                 <h5 className="font-athletic text-base uppercase text-white font-bold mb-1">
                   Tactical Board Ready
                 </h5>
@@ -341,8 +341,8 @@ export function TacticalPitchBoard({
 
           {/* Substitutes Bench */}
           {benchPlayers.length > 0 && (
-            <div className="bg-[#042819] p-4 rounded-xl border border-[#08783E]/40">
-              <h5 className="font-athletic text-sm uppercase tracking-wider text-[#F5D000] mb-3 flex items-center gap-1.5">
+            <div className="bg-[#0D0D0D] p-4 rounded-xl border border-[#262626]">
+              <h5 className="font-athletic text-sm uppercase tracking-wider text-[#FDE100] mb-3 flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5" /> Substitutes Bench
               </h5>
               <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
@@ -353,7 +353,7 @@ export function TacticalPitchBoard({
                     className="flex items-center justify-between p-2 rounded bg-black/20 hover:bg-white/10 cursor-pointer transition text-xs border border-white/5"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="font-athletic text-sm font-bold text-[#F5D000] w-5">
+                      <span className="font-athletic text-sm font-bold text-[#FDE100] w-5">
                         #{sub.jerseyNumber}
                       </span>
                       <span className="font-semibold text-white">

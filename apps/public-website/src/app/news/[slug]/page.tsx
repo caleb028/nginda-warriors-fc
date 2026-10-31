@@ -35,18 +35,18 @@ export default function SingleArticlePage({
 
   return (
     <article className="bg-black text-white min-h-screen">
-      <header className="bg-[#070C09] text-white py-14 border-b border-[#1E2B23]">
+      <header className="bg-[#0A0A0A] text-white py-14 border-b border-[#262626]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#F5D000] hover:underline"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FDE100] hover:underline"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Club News</span>
           </Link>
 
           <div>
-            <span className="inline-block px-3 py-1 rounded bg-[#08783E] text-white font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+            <span className="inline-block px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
               {article.categoryName}
             </span>
           </div>
@@ -57,11 +57,11 @@ export default function SingleArticlePage({
 
           <div className="flex flex-wrap items-center gap-5 text-xs text-slate-300 pt-2">
             <span className="inline-flex items-center gap-1.5">
-              <User className="w-4 h-4 text-[#F5D000]" />
+              <User className="w-4 h-4 text-[#FDE100]" />
               By {article.authorName}
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-[#F5D000]" />
+              <Calendar className="w-4 h-4 text-[#FDE100]" />
               {new Date(article.publishedAt || article.createdAt).toLocaleDateString('en-KE', {
                 dateStyle: 'full',
               })}
@@ -72,7 +72,7 @@ export default function SingleArticlePage({
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         {article.featuredImageUrl && (
-          <div className="rounded-2xl overflow-hidden border-2 border-[#1E2B23] shadow-2xl">
+          <div className="rounded-2xl overflow-hidden border-2 border-[#262626] shadow-2xl">
             <img
               src={article.featuredImageUrl}
               alt={article.headline}
@@ -81,8 +81,8 @@ export default function SingleArticlePage({
           </div>
         )}
 
-        <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl text-slate-200">
-          <p className="text-lg font-semibold text-white border-l-4 border-[#F5D000] pl-4 mb-6">
+        <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl text-slate-200">
+          <p className="text-lg font-semibold text-white border-l-4 border-[#FDE100] pl-4 mb-6">
             {article.excerpt}
           </p>
           <div className="text-base text-slate-300 leading-relaxed whitespace-pre-line space-y-4">
@@ -90,7 +90,7 @@ export default function SingleArticlePage({
           </div>
         </div>
 
-        <div className="p-6 rounded-2xl bg-[#080D0A] border border-[#1E2B23] flex items-center justify-between gap-4">
+        <div className="p-6 rounded-2xl bg-[#0D0D0D] border border-[#262626] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />
             <div>
@@ -102,7 +102,7 @@ export default function SingleArticlePage({
           </div>
           <Link
             href="/support"
-            className="px-4 py-2 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-bold text-xs uppercase tracking-wider transition shadow-sm"
+            className="px-4 py-2 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-xs uppercase tracking-wider transition shadow-sm"
           >
             Support the Club
           </Link>

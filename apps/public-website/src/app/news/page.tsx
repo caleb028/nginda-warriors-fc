@@ -32,20 +32,20 @@ export default function NewsListingPage({
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Header Banner */}
-      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
+      <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+            <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-widest">
               OFFICIAL CLUB PUBLISHING SYSTEM
             </span>
-            <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
+            <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
               CLUB NEWS & MEDIA
             </h1>
             <p className="text-slate-300 text-base mt-1">
               Verified announcements, match reports, transfers, interviews, and community stories.
             </p>
           </div>
-          <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
+          <div className="p-2.5 rounded-2xl bg-[#0A0A0A] border border-[#262626] shadow-md flex items-center justify-center">
             <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>
@@ -56,10 +56,10 @@ export default function NewsListingPage({
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/news"
-            className={`px-3.5 py-2 rounded-lg text-xs font-pedals font-athletic font-bold uppercase tracking-wider transition ${
+            className={`px-3.5 py-2 rounded-lg text-xs font-athletic font-bold uppercase tracking-wider transition ${
               activeCategory === 'ALL'
-                ? 'bg-[#08783E] text-white shadow-md'
-                : 'bg-[#141E18] text-slate-300 hover:bg-[#1C2B22] border border-[#1E2B23]'
+                ? 'bg-[#FDE100] text-black font-black shadow-md'
+                : 'bg-[#1A1A1A] text-slate-300 hover:bg-[#222222] border border-[#262626]'
             }`}
           >
             All Categories ({articles.length})
@@ -68,10 +68,10 @@ export default function NewsListingPage({
             <Link
               key={cat}
               href={`/news?category=${encodeURIComponent(cat)}`}
-              className={`px-3.5 py-2 rounded-lg text-xs font-pedals font-athletic font-bold uppercase tracking-wider transition ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-athletic font-bold uppercase tracking-wider transition ${
                 activeCategory === cat
-                  ? 'bg-[#08783E] text-white shadow-md'
-                  : 'bg-[#141E18] text-slate-300 hover:bg-[#1C2B22] border border-[#1E2B23]'
+                  ? 'bg-[#FDE100] text-black font-black shadow-md'
+                  : 'bg-[#1A1A1A] text-slate-300 hover:bg-[#222222] border border-[#262626]'
               }`}
             >
               {cat}
@@ -85,9 +85,9 @@ export default function NewsListingPage({
               <Link
                 key={article.id}
                 href={`/news/${article.slug}`}
-                className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] shadow-xl hover:border-[#08783E] transition flex flex-col"
+                className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] shadow-xl hover:border-[#262626] transition flex flex-col"
               >
-                <div className="h-52 bg-[#080D0A] relative flex items-center justify-center overflow-hidden">
+                <div className="h-52 bg-[#0D0D0D] relative flex items-center justify-center overflow-hidden">
                   {article.featuredImageUrl ? (
                     <img
                       src={article.featuredImageUrl}
@@ -97,7 +97,7 @@ export default function NewsListingPage({
                   ) : (
                     <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
                   )}
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#08783E] text-white font-pedals font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
+                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
                     {article.categoryName}
                   </span>
                 </div>
@@ -110,22 +110,22 @@ export default function NewsListingPage({
                       )}{' '}
                       • {article.authorName}
                     </p>
-                    <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-white group-hover:text-[#F5D000] transition-colors line-clamp-2">
+                    <h2 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors line-clamp-2">
                       {article.headline}
                     </h2>
                     <p className="text-sm text-slate-300 mt-2 line-clamp-3">{article.excerpt}</p>
                   </div>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#F5D000]">
-                    Read Full Article <ArrowRight className="w-3.5 h-3.5 text-[#F5D000]" />
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-athletic font-extrabold uppercase tracking-wider text-[#FDE100]">
+                    Read Full Article <ArrowRight className="w-3.5 h-3.5 text-[#FDE100]" />
                   </span>
                 </div>
               </Link>
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-[#0D1410] p-12 text-center border border-[#1E2B23]">
+          <div className="rounded-2xl bg-[#141414] p-12 text-center border border-[#262626]">
             <Newspaper className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-            <h2 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+            <h2 className="font-athletic text-2xl font-bold uppercase text-white">
               No Published Articles in This Category Yet
             </h2>
             <p className="text-sm text-slate-400 max-w-lg mx-auto mt-1">

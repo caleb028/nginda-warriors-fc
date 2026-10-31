@@ -14,20 +14,20 @@ export default function AboutClubPage() {
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Page Header - Pitch Black Banner */}
-      <section className="bg-[#070C09] text-white py-12 sm:py-16 border-b border-[#1E2B23]">
+      <section className="bg-[#0A0A0A] text-white py-12 sm:py-16 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3">
-            <span className="inline-block px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-black text-xs uppercase tracking-widest">
+            <span className="inline-block px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-widest">
               ESTABLISHED {clubSettings.establishedYear} • OFFICIAL CLUB IDENTITY
             </span>
-            <h1 className="font-pedals font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight text-white">
+            <h1 className="font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight text-white">
               ABOUT {clubSettings.clubName}
             </h1>
-            <p className="text-lg text-[#F5D000] font-athletic font-bold max-w-2xl">
+            <p className="text-lg text-[#FDE100] font-athletic font-bold max-w-2xl">
               “{clubSettings.tagline}”
             </p>
           </div>
-          <div className="p-4 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
+          <div className="p-4 rounded-2xl bg-[#0A0A0A] border border-[#262626] shadow-md flex items-center justify-center">
             <ClubCrest size={120} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>
@@ -36,23 +36,23 @@ export default function AboutClubPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
         {/* 1. About the Club & Club History */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl border-t-4 border-t-[#08783E]">
-            <div className="flex items-center gap-2.5 text-[#4ADE80] font-pedals font-athletic font-bold uppercase text-sm tracking-wider mb-2">
-              <Shield className="w-5 h-5 text-[#4ADE80]" />
+          <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl border-t-4 border-t-[#FDE100]">
+            <div className="flex items-center gap-2.5 text-[#FDE100] font-athletic font-bold uppercase text-sm tracking-wider mb-2">
+              <Shield className="w-5 h-5 text-[#FDE100]" />
               <span>Club Identity</span>
             </div>
-            <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white mb-4">
+            <h2 className="font-athletic text-3xl font-black uppercase text-white mb-4">
               About the Club
             </h2>
             <p className="text-slate-300 leading-relaxed">{clubInfo.aboutSummary}</p>
           </div>
 
-          <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl border-t-4 border-t-[#D5AA00]">
-            <div className="flex items-center gap-2.5 text-[#F5D000] font-pedals font-athletic font-bold uppercase text-sm tracking-wider mb-2">
-              <Flag className="w-5 h-5 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl border-t-4 border-t-[#D5AA00]">
+            <div className="flex items-center gap-2.5 text-[#FDE100] font-athletic font-bold uppercase text-sm tracking-wider mb-2">
+              <Flag className="w-5 h-5 text-[#FDE100]" />
               <span>Est. {clubSettings.establishedYear}</span>
             </div>
-            <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white mb-4">
+            <h2 className="font-athletic text-3xl font-black uppercase text-white mb-4">
               Club History
             </h2>
             <p className="text-slate-300 leading-relaxed">{clubInfo.historyNarrative}</p>
@@ -61,9 +61,9 @@ export default function AboutClubPage() {
 
         {/* 2. Vision and Mission */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-[#0D1410] text-white rounded-2xl p-8 border border-[#1E2B23] border-t-4 border-t-[#08783E] shadow-xl">
-            <Compass className="w-9 h-9 text-[#4ADE80] mb-3" />
-            <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white mb-3">
+          <div className="bg-[#141414] text-white rounded-2xl p-8 border border-[#262626] border-t-4 border-t-[#FDE100] shadow-xl">
+            <Compass className="w-9 h-9 text-[#FDE100] mb-3" />
+            <h2 className="font-athletic text-3xl font-black uppercase text-white mb-3">
               Our Vision
             </h2>
             <p className="text-slate-300 leading-relaxed text-base">
@@ -71,9 +71,9 @@ export default function AboutClubPage() {
             </p>
           </div>
 
-          <div className="bg-[#0D1410] text-white rounded-2xl p-8 border border-[#1E2B23] border-t-4 border-t-[#D5AA00] shadow-xl">
-            <Target className="w-9 h-9 text-[#F5D000] mb-3" />
-            <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white mb-3">
+          <div className="bg-[#141414] text-white rounded-2xl p-8 border border-[#262626] border-t-4 border-t-[#D5AA00] shadow-xl">
+            <Target className="w-9 h-9 text-[#FDE100] mb-3" />
+            <h2 className="font-athletic text-3xl font-black uppercase text-white mb-3">
               Our Mission
             </h2>
             <p className="text-slate-300 leading-relaxed text-base">
@@ -84,17 +84,17 @@ export default function AboutClubPage() {
 
         {/* 3. Club Values */}
         <section>
-          <h2 className="font-pedals font-athletic text-3xl sm:text-4xl font-black uppercase text-white mb-6">
+          <h2 className="font-athletic text-3xl sm:text-4xl font-black uppercase text-white mb-6">
             Core Club Values
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {clubInfo.coreValues.map((val, idx) => (
               <div
                 key={idx}
-                className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-md"
+                className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-md"
               >
-                <CheckCircle2 className="w-6 h-6 text-[#4ADE80] mb-3" />
-                <h3 className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                <CheckCircle2 className="w-6 h-6 text-[#FDE100] mb-3" />
+                <h3 className="font-athletic text-xl font-bold uppercase text-white">
                   {val.title}
                 </h3>
                 <p className="text-sm text-slate-300 mt-2 leading-relaxed">
@@ -106,25 +106,25 @@ export default function AboutClubPage() {
         </section>
 
         {/* 4. Honours and Milestones */}
-        <section className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl">
-          <div className="flex items-center gap-2.5 text-[#F5D000] font-pedals font-athletic font-bold uppercase text-sm tracking-wider mb-2">
-            <Award className="w-5 h-5 text-[#F5D000]" />
+        <section className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl">
+          <div className="flex items-center gap-2.5 text-[#FDE100] font-athletic font-bold uppercase text-sm tracking-wider mb-2">
+            <Award className="w-5 h-5 text-[#FDE100]" />
             <span>Official Club Record</span>
           </div>
-          <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white mb-6">
+          <h2 className="font-athletic text-3xl font-black uppercase text-white mb-6">
             Honours & Milestones
           </h2>
           <div className="space-y-4">
             {clubInfo.honoursAndMilestones.map((item, idx) => (
               <div
                 key={idx}
-                className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl bg-[#080D0A] border border-[#18231C]"
+                className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl bg-[#0D0D0D] border border-[#262626]"
               >
-                <span className="px-4 py-1.5 rounded-lg bg-[#08783E] text-white font-pedals font-athletic font-black text-xl shadow-xs">
+                <span className="px-4 py-1.5 rounded-lg bg-[#FDE100] text-black font-athletic font-black text-xl shadow-xs">
                   {item.year}
                 </span>
                 <div>
-                  <h3 className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                  <h3 className="font-athletic text-xl font-bold uppercase text-white">
                     {item.title}
                   </h3>
                   <p className="text-sm text-slate-300">{item.description}</p>
@@ -138,7 +138,7 @@ export default function AboutClubPage() {
         <section>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="font-pedals font-athletic text-3xl sm:text-4xl font-black uppercase text-white">
+              <h2 className="font-athletic text-3xl sm:text-4xl font-black uppercase text-white">
                 Club Leadership & Technical Bench
               </h2>
               <p className="text-sm text-slate-400 mt-1">
@@ -152,15 +152,15 @@ export default function AboutClubPage() {
               {[...leadership, ...technicalBench].map((member) => (
                 <div
                   key={member.id}
-                  className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-md"
+                  className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-md"
                 >
-                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 text-[11px] font-extrabold uppercase tracking-wider mb-3">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 text-[11px] font-extrabold uppercase tracking-wider mb-3">
                     {member.category}
                   </span>
-                  <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
+                  <h3 className="font-athletic text-2xl font-bold uppercase text-white">
                     {member.fullName}
                   </h3>
-                  <p className="text-xs font-extrabold uppercase text-[#F5D000] mt-0.5">
+                  <p className="text-xs font-extrabold uppercase text-[#FDE100] mt-0.5">
                     {member.roleTitle}
                   </p>
                   <p className="text-sm text-slate-300 mt-3">{member.biography}</p>
@@ -168,9 +168,9 @@ export default function AboutClubPage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl bg-[#0D1410] p-8 text-center border border-[#1E2B23]">
+            <div className="rounded-2xl bg-[#141414] p-8 text-center border border-[#262626]">
               <Users className="w-10 h-10 text-slate-500 mx-auto mb-2" />
-              <p className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+              <p className="font-athletic text-xl font-bold uppercase text-white">
                 Leadership & Technical Staff Directory Pending Publication
               </p>
               <p className="text-xs text-slate-400 mt-1">
@@ -182,12 +182,12 @@ export default function AboutClubPage() {
 
         {/* 6. Home Ground & Training Ground */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-md">
-            <div className="flex items-center gap-2 text-[#4ADE80] font-bold text-xs uppercase tracking-wider mb-2">
-              <MapPin className="w-4 h-4 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-md">
+            <div className="flex items-center gap-2 text-[#FDE100] font-bold text-xs uppercase tracking-wider mb-2">
+              <MapPin className="w-4 h-4 text-[#FDE100]" />
               <span>Matchday Fortress</span>
             </div>
-            <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-white">
+            <h2 className="font-athletic text-2xl font-black uppercase text-white">
               Home Ground: {clubInfo.homeGroundName || 'Nginda Home Ground'}
             </h2>
             <p className="text-xs font-semibold text-slate-400 mt-1">
@@ -198,12 +198,12 @@ export default function AboutClubPage() {
             </p>
           </div>
 
-          <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-md">
-            <div className="flex items-center gap-2 text-[#4ADE80] font-bold text-xs uppercase tracking-wider mb-2">
-              <MapPin className="w-4 h-4 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-md">
+            <div className="flex items-center gap-2 text-[#FDE100] font-bold text-xs uppercase tracking-wider mb-2">
+              <MapPin className="w-4 h-4 text-[#FDE100]" />
               <span>Preparation & Conditioning</span>
             </div>
-            <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-white">
+            <h2 className="font-athletic text-2xl font-black uppercase text-white">
               Training Ground: {clubInfo.trainingGroundName || 'Official Club Training Facility'}
             </h2>
             {clubInfo.trainingGroundSchedule && (

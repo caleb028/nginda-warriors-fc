@@ -142,24 +142,24 @@ export function GlobalSearchModal({
   const getCategoryIcon = (category: SearchItem['category']) => {
     switch (category) {
       case 'Players':
-        return <User className="w-4 h-4 text-[#F5D000]" />;
+        return <User className="w-4 h-4 text-[#FDE100]" />;
       case 'Fixtures':
-        return <Calendar className="w-4 h-4 text-[#F5D000]" />;
+        return <Calendar className="w-4 h-4 text-[#FDE100]" />;
       case 'Store':
-        return <ShoppingBag className="w-4 h-4 text-[#F5D000]" />;
+        return <ShoppingBag className="w-4 h-4 text-[#FDE100]" />;
       case 'News':
-        return <FileText className="w-4 h-4 text-[#F5D000]" />;
+        return <FileText className="w-4 h-4 text-[#FDE100]" />;
       default:
-        return <Trophy className="w-4 h-4 text-[#F5D000]" />;
+        return <Trophy className="w-4 h-4 text-[#FDE100]" />;
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/80 backdrop-blur-sm">
-      <div className="w-full max-w-xl bg-[#063B25] border border-[#08783E] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
+      <div className="w-full max-w-xl bg-[#0A0A0A] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
         {/* Search Input Bar */}
-        <div className="p-4 bg-[#042819] border-b border-[#08783E]/40 flex items-center gap-3">
-          <Search className="w-5 h-5 text-[#F5D000]" />
+        <div className="p-4 bg-[#0D0D0D] border-b border-[#262626] flex items-center gap-3">
+          <Search className="w-5 h-5 text-[#FDE100]" />
           <input
             type="text"
             autoFocus
@@ -188,17 +188,17 @@ export function GlobalSearchModal({
                 className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#042819] flex items-center justify-center border border-white/10 group-hover:border-[#F5D000]">
+                  <div className="w-9 h-9 rounded-lg bg-[#0D0D0D] flex items-center justify-center border border-white/10 group-hover:border-[#FDE100]">
                     {getCategoryIcon(item.category)}
                   </div>
                   <div>
-                    <h5 className="font-athletic text-base font-bold uppercase text-white group-hover:text-[#F5D000] transition-colors leading-tight">
+                    <h5 className="font-athletic text-base font-bold uppercase text-white group-hover:text-[#FDE100] transition-colors leading-tight">
                       {item.title}
                     </h5>
                     <p className="text-xs text-white/60 line-clamp-1">{item.subtitle}</p>
                   </div>
                 </div>
-                <span className="text-[10px] uppercase font-bold text-white/40 group-hover:text-[#F5D000]">
+                <span className="text-[10px] uppercase font-bold text-white/40 group-hover:text-[#FDE100]">
                   {item.category}
                 </span>
               </Link>
@@ -211,9 +211,9 @@ export function GlobalSearchModal({
         </div>
 
         {/* Footer shortcuts */}
-        <div className="px-4 py-2.5 bg-[#042819] border-t border-[#08783E]/40 flex items-center justify-between text-[11px] text-white/50">
+        <div className="px-4 py-2.5 bg-[#0D0D0D] border-t border-[#262626] flex items-center justify-between text-[11px] text-white/50">
           <span>Tip: Press ESC to close</span>
-          <span className="text-[#F5D000] font-semibold">Nginda Warriors FC Quick Navigator</span>
+          <span className="text-[#FDE100] font-semibold">Nginda Warriors FC Quick Navigator</span>
         </div>
       </div>
     </div>

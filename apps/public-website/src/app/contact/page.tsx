@@ -55,12 +55,12 @@ export default function ContactClubPage() {
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Header Banner */}
-      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
+      <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+          <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-widest">
             OFFICIAL COMMUNICATIONS DESK
           </span>
-          <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
+          <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
             CONTACT NGINDA WARRIORS FC
           </h1>
           <p className="text-slate-300 text-base mt-1">
@@ -71,17 +71,17 @@ export default function ContactClubPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-[#0D1410] p-5 rounded-xl border border-[#1E2B23] flex items-center gap-3 shadow-md">
-            <MapPin className="w-6 h-6 text-[#F5D000]" />
+          <div className="bg-[#141414] p-5 rounded-xl border border-[#262626] flex items-center gap-3 shadow-md">
+            <MapPin className="w-6 h-6 text-[#FDE100]" />
             <div>
-              <p className="text-xs font-bold uppercase text-[#4ADE80]">Club Headquarters</p>
+              <p className="text-xs font-bold uppercase text-[#FDE100]">Club Headquarters</p>
               <p className="font-semibold text-sm text-white">Nginda, Murang’a County, Kenya</p>
             </div>
           </div>
-          <div className="bg-[#0D1410] p-5 rounded-xl border border-[#1E2B23] flex items-center gap-3 shadow-md">
-            <Mail className="w-6 h-6 text-[#F5D000]" />
+          <div className="bg-[#141414] p-5 rounded-xl border border-[#262626] flex items-center gap-3 shadow-md">
+            <Mail className="w-6 h-6 text-[#FDE100]" />
             <div>
-              <p className="text-xs font-bold uppercase text-[#4ADE80]">Direct Secretariat Inbox</p>
+              <p className="text-xs font-bold uppercase text-[#FDE100]">Direct Secretariat Inbox</p>
               <p className="font-semibold text-sm text-white">
                 Messages routed directly to the Control Centre
               </p>
@@ -91,9 +91,9 @@ export default function ContactClubPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-[#0D1410] rounded-2xl p-6 sm:p-8 border border-[#1E2B23] shadow-xl space-y-4 text-white"
+          className="bg-[#141414] rounded-2xl p-6 sm:p-8 border border-[#262626] shadow-xl space-y-4 text-white"
         >
-          <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white">
+          <h2 className="font-athletic text-3xl font-black uppercase text-white">
             Send an Official Message
           </h2>
 
@@ -107,7 +107,7 @@ export default function ContactClubPage() {
                 required
                 value={senderName}
                 onChange={(e) => setSenderName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
               />
             </div>
             <div>
@@ -119,7 +119,7 @@ export default function ContactClubPage() {
                 required
                 value={senderEmail}
                 onChange={(e) => setSenderEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
               />
             </div>
             <div>
@@ -130,7 +130,7 @@ export default function ContactClubPage() {
                 type="tel"
                 value={senderPhone}
                 onChange={(e) => setSenderPhone(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
               />
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function ContactClubPage() {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="e.g. Friendly Fixture Request / Media Accreditation"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
             />
           </div>
 
@@ -158,22 +158,22 @@ export default function ContactClubPage() {
               required
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-lg uppercase tracking-wider shadow-md transition active:scale-95"
+            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-lg uppercase tracking-wider shadow-md transition active:scale-95"
           >
-            <Send className="w-4 h-4 text-[#F5D000]" />
+            <Send className="w-4 h-4 text-[#FDE100]" />
             <span>{submitting ? 'Sending Message...' : 'Send Message to Club Secretariat'}</span>
           </button>
 
           {successMsg && (
-            <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-xs font-bold flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0" />
+            <div className="p-4 rounded-xl bg-[#082012] border border-[#262626] text-[#FDE100] text-xs font-bold flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-[#FDE100] shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}

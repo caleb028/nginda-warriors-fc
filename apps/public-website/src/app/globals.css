@@ -19,22 +19,30 @@
 }
 
 :root {
-  /* Minimal Strategic Accents */
-  --warrior-green: #08783E;
-  --deep-forest-green: #063B25;
-  --crest-yellow: #F5D000;
-  --golden-accent: #D5AA00;
+  /* Borussia Dortmund (BVB) Official Primary Identity */
+  --bvb-yellow: #FDE100;
+  --bvb-yellow-hover: #FFE600;
+  --bvb-black: #000000;
+  --bvb-dark: #0A0A0A;
+  --bvb-card: #141414;
+  --bvb-border: #262626;
 
-  /* Sleek Modern Black Pitch Canvas & Surfaces */
+  /* Club Brand Tokens - BVB Yellow & Deep Black Dominant, Minimal Green */
+  --crest-yellow: #FDE100;
+  --golden-accent: #FFE600;
+  --warrior-green: #0A2E1C; /* Minimal subtle pitch hint */
+  --deep-forest-green: #071A10;
+
+  /* Pitch Surfaces */
   --canvas-white: #000000;
-  --soft-surface: #070C09;
-  --card-surface: #0D1410;
-  --border-light: #1E2B23;
+  --soft-surface: #0A0A0A;
+  --card-surface: #141414;
+  --border-light: #262626;
   --charcoal: #FFFFFF;
-  --text-muted: #94A3B8;
+  --text-muted: #A3A3A3;
 
-  /* Athletic Speed Display Typography (Pedals Style: Italic, Chamfered, Dynamic) */
-  --font-heading: 'Pedals', 'Chakra Petch', 'Kanit', 'Barlow Condensed', -apple-system, sans-serif;
+  /* Borussia Dortmund Intense Display Typography (Barlow Condensed / Kanit / Chakra Petch) */
+  --font-heading: 'Barlow Condensed', 'Kanit', 'Chakra Petch', 'Oswald', -apple-system, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -46,7 +54,7 @@ html {
 
 body {
   background-color: #000000;
-  color: #F8FAFC;
+  color: #FFFFFF;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior-y: none;
@@ -61,22 +69,23 @@ body {
   scrollbar-width: none;
 }
 
-/* Pedals Athletic Speed Font Styling */
+/* Borussia Dortmund Athletic Speed Display Font Styling */
 h1, h2, h3, h4, .font-athletic, .font-pedals {
   font-family: var(--font-heading);
   font-style: italic;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-/* Subtle focus ring */
+/* BVB Yellow Focus Ring */
 *:focus-visible {
-  outline: 2px solid var(--crest-yellow);
+  outline: 2px solid var(--bvb-yellow);
   outline-offset: 2px;
 }
 
-/* Crisp pitch grid for dark sports texture */
+/* Crisp BVB Pitch Texture with Yellow Subtle Flare */
 .pitch-grid-bg {
-  background-image: radial-gradient(rgba(8, 120, 62, 0.18) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(253, 225, 0, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
 }

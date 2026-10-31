@@ -62,7 +62,7 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-[#0D1410] text-white rounded-2xl p-6 sm:p-8 border-2 border-[#1E2B23] shadow-2xl space-y-4"
+      className="bg-[#141414] text-white rounded-2xl p-6 sm:p-8 border-2 border-[#262626] shadow-2xl space-y-4"
     >
       <h3 className="font-athletic text-3xl font-black uppercase text-white">
         Official Partnership Inquiry Form
@@ -82,7 +82,7 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={contactName}
             onChange={(e) => setContactName(e.target.value)}
             placeholder="e.g. Jane Mwangi"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
           />
         </div>
         <div>
@@ -95,7 +95,7 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder="e.g. Highlands Agro Ltd"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
           />
         </div>
       </div>
@@ -111,7 +111,7 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="e.g. 0712 345 678"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
           />
         </div>
         <div>
@@ -124,7 +124,7 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="partnerships@company.co.ke"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
           />
         </div>
       </div>
@@ -137,14 +137,14 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
           <select
             value={packageOfInterest}
             onChange={(e) => setPackageOfInterest(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] text-sm bg-[#0D0D0D] text-white focus:border-[#262626] focus:outline-none"
           >
             {packages.map((p) => (
-              <option key={p} value={p} className="bg-[#080D0A] text-white">
+              <option key={p} value={p} className="bg-[#0D0D0D] text-white">
                 {p}
               </option>
             ))}
-            <option value="Custom Bespoke Partnership" className="bg-[#080D0A] text-white">Custom Bespoke Partnership</option>
+            <option value="Custom Bespoke Partnership" className="bg-[#0D0D0D] text-white">Custom Bespoke Partnership</option>
           </select>
         </div>
         <div>
@@ -157,7 +157,7 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={budgetKes}
             onChange={(e) => setBudgetKes(e.target.value)}
             placeholder="Optional (KES)"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
           />
         </div>
       </div>
@@ -172,22 +172,22 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Tell us how your business would like to partner with Nginda Warriors FC..."
-          className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
+          className="w-full px-3.5 py-2.5 rounded-lg border border-[#262626] bg-[#0D0D0D] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
         />
       </div>
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-slate-950 font-athletic font-black text-lg uppercase tracking-wider shadow-lg disabled:opacity-50 transition active:scale-95"
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-slate-950 font-athletic font-black text-lg uppercase tracking-wider shadow-lg disabled:opacity-50 transition active:scale-95"
       >
         <Send className="w-4 h-4" />
         <span>{submitting ? 'Submitting Inquiry...' : 'Submit Official Partnership Inquiry'}</span>
       </button>
 
       {successMsg && (
-        <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0" />
+        <div className="p-4 rounded-xl bg-[#082012] border border-[#262626] text-[#FDE100] text-xs font-bold flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 text-[#FDE100] shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}

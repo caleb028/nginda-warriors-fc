@@ -22,13 +22,13 @@ export async function GET() {
       max-width: 900px;
       margin: 0 auto;
       background: #FFFFFF;
-      border: 4px solid #08783E;
+      border: 4px solid #FDE100;
     }
     .hero {
-      background: linear-gradient(135deg, #063B25 0%, #08783E 100%);
+      background: linear-gradient(135deg, #000000 0%, #FDE100 100%);
       color: #FFFFFF;
       padding: 40px;
-      border-bottom: 6px solid #F5D000;
+      border-bottom: 6px solid #FDE100;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -42,8 +42,8 @@ export async function GET() {
     }
     .badge {
       display: inline-block;
-      background: #F5D000;
-      color: #063B25;
+      background: #FDE100;
+      color: #000000;
       font-weight: 800;
       font-size: 12px;
       padding: 4px 12px;
@@ -56,10 +56,10 @@ export async function GET() {
     }
     h2 {
       font-family: 'Barlow Condensed', sans-serif;
-      color: #063B25;
+      color: #000000;
       font-size: 26px;
       text-transform: uppercase;
-      border-left: 5px solid #F5D000;
+      border-left: 5px solid #FDE100;
       padding-left: 12px;
       margin-top: 28px;
     }
@@ -70,7 +70,7 @@ export async function GET() {
       margin-top: 16px;
     }
     .pkg {
-      border: 2px solid #08783E;
+      border: 2px solid #FDE100;
       border-radius: 10px;
       padding: 20px;
       background: #EEF7EF;
@@ -83,12 +83,12 @@ export async function GET() {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 22px;
       margin: 0 0 6px 0;
-      color: #063B25;
+      color: #000000;
       text-transform: uppercase;
     }
     .price {
       font-weight: 800;
-      color: #08783E;
+      color: #FDE100;
       font-size: 16px;
       margin-bottom: 10px;
     }
@@ -99,7 +99,7 @@ export async function GET() {
       line-height: 1.6;
     }
     .footer {
-      background: #063B25;
+      background: #000000;
       color: #FFFFFF;
       padding: 24px 40px;
       font-size: 13px;
@@ -108,8 +108,8 @@ export async function GET() {
       align-items: center;
     }
     .print-bar {
-      background: #F5D000;
-      color: #063B25;
+      background: #FDE100;
+      color: #000000;
       padding: 12px 40px;
       display: flex;
       justify-content: space-between;
@@ -117,8 +117,8 @@ export async function GET() {
       font-weight: 700;
     }
     .print-btn {
-      background: #063B25;
-      color: #F5D000;
+      background: #000000;
+      color: #FDE100;
       border: none;
       padding: 8px 18px;
       border-radius: 6px;
@@ -183,7 +183,7 @@ export async function GET() {
     </div>
     <div class="footer">
       <div>
-        <strong style="color:#F5D000;">${clubSettings.clubName} (Est. ${clubSettings.establishedYear})</strong><br/>
+        <strong style="color:#FDE100;">${clubSettings.clubName} (Est. ${clubSettings.establishedYear})</strong><br/>
         Location: ${clubSettings.physicalAddress || 'Nginda, Kenya'}
       </div>
       <div style="text-align:right;">

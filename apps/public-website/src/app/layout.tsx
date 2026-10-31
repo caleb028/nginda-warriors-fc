@@ -71,7 +71,7 @@ export default function RootLayout({
     <html lang="en" className="dark bg-black">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#08783E" />
+        <meta name="theme-color" content="#FDE100" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Nginda Warriors FC" />
@@ -84,7 +84,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-black text-white selection:bg-[#08783E] selection:text-white">
+      <body className="bg-black text-white selection:bg-[#FDE100] selection:text-black">
         <script
           dangerouslySetInnerHTML={{
             __html: `

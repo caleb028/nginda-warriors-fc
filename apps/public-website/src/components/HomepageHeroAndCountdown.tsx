@@ -39,7 +39,7 @@ export function HomepageHeroSlideshow({
   };
 
   return (
-    <section className="relative overflow-hidden bg-black text-white border-b border-[#1E2B23]">
+    <section className="relative overflow-hidden bg-black text-white border-b border-[#262626]">
       {/* Team Photograph Background (When Uploaded) */}
       {activeSlide.imageUrl ? (
         <div
@@ -53,7 +53,7 @@ export function HomepageHeroSlideshow({
 
       {/* Dark Gradient Overlay for Supreme Contrast & Readability */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-black via-black/95 to-[#080D0A]/90"
+        className="absolute inset-0 bg-gradient-to-r from-black via-black/95 to-[#0A0A0A]/90"
         aria-hidden="true"
       />
 
@@ -61,16 +61,16 @@ export function HomepageHeroSlideshow({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Hero Copy */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] text-xs font-athletic font-extrabold tracking-widest uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-[#F5D000]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] text-xs font-athletic font-extrabold tracking-widest uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-[#FDE100]" />
               <span>OFFICIAL DIGITAL PLATFORM • EST. {settings.establishedYear}</span>
             </div>
 
-            <h1 className="font-pedals font-athletic text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95] text-white">
+            <h1 className="font-athletic text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95] text-white">
               {activeSlide.headline || settings.clubName}
             </h1>
 
-            <p className="font-athletic text-2xl sm:text-3xl font-bold uppercase tracking-wide text-[#F5D000]">
+            <p className="font-athletic text-2xl sm:text-3xl font-black uppercase tracking-wide text-[#FDE100]">
               “{activeSlide.tagline || 'One Team. One Community. One Warrior Spirit.'}”
             </p>
 
@@ -81,17 +81,17 @@ export function HomepageHeroSlideshow({
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
                 href={activeSlide.primaryCtaHref || '/about'}
-                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-black text-lg uppercase tracking-wider shadow-lg transition-transform active:scale-95"
+                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-lg uppercase tracking-wider shadow-xl transition-all active:scale-95"
               >
                 <span>{activeSlide.primaryCtaLabel || 'Explore Our Club'}</span>
-                <ArrowRight className="w-5 h-5 text-[#F5D000]" />
+                <ArrowRight className="w-5 h-5 text-black" />
               </Link>
 
               <Link
                 href={activeSlide.secondaryCtaHref || '/sponsors'}
-                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#0D1410] hover:bg-[#141E18] text-white border-2 border-[#1E2B23] hover:border-[#08783E] font-athletic font-bold text-lg uppercase tracking-wider transition"
+                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#141414] hover:bg-[#1F1F1F] text-white border-2 border-[#262626] hover:border-[#FDE100] font-athletic font-bold text-lg uppercase tracking-wider transition"
               >
-                <Shield className="w-5 h-5 text-[#4ADE80]" />
+                <Shield className="w-5 h-5 text-[#FDE100]" />
                 <span>{activeSlide.secondaryCtaLabel || 'Partner With Us'}</span>
               </Link>
             </div>
@@ -104,7 +104,7 @@ export function HomepageHeroSlideshow({
                   onClick={() =>
                     setCurrentIndex((prev) => (prev - 1 + activeSlides.length) % activeSlides.length)
                   }
-                  className="p-2 rounded-lg bg-[#0D1410] hover:bg-[#08783E] text-slate-300 hover:text-white border border-[#1E2B23] transition"
+                  className="p-2 rounded-lg bg-[#141414] hover:bg-[#FDE100] text-slate-300 hover:text-black border border-[#262626] transition"
                   aria-label="Previous hero slide"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -117,7 +117,7 @@ export function HomepageHeroSlideshow({
                       onClick={() => setCurrentIndex(idx)}
                       aria-label={`Go to slide ${idx + 1}`}
                       className={`h-2.5 rounded-full transition-all ${
-                        idx === currentIndex ? 'w-8 bg-[#08783E]' : 'w-2.5 bg-slate-700'
+                        idx === currentIndex ? 'w-8 bg-[#FDE100]' : 'w-2.5 bg-neutral-700'
                       }`}
                     />
                   ))}
@@ -125,7 +125,7 @@ export function HomepageHeroSlideshow({
                 <button
                   type="button"
                   onClick={() => setCurrentIndex((prev) => (prev + 1) % activeSlides.length)}
-                  className="p-2 rounded-lg bg-[#0D1410] hover:bg-[#08783E] text-slate-300 hover:text-white border border-[#1E2B23] transition"
+                  className="p-2 rounded-lg bg-[#141414] hover:bg-[#FDE100] text-slate-300 hover:text-black border border-[#262626] transition"
                   aria-label="Next hero slide"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -136,7 +136,7 @@ export function HomepageHeroSlideshow({
 
           {/* Right Official Crest Showcase */}
           <div className="lg:col-span-4 flex flex-col items-center justify-center">
-            <div className="relative p-6 sm:p-8 rounded-3xl bg-[#0A0F0D]/90 border-2 border-[#1E2B23] shadow-2xl group hover:border-[#08783E] transition-all flex items-center justify-center">
+            <div className="relative p-6 sm:p-8 rounded-3xl bg-[#0A0A0A]/95 border-2 border-[#262626] shadow-2xl group hover:border-[#FDE100] transition-all flex items-center justify-center">
               <ClubCrest
                 size={220}
                 customCrestUrl={settings.crestUrl}
@@ -144,7 +144,7 @@ export function HomepageHeroSlideshow({
                 className="w-auto h-auto max-h-56 max-w-full drop-shadow-xl"
               />
             </div>
-            <p className="mt-4 text-xs font-athletic font-bold uppercase tracking-widest text-[#F5D000] text-center">
+            <p className="mt-4 text-xs font-athletic font-black uppercase tracking-widest text-[#FDE100] text-center">
               OFFICIAL CLUB IDENTITY • EST. {settings.establishedYear}
             </p>
           </div>
@@ -157,10 +157,10 @@ export function HomepageHeroSlideshow({
           transition={{ delay: 1.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="hidden sm:flex flex-col items-center justify-center pt-8 pb-3"
         >
-          <span className="text-[11px] font-athletic font-bold uppercase tracking-widest text-[#F5D000] mb-2 drop-shadow-sm">
+          <span className="text-[11px] font-athletic font-bold uppercase tracking-widest text-[#FDE100] mb-2 drop-shadow-sm">
             Scroll to Explore
           </span>
-          <div className="w-5 h-9 rounded-full border-2 border-[#F5D000]/40 flex items-start justify-center p-1 relative overflow-hidden bg-black/40 backdrop-blur-xs">
+          <div className="w-5 h-9 rounded-full border-2 border-[#FDE100]/40 flex items-start justify-center p-1 relative overflow-hidden bg-black/40 backdrop-blur-xs">
             <motion.div
               animate={{ y: [-12, 16, -12] }}
               transition={{
@@ -168,7 +168,7 @@ export function HomepageHeroSlideshow({
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="w-1.5 h-2.5 bg-[#F5D000] rounded-full shadow-[0_0_8px_#F5D000]"
+              className="w-1.5 h-2.5 bg-[#FDE100] rounded-full shadow-[0_0_8px_#FDE100]"
             />
           </div>
         </motion.div>
@@ -208,8 +208,8 @@ export function MatchKickoffCountdown({ kickoffIso }: { kickoffIso: string }) {
 
   if (timeLeft.isPast) {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 font-athletic font-black text-xs uppercase tracking-wider">
-        <Clock className="w-4 h-4 text-[#F5D000]" />
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 font-athletic font-black text-xs uppercase tracking-wider">
+        <Clock className="w-4 h-4 text-[#FDE100]" />
         <span>Match Time Reached</span>
       </div>
     );
@@ -225,9 +225,9 @@ export function MatchKickoffCountdown({ kickoffIso }: { kickoffIso: string }) {
       ].map((unit) => (
         <div
           key={unit.label}
-          className="bg-[#0D1410] border border-[#1E2B23] rounded-lg px-2.5 py-1.5"
+          className="bg-[#141414] border border-[#262626] rounded-lg px-2.5 py-1.5"
         >
-          <span className="block font-pedals font-athletic text-2xl font-black text-white leading-none">
+          <span className="block font-athletic text-2xl font-black text-white leading-none">
             {String(unit.value).padStart(2, '0')}
           </span>
           <span className="block text-[10px] font-bold text-slate-400 tracking-wider mt-0.5">

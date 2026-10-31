@@ -56,9 +56,9 @@ export function MotmVoteWidget({
   if (players.length === 0) return null;
 
   return (
-    <div className="rounded-2xl bg-[#063B25] text-white p-6 border-2 border-[#F5D000]">
-      <div className="flex items-center gap-2 text-[#F5D000] font-athletic font-bold uppercase text-sm tracking-wider mb-1">
-        <Star className="w-4 h-4 fill-[#F5D000]" />
+    <div className="rounded-2xl bg-[#0A0A0A] text-white p-6 border-2 border-[#FDE100]">
+      <div className="flex items-center gap-2 text-[#FDE100] font-athletic font-bold uppercase text-sm tracking-wider mb-1">
+        <Star className="w-4 h-4 fill-[#FDE100]" />
         <span>Supporter Engagement</span>
       </div>
       <h3 className="font-athletic text-2xl font-black uppercase text-white mb-2">
@@ -73,7 +73,7 @@ export function MotmVoteWidget({
           value={selectedPlayerId}
           onChange={(e) => setSelectedPlayerId(e.target.value)}
           required
-          className="w-full px-3.5 py-2.5 rounded-lg bg-[#08783E] text-white border border-[#F5D000]/40 text-sm font-semibold"
+          className="w-full px-3.5 py-2.5 rounded-lg bg-[#FDE100] text-black font-black border border-[#FDE100]/40 text-sm font-semibold"
         >
           <option value="">-- Choose a Warrior Player --</option>
           {players.map((p) => {
@@ -89,14 +89,14 @@ export function MotmVoteWidget({
         <button
           type="submit"
           disabled={submitting || !selectedPlayerId}
-          className="w-full py-2.5 rounded-lg bg-[#F5D000] hover:bg-[#ffe033] text-[#063B25] font-athletic font-black text-base uppercase tracking-wider disabled:opacity-50"
+          className="w-full py-2.5 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-base uppercase tracking-wider disabled:opacity-50"
         >
           {submitting ? 'Submitting Vote...' : 'Cast Official Supporter Vote'}
         </button>
       </form>
 
       {statusMessage && (
-        <div className="mt-3 p-3 rounded-lg bg-[#08783E] text-[#F5D000] text-xs font-bold flex items-center gap-2">
+        <div className="mt-3 p-3 rounded-lg bg-[#FDE100] text-[#FDE100] text-xs font-bold flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{statusMessage}</span>
         </div>

@@ -23,20 +23,20 @@ export default function FinancialTransparencyPage() {
   return (
     <div className="bg-black text-white min-h-screen">
       {/* Header Banner */}
-      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
+      <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+            <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-widest">
               PUBLIC FINANCIAL ACCOUNTABILITY LEDGER
             </span>
-            <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
+            <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
               FINANCIAL TRANSPARENCY
             </h1>
             <p className="text-slate-300 text-base mt-1 max-w-2xl">
               Verified supporter contributions, campaign targets, approved expenditure categories, and remaining balances. Donor personal details are strictly protected.
             </p>
           </div>
-          <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
+          <div className="p-2.5 rounded-2xl bg-[#0A0A0A] border border-[#262626] shadow-md flex items-center justify-center">
             <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>
@@ -45,12 +45,12 @@ export default function FinancialTransparencyPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Top Verified Financial Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-xl border-t-4 border-t-[#08783E]">
-            <div className="flex items-center gap-2 text-xs font-pedals font-athletic font-extrabold uppercase text-[#4ADE80]">
-              <CheckCircle2 className="w-4 h-4 text-[#4ADE80]" />
+          <div className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl border-t-4 border-t-[#FDE100]">
+            <div className="flex items-center gap-2 text-xs font-athletic font-extrabold uppercase text-[#FDE100]">
+              <CheckCircle2 className="w-4 h-4 text-[#FDE100]" />
               <span>Confirmed Funds Received</span>
             </div>
-            <p className="font-pedals font-athletic text-4xl font-black text-white mt-2">
+            <p className="font-athletic text-4xl font-black text-white mt-2">
               KES {totalConfirmedFunds.toLocaleString()}
             </p>
             <p className="text-xs text-slate-400 mt-1">
@@ -58,12 +58,12 @@ export default function FinancialTransparencyPage() {
             </p>
           </div>
 
-          <div className="bg-[#0D1410] rounded-2xl p-6 border border-[#1E2B23] shadow-xl border-t-4 border-t-slate-500">
-            <div className="flex items-center gap-2 text-xs font-pedals font-athletic font-extrabold uppercase text-slate-300">
-              <FileSpreadsheet className="w-4 h-4 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-6 border border-[#262626] shadow-xl border-t-4 border-t-slate-500">
+            <div className="flex items-center gap-2 text-xs font-athletic font-extrabold uppercase text-slate-300">
+              <FileSpreadsheet className="w-4 h-4 text-[#FDE100]" />
               <span>Approved Club Expenditure</span>
             </div>
-            <p className="font-pedals font-athletic text-4xl font-black text-white mt-2">
+            <p className="font-athletic text-4xl font-black text-white mt-2">
               KES {totalExpenditure.toLocaleString()}
             </p>
             <p className="text-xs text-slate-400 mt-1">
@@ -71,12 +71,12 @@ export default function FinancialTransparencyPage() {
             </p>
           </div>
 
-          <div className="bg-[#0D1410] rounded-2xl p-6 border-2 border-[#08783E] shadow-xl">
-            <div className="flex items-center gap-2 text-xs font-pedals font-athletic font-extrabold uppercase text-[#F5D000]">
-              <Wallet className="w-4 h-4 text-[#F5D000]" />
+          <div className="bg-[#141414] rounded-2xl p-6 border-2 border-[#262626] shadow-xl">
+            <div className="flex items-center gap-2 text-xs font-athletic font-extrabold uppercase text-[#FDE100]">
+              <Wallet className="w-4 h-4 text-[#FDE100]" />
               <span>Remaining Campaign Balance</span>
             </div>
-            <p className="font-pedals font-athletic text-4xl font-black text-[#4ADE80] mt-2">
+            <p className="font-athletic text-4xl font-black text-[#FDE100] mt-2">
               KES {remainingBalance.toLocaleString()}
             </p>
             <p className="text-xs text-slate-300 mt-1">
@@ -86,8 +86,8 @@ export default function FinancialTransparencyPage() {
         </div>
 
         {/* Verified Campaign Progress */}
-        <section className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl">
-          <h2 className="font-pedals font-athletic text-3xl font-black uppercase text-white mb-6">
+        <section className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl">
+          <h2 className="font-athletic text-3xl font-black uppercase text-white mb-6">
             Campaign Targets & Verified Progress
           </h2>
           {fundraisingCampaigns.length > 0 ? (
@@ -97,13 +97,13 @@ export default function FinancialTransparencyPage() {
                 return (
                   <div
                     key={c.id}
-                    className="p-4 rounded-xl bg-[#080D0A] border border-[#18231C] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    className="p-4 rounded-xl bg-[#0D0D0D] border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                   >
                     <div>
-                      <span className="text-[11px] font-bold uppercase text-[#4ADE80]">
+                      <span className="text-[11px] font-bold uppercase text-[#FDE100]">
                         {c.category}
                       </span>
-                      <h3 className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                      <h3 className="font-athletic text-xl font-bold uppercase text-white">
                         {c.title}
                       </h3>
                     </div>
@@ -116,7 +116,7 @@ export default function FinancialTransparencyPage() {
                       </div>
                       <div>
                         <span className="block text-slate-400 uppercase">Verified Raised</span>
-                        <strong className="text-sm text-[#F5D000]">
+                        <strong className="text-sm text-[#FDE100]">
                           KES {c.verifiedRaisedKes.toLocaleString()}
                         </strong>
                       </div>
@@ -140,8 +140,8 @@ export default function FinancialTransparencyPage() {
 
         {/* Recorded Expenditure Categories & Approved Spending Reports */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl">
-            <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-white mb-4">
+          <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl">
+            <h2 className="font-athletic text-2xl font-black uppercase text-white mb-4">
               Recorded Expenditure Categories
             </h2>
             {publishedExpenditures.length > 0 ? (
@@ -149,10 +149,10 @@ export default function FinancialTransparencyPage() {
                 {publishedExpenditures.map((exp) => (
                   <div
                     key={exp.id}
-                    className="p-3.5 rounded-xl bg-[#080D0A] border border-[#18231C] flex items-center justify-between gap-4"
+                    className="p-3.5 rounded-xl bg-[#0D0D0D] border border-[#262626] flex items-center justify-between gap-4"
                   >
                     <div>
-                      <span className="px-2 py-0.5 rounded-full bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 text-[10px] font-extrabold uppercase">
+                      <span className="px-2 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 text-[10px] font-extrabold uppercase">
                         {exp.category}
                       </span>
                       <p className="font-bold text-sm text-white mt-1">{exp.description}</p>
@@ -160,7 +160,7 @@ export default function FinancialTransparencyPage() {
                         Date: {exp.spentDate} • Approved by {exp.approvedByName}
                       </p>
                     </div>
-                    <span className="font-pedals font-athletic text-xl font-black text-white">
+                    <span className="font-athletic text-xl font-black text-white">
                       KES {exp.amountKes.toLocaleString()}
                     </span>
                   </div>
@@ -173,8 +173,8 @@ export default function FinancialTransparencyPage() {
             )}
           </div>
 
-          <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl">
-            <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-white mb-4">
+          <div className="bg-[#141414] rounded-2xl p-8 border border-[#262626] shadow-xl">
+            <h2 className="font-athletic text-2xl font-black uppercase text-white mb-4">
               Published Financial Summaries
             </h2>
             {transparencyReports.length > 0 ? (
@@ -182,18 +182,18 @@ export default function FinancialTransparencyPage() {
                 {transparencyReports.map((rep) => (
                   <div
                     key={rep.id}
-                    className="p-4 rounded-xl bg-[#080D0A] border border-[#18231C] space-y-2"
+                    className="p-4 rounded-xl bg-[#0D0D0D] border border-[#262626] space-y-2"
                   >
                     <div className="flex items-center justify-between">
-                      <h3 className="font-pedals font-athletic text-xl font-bold uppercase text-white">
+                      <h3 className="font-athletic text-xl font-bold uppercase text-white">
                         {rep.title}
                       </h3>
-                      <span className="text-xs font-bold text-[#F5D000]">
+                      <span className="text-xs font-bold text-[#FDE100]">
                         {rep.reportingPeriod}
                       </span>
                     </div>
                     <p className="text-xs text-slate-300">{rep.summary}</p>
-                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#18231C] text-xs">
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#262626] text-xs">
                       <div>
                         <span className="text-slate-400 block">Received</span>
                         <strong className="text-white">KES {rep.totalConfirmedFundsKes.toLocaleString()}</strong>
@@ -204,7 +204,7 @@ export default function FinancialTransparencyPage() {
                       </div>
                       <div>
                         <span className="text-slate-400 block">Balance</span>
-                        <strong className="text-[#4ADE80]">
+                        <strong className="text-[#FDE100]">
                           KES {rep.remainingBalanceKes.toLocaleString()}
                         </strong>
                       </div>
