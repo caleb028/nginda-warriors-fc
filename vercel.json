@@ -12,9 +12,10 @@
   },
   "rewrites": [
     {
-      "source": "/api/admin/:path*",
+      "source": "/api/admin/(.*)",
       "destination": {
-        "service": "control-centre"
+        "service": "control-centre",
+        "path": "/manage/api/admin/$1"
       }
     },
     {
@@ -24,13 +25,19 @@
       }
     },
     {
-      "source": "/manage/:path*",
+      "source": "/manage/(.*)",
       "destination": {
         "service": "control-centre"
       }
     },
     {
-      "source": "/:path*",
+      "source": "/",
+      "destination": {
+        "service": "public-website"
+      }
+    },
+    {
+      "source": "/(.*)",
       "destination": {
         "service": "public-website"
       }
