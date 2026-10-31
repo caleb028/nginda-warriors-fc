@@ -4,6 +4,7 @@ import {
   ADMIN_SESSION_COOKIE_NAME,
   AdminRoleCode,
   assertAuthorizedAdmin,
+  assertValidCsrfOrigin,
   createUuid,
   readDatabase,
   recalculateStandingsFromVerifiedFixtures,
@@ -56,6 +57,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    assertValidCsrfOrigin(req.headers);
     const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
     const body = await req.json();
     const { action, payload } = body;

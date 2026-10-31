@@ -3,6 +3,18 @@ import { reconcileMpesaTransaction } from '@nginda-warriors/shared/server';
 
 export async function POST(req: NextRequest) {
   try {
+    const configuredSecret = process.env.DARAJA_WEBHOOK_SECRET;
+    if (configuredSecret) {
+      const urlSecret = req.nextUrl.searchParams.get('secret');
+      const headerSecret = req.headers.get('x-daraja-webhook-secret');
+      if (urlSecret !== configuredSecret && headerSecret !== configuredSecret) {
+        return NextResponse.json(
+          { ResultCode: 1, ResultDesc: 'Unauthorized: Invalid Daraja webhook secret' },
+          { status: 401 }
+        );
+      }
+    }
+
     const payload = await req.json();
     const stkCallback = payload?.Body?.stkCallback;
 

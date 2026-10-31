@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   ADMIN_SESSION_COOKIE_NAME,
+  assertValidCsrfOrigin,
   authenticateAdminUser,
   bootstrapOwnerSuperAdmin,
+  getSafeClientIp,
   isSystemBootstrapped,
+  revokeUserSessions,
   verifyAdminSessionToken,
+  verifyTotpCode,
 } from '@nginda-warriors/shared/server';
 
 export async function GET(req: NextRequest) {
@@ -21,8 +25,12 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    assertValidCsrfOrigin(req.headers);
+
     const body = await req.json();
     const { action } = body;
+
+    const isSecure = process.env.NODE_ENV === 'production';
 
     if (action === 'bootstrap_owner') {
       const { user, token } = bootstrapOwnerSuperAdmin({
@@ -40,6 +48,7 @@ export async function POST(req: NextRequest) {
 
       res.cookies.set(ADMIN_SESSION_COOKIE_NAME, token, {
         httpOnly: true,
+        secure: isSecure,
         sameSite: 'lax',
         path: '/',
         maxAge: 60 * 60 * 12,
@@ -48,12 +57,21 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'login') {
-      const clientIp = req.headers.get('x-forwarded-for') || 'local';
+      const clientIp = getSafeClientIp(req.headers);
       const { user, token } = authenticateAdminUser({
         email: body.email,
         password: body.password,
         clientIp,
       });
+
+      if (user.mfaEnabled && user.mfaSecret) {
+        if (!body.mfaCode || !verifyTotpCode(user.mfaSecret, body.mfaCode)) {
+          return NextResponse.json(
+            { ok: false, error: 'Valid 6-digit MFA verification code required.', mfaRequired: true },
+            { status: 403 }
+          );
+        }
+      }
 
       const res = NextResponse.json({
         ok: true,
@@ -63,6 +81,7 @@ export async function POST(req: NextRequest) {
 
       res.cookies.set(ADMIN_SESSION_COOKIE_NAME, token, {
         httpOnly: true,
+        secure: isSecure,
         sameSite: 'lax',
         path: '/',
         maxAge: 60 * 60 * 12,
@@ -71,7 +90,12 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'logout') {
-      const res = NextResponse.json({ ok: true, message: 'Logged out.' });
+      const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+      const session = verifyAdminSessionToken(token);
+      if (session) {
+        revokeUserSessions(session.userId);
+      }
+      const res = NextResponse.json({ ok: true, message: 'Logged out and session revoked.' });
       res.cookies.delete(ADMIN_SESSION_COOKIE_NAME);
       return res;
     }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline — Nginda Warriors FC</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #FFFFFF;
+      color: #0F172A;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 1.5rem;
+      box-sizing: border-box;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(8, 120, 62, 0.1);
+      color: #08783E;
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(8, 120, 62, 0.2);
+    }
+    .crest {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: -0.02em;
+    }
+    p {
+      color: #64748B;
+      font-size: 0.95rem;
+      max-width: 420px;
+      line-height: 1.5;
+      margin: 0 0 1.75rem 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.75rem;
+      border-radius: 0.75rem;
+      background: #08783E;
+      color: #FFFFFF;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn:hover {
+      background: #063B25;
+    }
+    .footer {
+      margin-top: 2.5rem;
+      font-size: 0.75rem;
+      color: #94A3B8;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+  <img src="/brand/nginda-warriors-crest.svg" alt="Nginda Warriors FC" class="crest">
+  <div class="badge">Nginda Warriors FC • Offline Shell</div>
+  <h1>No Internet Connection</h1>
+  <p>You are currently offline. Any previously viewed club articles, fixtures, and squad profiles remain cached and available in your app.</p>
+  <button class="btn" onclick="window.location.reload()">Retry Connection</button>
+  <div class="footer">One Team. One Community. One Warrior Spirit.</div>
+</body>
+</html>

@@ -13,9 +13,12 @@ import {
   Calendar,
   Globe,
   HeartHandshake,
+  Home,
   Mail,
   MapPin,
   Menu,
+  MoreHorizontal,
+  Newspaper,
   Phone,
   Search,
   ShieldCheck,
@@ -26,6 +29,7 @@ import {
   X,
 } from 'lucide-react';
 import { GlobalSearchModal } from './GlobalSearchModal';
+import { PwaInstallPrompt } from './PwaInstallPrompt';
 
 interface LocaleContextValue {
   locale: SupportedLocale;
@@ -89,7 +93,7 @@ export function PublicShell({
             '--golden-accent': settings.goldenAccent || '#D5AA00',
           } as React.CSSProperties
         }
-        className="min-h-screen flex flex-col bg-white text-slate-900"
+        className="min-h-screen flex flex-col bg-white text-slate-900 overflow-x-hidden w-full"
       >
         {/* Top Utility & Community Strip - Crisp Clean White/Light Neutral */}
         <div className="bg-slate-50 text-slate-600 border-b border-slate-200 text-xs">
@@ -227,16 +231,27 @@ export function PublicShell({
                 </Link>
               </div>
 
-              {/* Mobile Menu Button */}
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="xl:hidden inline-flex items-center justify-center p-2.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none"
-                aria-expanded={mobileMenuOpen}
-                aria-label="Toggle navigation menu"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+        {/* Mobile Action Buttons */}
+              <div className="xl:hidden flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(true)}
+                  className="inline-flex items-center justify-center p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none min-h-[44px] min-w-[44px]"
+                  title="Search club site"
+                  aria-label="Search club site"
+                >
+                  <Search className="w-5 h-5 text-slate-600" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="inline-flex items-center justify-center p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none min-h-[44px] min-w-[44px]"
+                  aria-expanded={mobileMenuOpen}
+                  aria-label="Toggle navigation menu"
+                >
+                  {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -310,7 +325,7 @@ export function PublicShell({
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-16 xl:pb-0">{children}</main>
 
         {/* Clean Crisp Footer - White/Light Neutral dominant with minimal green & yellow accents */}
         <footer className="bg-slate-50 text-slate-700 border-t border-slate-200">
@@ -467,6 +482,60 @@ export function PublicShell({
             </div>
           </div>
         </footer>
+
+        {/* PWA / App Install Prompt */}
+        <PwaInstallPrompt crestUrl={settings.crestUrl} />
+
+        {/* Mobile App Bottom Navigation Bar */}
+        <nav
+          className="xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg px-2 py-1 flex items-center justify-around"
+          aria-label="Mobile Bottom Navigation"
+        >
+          <Link
+            href="/"
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
+              pathname === '/' ? 'text-[#08783E]' : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Home className={`w-5 h-5 ${pathname === '/' ? 'text-[#08783E]' : 'text-slate-400'}`} />
+            <span>Home</span>
+          </Link>
+          <Link
+            href="/fixtures"
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
+              pathname.startsWith('/fixtures') ? 'text-[#08783E]' : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Calendar className={`w-5 h-5 ${pathname.startsWith('/fixtures') ? 'text-[#08783E]' : 'text-slate-400'}`} />
+            <span>Matches</span>
+          </Link>
+          <Link
+            href="/team"
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
+              pathname.startsWith('/team') ? 'text-[#08783E]' : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Users className={`w-5 h-5 ${pathname.startsWith('/team') ? 'text-[#08783E]' : 'text-slate-400'}`} />
+            <span>Team</span>
+          </Link>
+          <Link
+            href="/news"
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
+              pathname.startsWith('/news') ? 'text-[#08783E]' : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Newspaper className={`w-5 h-5 ${pathname.startsWith('/news') ? 'text-[#08783E]' : 'text-slate-400'}`} />
+            <span>News</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] text-slate-500 hover:text-slate-900 transition"
+          >
+            <MoreHorizontal className="w-5 h-5 text-slate-400" />
+            <span>More</span>
+          </button>
+        </nav>
 
         {/* Global Command Palette / Search Dialog */}
         <GlobalSearchModal

@@ -1,0 +1,33 @@
+{
+  "name": "Nginda Warriors FC",
+  "short_name": "Nginda Warriors",
+  "description": "Your home for Nginda Warriors FC news, fixtures, results, squad updates and club activities.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#08783E",
+  "scope": "/",
+  "categories": ["sports", "news"],
+  "icons": [
+    {
+      "src": "/brand/nginda-warriors-crest.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

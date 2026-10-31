@@ -1,0 +1,74 @@
+name: Build & Package Android APK & AAB
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android APK and AAB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci || npm install
+
+      - name: Run Test Suite
+        run: npm test
+
+      - name: Generate Android Production Keystore
+        run: |
+          chmod +x scripts/generate-android-keystore.sh
+          ./scripts/generate-android-keystore.sh apps/public-website/android/app/nginda-release.keystore ngindawarriors "${{ secrets.ANDROID_KEYSTORE_PASSWORD || 'NgindaWarriors2024Release!' }}" "${{ secrets.ANDROID_KEY_PASSWORD || 'NgindaWarriors2024Release!' }}"
+
+      - name: Build Android Release APK (Direct Installable)
+        working-directory: apps/public-website/android
+        env:
+          ANDROID_KEYSTORE_PATH: nginda-release.keystore
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD || 'NgindaWarriors2024Release!' }}
+          ANDROID_KEY_ALIAS: ngindawarriors
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD || 'NgindaWarriors2024Release!' }}
+        run: |
+          chmod +x gradlew || true
+          ./gradlew assembleRelease
+
+      - name: Build Android App Bundle (AAB for Google Play)
+        working-directory: apps/public-website/android
+        env:
+          ANDROID_KEYSTORE_PATH: nginda-release.keystore
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD || 'NgindaWarriors2024Release!' }}
+          ANDROID_KEY_ALIAS: ngindawarriors
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD || 'NgindaWarriors2024Release!' }}
+        run: |
+          ./gradlew bundleRelease
+
+      - name: Upload Signed APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nginda-warriors-fc-release-apk
+          path: apps/public-website/android/app/build/outputs/apk/release/*.apk
+
+      - name: Upload Signed AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nginda-warriors-fc-release-aab
+          path: apps/public-website/android/app/build/outputs/bundle/release/*.aab

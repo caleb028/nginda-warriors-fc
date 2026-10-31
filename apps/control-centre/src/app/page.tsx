@@ -226,7 +226,7 @@ export default function ControlCentreApp() {
     .reduce((sum, d) => sum + Number(d.amountKes || 0), 0);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 flex overflow-x-hidden w-full max-w-full">
       {/* 1. CLEAN WHITE SIDEBAR NAVIGATION */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-72 bg-white text-slate-800 flex flex-col justify-between border-r border-slate-200 shadow-sm transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
@@ -339,31 +339,31 @@ export default function ControlCentreApp() {
             </h2>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Quick Action Buttons */}
             <button
               type="button"
               onClick={() => setActiveModule('match-centre')}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-[#08783E] font-pedals font-athletic font-black text-xs uppercase tracking-wider transition"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-[#08783E] font-pedals font-athletic font-black text-[11px] sm:text-xs uppercase tracking-wider transition min-h-[38px]"
             >
               <Zap className="w-3.5 h-3.5 text-[#F5D000]" />
-              <span>⚡ 60s Live Score</span>
+              <span className="inline">⚡ 60s Score</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveModule('players')}
-              className="hidden md:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#08783E] text-white hover:bg-[#063B25] font-pedals font-athletic font-bold text-xs uppercase transition"
+              className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#08783E] text-white hover:bg-[#063B25] font-pedals font-athletic font-bold text-xs uppercase transition min-h-[38px]"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>+ Player</span>
             </button>
             <button
               type="button"
-              onClick={() => setActiveModule('fixtures')}
-              className="hidden lg:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition"
+              onClick={() => setActiveModule('news')}
+              className="hidden md:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition min-h-[38px]"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>+ Fixture</span>
+              <span>+ Article</span>
             </button>
 
             {/* Notification Bell */}
@@ -410,7 +410,7 @@ export default function ControlCentreApp() {
         )}
 
         {/* Main Workspace Body */}
-        <main className="p-4 sm:p-6 lg:p-8 flex-1">
+        <main className="p-4 sm:p-6 lg:p-8 flex-1 pb-20 lg:pb-8">
           {activeModule === 'dashboard' ? (
             /* OVERVIEW DASHBOARD */
             <div className="space-y-8">
@@ -597,6 +597,48 @@ export default function ControlCentreApp() {
             />
           )}
         </main>
+
+        {/* Mobile Admin Quick Match-Day Action Strip */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-xl px-3 py-1.5 flex items-center justify-around">
+          <button
+            type="button"
+            onClick={() => setActiveModule('match-centre')}
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] transition ${
+              activeModule === 'match-centre' ? 'text-[#08783E] font-black' : 'text-slate-600'
+            }`}
+          >
+            <Zap className="w-5 h-5 text-[#F5D000] fill-[#F5D000]" />
+            <span>⚡ Score</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveModule('players')}
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] transition ${
+              activeModule === 'players' ? 'text-[#08783E] font-black' : 'text-slate-600'
+            }`}
+          >
+            <Users className="w-5 h-5 text-[#08783E]" />
+            <span>Players</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveModule('news')}
+            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] transition ${
+              activeModule === 'news' ? 'text-[#08783E] font-black' : 'text-slate-600'
+            }`}
+          >
+            <Newspaper className="w-5 h-5 text-slate-700" />
+            <span>News</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] text-slate-600"
+          >
+            <Menu className="w-5 h-5 text-slate-600" />
+            <span>Menu</span>
+          </button>
+        </div>
       </div>
     </div>
   );

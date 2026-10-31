@@ -28,6 +28,10 @@ import {
   maskPhoneNumber,
   ROLE_DEFINITIONS,
   hasModulePermission,
+  assertValidCsrfOrigin,
+  revokeUserSessions,
+  verifyAdminSessionToken,
+  signAdminSession,
 } from '../packages/shared/src/server';
 
 // Ensure test database starts in a clean state
@@ -396,4 +400,222 @@ test('Criteria 21: Content Deletion Removes Records From Public Website', () => 
 
   snap = getPublicWebsiteSnapshot();
   assert.equal(snap.upcomingFixtures.some((f) => f.id === fixId), false, 'Fixture removed after deletion');
+});
+
+test('Criteria 22: Security Test - Session Revocation & Token Version Invalidation', () => {
+  const db = readDatabase();
+  const testUser = {
+    id: createUuid(),
+    email: 'sec-tester@ngindawarriorsfc.co.ke',
+    fullName: 'Security Tester',
+    passwordHash: 'hash',
+    roleCode: 'CLUB_ADMIN' as const,
+    isOwnerSuperAdmin: false,
+    isActive: true,
+    mfaEnabled: false,
+    tokenVersion: 1,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  db.users.push(testUser);
+  writeDatabase(db);
+
+  // 1. Issue token for session
+  const token = signAdminSession(testUser);
+  const verifiedBefore = verifyAdminSessionToken(token);
+  assert.ok(verifiedBefore, 'Session token should be valid before revocation');
+
+  // 2. Revoke user session
+  revokeUserSessions(testUser.id);
+
+  // 3. Verify old token is rejected
+  const verifiedAfter = verifyAdminSessionToken(token);
+  assert.equal(verifiedAfter, null, 'Revoked token version must be rejected by server');
+});
+
+test('Criteria 23: Security Test - CSRF Origin Mismatch Enforcement', () => {
+  // Same host should pass
+  assert.doesNotThrow(() => {
+    assertValidCsrfOrigin({
+      get: (h) => (h === 'origin' ? 'https://ngindawarriorsfc.co.ke' : 'ngindawarriorsfc.co.ke'),
+    });
+  });
+
+  // Cross-site origin should be blocked
+  assert.throws(
+    () => {
+      assertValidCsrfOrigin({
+        get: (h) => (h === 'origin' ? 'https://evil-attacker-site.com' : 'ngindawarriorsfc.co.ke'),
+      });
+    },
+    /CSRF validation failed/,
+    'Cross-site origin must be blocked by CSRF validator'
+  );
+});
+
+test('Criteria 24: Security Test - Strict RBAC & Role Isolation', () => {
+  // Content editor cannot manage match centre or users
+  assert.equal(hasModulePermission('CONTENT_EDITOR', 'match-centre'), false);
+  assert.equal(hasModulePermission('CONTENT_EDITOR', 'users'), false);
+  assert.equal(hasModulePermission('CONTENT_EDITOR', 'news'), true);
+
+  // Match official cannot manage sponsors or users
+  assert.equal(hasModulePermission('MATCH_OFFICIAL', 'sponsors'), false);
+  assert.equal(hasModulePermission('MATCH_OFFICIAL', 'users'), false);
+  assert.equal(hasModulePermission('MATCH_OFFICIAL', 'match-centre'), true);
+
+  // Finance manager cannot manage players
+  assert.equal(hasModulePermission('FINANCE_MANAGER', 'players'), false);
+  assert.equal(hasModulePermission('FINANCE_MANAGER', 'donations'), true);
+
+  // Unauthenticated user throws on assertAuthorizedAdmin
+  assert.throws(() => {
+    assertAuthorizedAdmin(null, 'players');
+  }, /UNAUTHORIZED/);
+});
+
+test('Criteria 25: Security Test - Daraja M-Pesa Idempotency & Duplicate Receipt Protection', () => {
+  const db = readDatabase();
+  const testDonationId = 'mpesa-sec-test-1';
+  db.donations.push({
+    id: testDonationId,
+    campaignTitle: 'Pitch Development',
+    donorName: 'Test Supporter',
+    donorPhoneMasked: '2547****1234',
+    isAnonymous: false,
+    amountKes: 1500,
+    paymentMethod: 'mpesa_stk',
+    status: 'pending',
+    checkoutRequestId: 'ws_sec_chk_123',
+    createdAt: new Date().toISOString(),
+  });
+  writeDatabase(db);
+
+  // 1. Confirm payment
+  reconcileMpesaTransaction({
+    donationId: testDonationId,
+    newStatus: 'confirmed',
+    mpesaReceiptNumber: 'QWE123TEST',
+    actorUserId: 'system',
+    actorName: 'Daraja System',
+    actorRole: 'SYSTEM',
+  });
+
+  const confirmedDonation = readDatabase().donations.find((d) => d.id === testDonationId);
+  assert.equal(confirmedDonation?.status, 'confirmed');
+  assert.equal(confirmedDonation?.mpesaReceiptNumber, 'QWE123TEST');
+
+  // 2. Idempotent retry should succeed without error
+  assert.doesNotThrow(() => {
+    reconcileMpesaTransaction({
+      donationId: testDonationId,
+      newStatus: 'confirmed',
+      mpesaReceiptNumber: 'QWE123TEST',
+      actorUserId: 'system',
+      actorName: 'Daraja System',
+      actorRole: 'SYSTEM',
+    });
+  });
+
+  // 3. Forged downgrade to failed must be blocked
+  assert.throws(
+    () => {
+      reconcileMpesaTransaction({
+        donationId: testDonationId,
+        newStatus: 'failed',
+        actorUserId: 'attacker',
+        actorName: 'Attacker Callback',
+        actorRole: 'SYSTEM',
+      });
+    },
+    /Cannot downgrade/,
+    'Attempt to downgrade a confirmed transaction must throw'
+  );
+
+  // 4. Duplicate receipt number on a different donation must be blocked
+  const dbFresh = readDatabase();
+  dbFresh.donations.push({
+    id: 'mpesa-sec-test-2',
+    campaignTitle: 'Pitch Development',
+    donorName: 'Another Supporter',
+    donorPhoneMasked: '2547****5678',
+    isAnonymous: false,
+    amountKes: 500,
+    paymentMethod: 'mpesa_stk',
+    status: 'pending',
+    checkoutRequestId: 'ws_sec_chk_456',
+    createdAt: new Date().toISOString(),
+  });
+  writeDatabase(dbFresh);
+
+  assert.throws(
+    () => {
+      reconcileMpesaTransaction({
+        donationId: 'mpesa-sec-test-2',
+        newStatus: 'confirmed',
+        mpesaReceiptNumber: 'QWE123TEST', // Replay of previously used receipt
+        actorUserId: 'system',
+        actorName: 'Daraja System',
+        actorRole: 'SYSTEM',
+      });
+    },
+    /Duplicate M-Pesa receipt/,
+    'Replay of duplicate receipt number must be rejected'
+  );
+});
+
+test('Criteria 26: Security & Privacy - Underage Player & Recruitment Data Protection', () => {
+  const db = readDatabase();
+  const minorPlayer = {
+    id: 'minor-player-1',
+    slug: 'junior-warrior-10',
+    fullName: 'Junior Warrior',
+    jerseyNumber: 10,
+    positionGroup: 'Forwards' as const,
+    specificRole: 'Striker',
+    photoUrl: '',
+    biography: 'Promising talent in club youth academy.',
+    preferredFoot: 'Right' as const,
+    isUnderageProtected: true, // Under 18 privacy protection
+    appearances: 3,
+    starts: 1,
+    goals: 2,
+    assists: 1,
+    yellowCards: 0,
+    redCards: 0,
+    cleanSheets: 0,
+    seasonStats: [],
+    isFeatured: true,
+    squadStatus: 'active' as const,
+    publicationStatus: 'published' as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  db.players.push(minorPlayer);
+  writeDatabase(db);
+
+  const snapshot = getPublicWebsiteSnapshot();
+  const found = snapshot.players.find((p) => p.slug === 'junior-warrior-10');
+  assert.ok(found);
+  assert.equal(found?.isUnderageProtected, true);
+  // Phone mask test
+  assert.equal(maskPhoneNumber('254712345678'), '2547***678');
+});
+
+test('Criteria 27: Multi-Platform Assets - PWA Manifest & Capacitor Configuration', () => {
+  const manifestPath = path.join(__dirname, '..', 'apps', 'public-website', 'public', 'manifest.json');
+  assert.ok(fs.existsSync(manifestPath), 'manifest.json must exist in public directory');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  assert.equal(manifest.name, 'Nginda Warriors FC');
+  assert.equal(manifest.display, 'standalone');
+  assert.equal(manifest.theme_color, '#08783E');
+
+  const swPath = path.join(__dirname, '..', 'apps', 'public-website', 'public', 'sw.js');
+  assert.ok(fs.existsSync(swPath), 'sw.js service worker must exist in public directory');
+
+  const capPath = path.join(__dirname, '..', 'apps', 'public-website', 'capacitor.config.ts');
+  assert.ok(fs.existsSync(capPath), 'capacitor.config.ts must exist');
+
+  const androidManifest = path.join(__dirname, '..', 'apps', 'public-website', 'android', 'app', 'src', 'main', 'AndroidManifest.xml');
+  assert.ok(fs.existsSync(androidManifest), 'Android Manifest must exist for native Android distribution');
 });

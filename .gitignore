@@ -13,6 +13,9 @@ dist/
 data/acceptance-test-db.json
 data/*.tmp
 data/*-test*.json
+data/backups/
+*.keystore
+*.jks
 
 # Logs
 npm-debug.log*

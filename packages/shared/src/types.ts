@@ -105,6 +105,8 @@ export interface AdminUser {
   isOwnerSuperAdmin: boolean;
   isActive: boolean;
   mfaEnabled: boolean;
+  mfaSecret?: string;
+  tokenVersion?: number;
   lastLoginAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -116,6 +118,7 @@ export interface AdminSessionPayload {
   fullName: string;
   roleCode: AdminRoleCode;
   isOwnerSuperAdmin: boolean;
+  tokenVersion?: number;
 }
 
 export interface HeroSlide {

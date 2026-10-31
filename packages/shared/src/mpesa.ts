@@ -199,11 +199,30 @@ export function reconcileMpesaTransaction(params: {
     throw new Error('Payment transaction record not found.');
   }
 
+  // Idempotency: If already confirmed and new status is confirmed, return safely
+  if (donation.status === 'confirmed' && params.newStatus === 'confirmed') {
+    return donation;
+  }
+
+  // Security: Never allow downgrade of an already confirmed transaction
+  if (donation.status === 'confirmed' && params.newStatus !== 'confirmed') {
+    throw new Error('Cannot downgrade an already verified and confirmed financial transaction.');
+  }
+
+  // Uniqueness: Prevent replay of previously used M-Pesa receipt numbers
+  if (params.mpesaReceiptNumber) {
+    const cleanReceipt = params.mpesaReceiptNumber.trim().toUpperCase();
+    const duplicate = db.donations.find(
+      (d) => d.id !== donation.id && d.mpesaReceiptNumber === cleanReceipt && d.status === 'confirmed'
+    );
+    if (duplicate) {
+      throw new Error(`Duplicate M-Pesa receipt reference detected: ${cleanReceipt}`);
+    }
+    donation.mpesaReceiptNumber = cleanReceipt;
+  }
+
   const previousStatus = donation.status;
   donation.status = params.newStatus;
-  if (params.mpesaReceiptNumber) {
-    donation.mpesaReceiptNumber = params.mpesaReceiptNumber.trim().toUpperCase();
-  }
   if (params.newStatus === 'confirmed') {
     donation.verifiedAt = new Date().toISOString();
   }

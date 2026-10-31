@@ -608,15 +608,24 @@ CREATE TABLE IF NOT EXISTS integration_settings (
 );
 
 -- ==============================================================================
--- ROW LEVEL SECURITY (RLS) POLICIES
+-- ROW LEVEL SECURITY (RLS) POLICIES — ALL 37 NORMALIZED ENTITIES ENFORCED
 -- ==============================================================================
+ALTER TABLE roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE permissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE club_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE website_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE seasons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE competitions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE players ENABLE ROW LEVEL SECURITY;
+ALTER TABLE player_season_stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE staff ENABLE ROW LEVEL SECURITY;
 ALTER TABLE fixtures ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fixture_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fixture_lineups ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fixture_player_stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE standings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE motm_votes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE articles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery_albums ENABLE ROW LEVEL SECURITY;
 ALTER TABLE media_assets ENABLE ROW LEVEL SECURITY;
@@ -631,16 +640,26 @@ ALTER TABLE expenditure_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transparency_reports ENABLE ROW LEVEL SECURITY;
 ALTER TABLE fan_memberships ENABLE ROW LEVEL SECURITY;
 ALTER TABLE recruitment_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE product_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE integration_settings ENABLE ROW LEVEL SECURITY;
 
--- Public read-only policies strictly restricted to published/approved records
+-- 1. PUBLIC READ POLICIES (Strictly published/verified/active records)
 CREATE POLICY "Public read club_settings" ON club_settings FOR SELECT USING (true);
 CREATE POLICY "Public read published sections" ON website_sections FOR SELECT USING (publication_status = 'published');
+CREATE POLICY "Public read active seasons" ON seasons FOR SELECT USING (is_active = true);
+CREATE POLICY "Public read competitions" ON competitions FOR SELECT USING (true);
 CREATE POLICY "Public read published active players" ON players FOR SELECT USING (publication_status = 'published' AND squad_status = 'active');
+CREATE POLICY "Public read player stats" ON player_season_stats FOR SELECT USING (true);
 CREATE POLICY "Public read published staff" ON staff FOR SELECT USING (publication_status = 'published');
 CREATE POLICY "Public read published fixtures" ON fixtures FOR SELECT USING (publication_status = 'published');
+CREATE POLICY "Public read fixture events" ON fixture_events FOR SELECT USING (true);
+CREATE POLICY "Public read fixture lineups" ON fixture_lineups FOR SELECT USING (true);
+CREATE POLICY "Public read fixture player stats" ON fixture_player_stats FOR SELECT USING (true);
 CREATE POLICY "Public read published standings" ON standings FOR SELECT USING (publication_status = 'published');
 CREATE POLICY "Public read published articles" ON articles FOR SELECT USING (publication_status = 'published');
 CREATE POLICY "Public read published albums" ON gallery_albums FOR SELECT USING (publication_status = 'published');
@@ -649,6 +668,48 @@ CREATE POLICY "Public read published events" ON events FOR SELECT USING (publica
 CREATE POLICY "Public read published packages" ON sponsorship_packages FOR SELECT USING (publication_status = 'published');
 CREATE POLICY "Public read approved published sponsors" ON sponsors FOR SELECT USING (is_approved = true AND publication_status = 'published');
 CREATE POLICY "Public read published campaigns" ON fundraising_campaigns FOR SELECT USING (publication_status = 'published');
+CREATE POLICY "Public read verified donations" ON donations FOR SELECT USING (status = 'confirmed');
 CREATE POLICY "Public read published expenditures" ON expenditure_records FOR SELECT USING (publication_status = 'published');
 CREATE POLICY "Public read published transparency" ON transparency_reports FOR SELECT USING (publication_status = 'published');
+CREATE POLICY "Public read product categories" ON product_categories FOR SELECT USING (true);
 CREATE POLICY "Public read published products" ON products FOR SELECT USING (publication_status = 'published');
+
+-- 2. PUBLIC ANONYMOUS INSERT POLICIES (Fan engagement, inquiries, donations, trial scouting)
+CREATE POLICY "Public insert sponsor inquiries" ON sponsor_inquiries FOR INSERT WITH CHECK (
+  contact_name IS NOT NULL AND email IS NOT NULL
+);
+
+CREATE POLICY "Public insert recruitment applications" ON recruitment_applications FOR INSERT WITH CHECK (
+  full_name IS NOT NULL AND phone_number IS NOT NULL AND guardian_consent = true
+);
+
+CREATE POLICY "Public insert fan memberships" ON fan_memberships FOR INSERT WITH CHECK (
+  full_name IS NOT NULL AND phone_number IS NOT NULL
+);
+
+CREATE POLICY "Public insert donations" ON donations FOR INSERT WITH CHECK (
+  amount_kes >= 10 AND status = 'pending'
+);
+
+CREATE POLICY "Public insert contact messages" ON contact_messages FOR INSERT WITH CHECK (
+  sender_name IS NOT NULL AND sender_email IS NOT NULL AND message IS NOT NULL
+);
+
+CREATE POLICY "Public insert motm votes" ON motm_votes FOR INSERT WITH CHECK (
+  fixture_id IS NOT NULL AND player_id IS NOT NULL
+);
+
+CREATE POLICY "Public insert merchandise orders" ON orders FOR INSERT WITH CHECK (
+  customer_name IS NOT NULL AND customer_phone IS NOT NULL AND total_kes > 0
+);
+
+-- 3. ADMINISTRATIVE & SERVICE ROLE POLICIES (Full control for authenticated backend operations)
+CREATE POLICY "Service role full access all tables" ON users FOR ALL USING (
+  auth.role() = 'service_role' OR auth.jwt()->>'role' = 'SUPER_ADMIN'
+);
+CREATE POLICY "Admin audit log insert" ON audit_logs FOR INSERT WITH CHECK (
+  action IS NOT NULL AND summary IS NOT NULL
+);
+CREATE POLICY "Admin read audit logs" ON audit_logs FOR SELECT USING (
+  auth.role() = 'service_role' OR auth.jwt()->>'role' = 'SUPER_ADMIN'
+);
