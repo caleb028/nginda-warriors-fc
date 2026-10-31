@@ -25,13 +25,13 @@
   --crest-yellow: #F5D000;
   --golden-accent: #D5AA00;
 
-  /* Primary White-Dominant Canvas */
-  --canvas-white: #FFFFFF;
-  --soft-surface: #F8FAFC;
-  --card-surface: #FFFFFF;
-  --border-light: #E2E8F0;
-  --charcoal: #0F172A;
-  --text-muted: #64748B;
+  /* Sleek Modern Black Pitch Canvas & Surfaces */
+  --canvas-white: #000000;
+  --soft-surface: #070C09;
+  --card-surface: #0D1410;
+  --border-light: #1E2B23;
+  --charcoal: #FFFFFF;
+  --text-muted: #94A3B8;
 
   /* Athletic Speed Display Typography (Pedals Style: Italic, Chamfered, Dynamic) */
   --font-heading: 'Pedals', 'Chakra Petch', 'Kanit', 'Barlow Condensed', -apple-system, sans-serif;
@@ -39,8 +39,8 @@
 }
 
 body {
-  background-color: #FFFFFF;
-  color: #0F172A;
+  background-color: #000000;
+  color: #F8FAFC;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
@@ -55,12 +55,12 @@ h1, h2, h3, h4, .font-athletic, .font-pedals {
 
 /* Subtle focus ring */
 *:focus-visible {
-  outline: 2px solid var(--warrior-green);
+  outline: 2px solid var(--crest-yellow);
   outline-offset: 2px;
 }
 
-/* Crisp light pitch grid for sports texture */
+/* Crisp pitch grid for dark sports texture */
 .pitch-grid-bg {
-  background-image: radial-gradient(rgba(8, 120, 62, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(8, 120, 62, 0.18) 1px, transparent 1px);
   background-size: 24px 24px;
 }

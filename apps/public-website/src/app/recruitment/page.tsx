@@ -73,17 +73,17 @@ export default function PlayerRecruitmentPage() {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* Header Banner - White Dominant */}
-      <section className="bg-slate-50 text-slate-900 py-12 border-b border-slate-200">
+    <div className="bg-black text-white min-h-screen">
+      {/* Header Banner */}
+      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="px-3 py-1 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+          <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
             TECHNICAL BENCH SCOUTING & TRIALS
           </span>
-          <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-slate-950 mt-2">
+          <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
             PLAYER RECRUITMENT & TRIAL APPLICATION
           </h1>
-          <p className="text-slate-600 text-base mt-1 max-w-2xl">
+          <p className="text-slate-300 text-base mt-1 max-w-2xl">
             Apply for official trials with Nginda Warriors FC. All applications are transmitted privately to the Technical Bench and are never visible to public visitors.
           </p>
         </div>
@@ -92,21 +92,21 @@ export default function PlayerRecruitmentPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5"
+          className="bg-[#0D1410] rounded-2xl p-6 sm:p-8 border border-[#1E2B23] shadow-xl space-y-5 text-white"
         >
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-2 text-[#08783E] font-pedals font-athletic font-bold uppercase text-sm">
-              <UserPlus className="w-5 h-5 text-[#08783E]" />
+          <div className="flex items-center justify-between border-b border-[#1E2B23] pb-3">
+            <div className="flex items-center gap-2 text-[#4ADE80] font-pedals font-athletic font-bold uppercase text-sm">
+              <UserPlus className="w-5 h-5 text-[#F5D000]" />
               <span>Confidential Trial Application Dossier</span>
             </div>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500">
-              <Lock className="w-3.5 h-3.5 text-[#08783E]" /> Private Submission
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-400">
+              <Lock className="w-3.5 h-3.5 text-[#4ADE80]" /> Private Submission
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Applicant Full Name *
               </label>
               <input
@@ -115,11 +115,11 @@ export default function PlayerRecruitmentPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Player Full Name"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Age (Years) *
               </label>
               <input
@@ -129,24 +129,24 @@ export default function PlayerRecruitmentPage() {
                 required
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm font-bold focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm font-bold focus:border-[#08783E] focus:outline-none"
               />
             </div>
           </div>
 
           {/* Mandatory Guardian Consent Block for Minors (Under 18) */}
           {isMinor && (
-            <div className="p-5 rounded-xl bg-amber-50 border-2 border-amber-300 space-y-3">
-              <div className="flex items-center gap-2 text-amber-900 font-pedals font-athletic font-black uppercase text-base">
-                <ShieldAlert className="w-5 h-5 text-amber-600" />
+            <div className="p-5 rounded-xl bg-[#141E18] border-2 border-amber-500/40 space-y-3">
+              <div className="flex items-center gap-2 text-amber-300 font-pedals font-athletic font-black uppercase text-base">
+                <ShieldAlert className="w-5 h-5 text-amber-400" />
                 <span>Safeguarding & Parent/Guardian Consent (Applicant Under 18)</span>
               </div>
-              <p className="text-xs text-amber-800 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed">
                 Nginda Warriors FC complies with Kenyan youth football safeguarding guidelines. Applicants under 18 years of age must provide verified parent/guardian details and explicit consent to attend trials.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
-                  <label className="block text-xs font-bold uppercase text-amber-900 mb-1">
+                  <label className="block text-xs font-bold uppercase text-amber-200 mb-1">
                     Parent / Guardian Full Name *
                   </label>
                   <input
@@ -155,11 +155,11 @@ export default function PlayerRecruitmentPage() {
                     value={guardianName}
                     onChange={(e) => setGuardianName(e.target.value)}
                     placeholder="Parent / Guardian Name"
-                    className="w-full px-3.5 py-2 rounded-lg border border-amber-300 bg-white text-sm"
+                    className="w-full px-3.5 py-2 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase text-amber-900 mb-1">
+                  <label className="block text-xs font-bold uppercase text-amber-200 mb-1">
                     Parent / Guardian Phone Number *
                   </label>
                   <input
@@ -168,17 +168,17 @@ export default function PlayerRecruitmentPage() {
                     value={guardianPhone}
                     onChange={(e) => setGuardianPhone(e.target.value)}
                     placeholder="07XX XXX XXX"
-                    className="w-full px-3.5 py-2 rounded-lg border border-amber-300 bg-white text-sm"
+                    className="w-full px-3.5 py-2 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm"
                   />
                 </div>
               </div>
-              <label className="flex items-start gap-2 pt-1 text-xs font-bold text-amber-950 cursor-pointer">
+              <label className="flex items-start gap-2 pt-1 text-xs font-bold text-amber-200 cursor-pointer">
                 <input
                   type="checkbox"
                   required={isMinor}
                   checked={guardianConsentConfirmed}
                   onChange={(e) => setGuardianConsentConfirmed(e.target.checked)}
-                  className="mt-0.5 rounded border-amber-400"
+                  className="mt-0.5 rounded border-[#1E2B23] bg-[#080D0A]"
                 />
                 <span>
                   I confirm that my parent or legal guardian is aware of this trial application and grants permission for my participation in Nginda Warriors FC scouting activities.
@@ -189,42 +189,42 @@ export default function PlayerRecruitmentPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Preferred Position *
               </label>
               <select
                 value={preferredPosition}
                 onChange={(e) => setPreferredPosition(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
               >
-                <option value="Goalkeeper">Goalkeeper</option>
-                <option value="Centre-Back">Centre-Back</option>
-                <option value="Right-Back">Right-Back</option>
-                <option value="Left-Back">Left-Back</option>
-                <option value="Defensive Midfielder">Defensive Midfielder</option>
-                <option value="Central Midfielder">Central Midfielder</option>
-                <option value="Attacking Midfielder">Attacking Midfielder</option>
-                <option value="Right Winger">Right Winger</option>
-                <option value="Left Winger">Left Winger</option>
-                <option value="Centre-Forward">Centre-Forward</option>
+                <option value="Goalkeeper" className="bg-[#080D0A] text-white">Goalkeeper</option>
+                <option value="Centre-Back" className="bg-[#080D0A] text-white">Centre-Back</option>
+                <option value="Right-Back" className="bg-[#080D0A] text-white">Right-Back</option>
+                <option value="Left-Back" className="bg-[#080D0A] text-white">Left-Back</option>
+                <option value="Defensive Midfielder" className="bg-[#080D0A] text-white">Defensive Midfielder</option>
+                <option value="Central Midfielder" className="bg-[#080D0A] text-white">Central Midfielder</option>
+                <option value="Attacking Midfielder" className="bg-[#080D0A] text-white">Attacking Midfielder</option>
+                <option value="Right Winger" className="bg-[#080D0A] text-white">Right Winger</option>
+                <option value="Left Winger" className="bg-[#080D0A] text-white">Left Winger</option>
+                <option value="Centre-Forward" className="bg-[#080D0A] text-white">Centre-Forward</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Preferred Foot *
               </label>
               <select
                 value={preferredFoot}
                 onChange={(e) => setPreferredFoot(e.target.value as 'Right' | 'Left' | 'Both')}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
               >
-                <option value="Right">Right</option>
-                <option value="Left">Left</option>
-                <option value="Both">Both (Ambidextrous)</option>
+                <option value="Right" className="bg-[#080D0A] text-white">Right</option>
+                <option value="Left" className="bg-[#080D0A] text-white">Left</option>
+                <option value="Both" className="bg-[#080D0A] text-white">Both (Ambidextrous)</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 County of Residence *
               </label>
               <input
@@ -233,14 +233,14 @@ export default function PlayerRecruitmentPage() {
                 value={county}
                 onChange={(e) => setCounty(e.target.value)}
                 placeholder="e.g. Murang'a"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Applicant Phone Number *
               </label>
               <input
@@ -249,11 +249,11 @@ export default function PlayerRecruitmentPage() {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="07XX XXX XXX"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Email Address (Optional)
               </label>
               <input
@@ -261,13 +261,13 @@ export default function PlayerRecruitmentPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="player@example.com"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+            <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
               Previous Clubs & Playing Experience *
             </label>
             <textarea
@@ -276,13 +276,13 @@ export default function PlayerRecruitmentPage() {
               value={playingExperience}
               onChange={(e) => setPlayingExperience(e.target.value)}
               placeholder="Describe your school, academy, or league football experience..."
-              className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Notable Football Achievements (Optional)
               </label>
               <input
@@ -290,11 +290,11 @@ export default function PlayerRecruitmentPage() {
                 value={achievements}
                 onChange={(e) => setAchievements(e.target.value)}
                 placeholder="e.g. Best Midfielder, Sub-County Cup"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Highlight Video Link (YouTube / Drive - Optional)
               </label>
               <input
@@ -302,7 +302,7 @@ export default function PlayerRecruitmentPage() {
                 value={highlightVideoUrl}
                 onChange={(e) => setHighlightVideoUrl(e.target.value)}
                 placeholder="https://youtube.com/watch?v=..."
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
           </div>
@@ -310,19 +310,19 @@ export default function PlayerRecruitmentPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-lg uppercase tracking-wider shadow-sm transition"
+            className="w-full py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-lg uppercase tracking-wider shadow-md transition active:scale-95"
           >
             {submitting ? 'Submitting Application...' : 'Submit Confidential Trial Application'}
           </button>
 
           {successMsg && (
-            <div className="p-4 rounded-xl bg-[#08783E]/10 border border-[#08783E]/30 text-[#08783E] text-xs font-bold flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#08783E] shrink-0" />
+            <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-xs font-bold flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-red-950/60 border border-red-800 text-red-200 text-xs font-semibold">
               {errorMsg}
             </div>
           )}

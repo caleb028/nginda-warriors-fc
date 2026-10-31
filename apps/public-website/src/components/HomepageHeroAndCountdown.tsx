@@ -38,21 +38,21 @@ export function HomepageHeroSlideshow({
   };
 
   return (
-    <section className="relative overflow-hidden bg-white text-slate-900 border-b border-slate-200">
+    <section className="relative overflow-hidden bg-black text-white border-b border-[#1E2B23]">
       {/* Team Photograph Background (When Uploaded) */}
       {activeSlide.imageUrl ? (
         <div
-          className="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-20"
+          className="absolute inset-0 bg-cover bg-center transition-all duration-700 opacity-25"
           style={{ backgroundImage: `url(${activeSlide.imageUrl})` }}
           aria-hidden="true"
         />
       ) : (
-        <div className="absolute inset-0 pitch-grid-bg opacity-40" aria-hidden="true" />
+        <div className="absolute inset-0 pitch-grid-bg opacity-50" aria-hidden="true" />
       )}
 
-      {/* Light Gradient Overlay for Maximum Readability */}
+      {/* Dark Gradient Overlay for Supreme Contrast & Readability */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-slate-50/90"
+        className="absolute inset-0 bg-gradient-to-r from-black via-black/95 to-[#080D0A]/90"
         aria-hidden="true"
       />
 
@@ -60,27 +60,27 @@ export function HomepageHeroSlideshow({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Hero Copy */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] text-xs font-athletic font-extrabold tracking-widest uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-[#D5AA00]" />
-              <span>OFFICIAL CLUB PLATFORM • EST. {settings.establishedYear}</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] text-xs font-athletic font-extrabold tracking-widest uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-[#F5D000]" />
+              <span>OFFICIAL DIGITAL PLATFORM • EST. {settings.establishedYear}</span>
             </div>
 
-            <h1 className="font-pedals font-athletic text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95] text-slate-950">
+            <h1 className="font-pedals font-athletic text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95] text-white">
               {activeSlide.headline || settings.clubName}
             </h1>
 
-            <p className="font-athletic text-2xl sm:text-3xl font-bold uppercase tracking-wide text-[#08783E]">
+            <p className="font-athletic text-2xl sm:text-3xl font-bold uppercase tracking-wide text-[#F5D000]">
               “{activeSlide.tagline || 'One Team. One Community. One Warrior Spirit.'}”
             </p>
 
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
               {activeSlide.description}
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
                 href={activeSlide.primaryCtaHref || '/about'}
-                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-black text-lg uppercase tracking-wider shadow-md transition-transform active:scale-95"
+                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-black text-lg uppercase tracking-wider shadow-lg transition-transform active:scale-95"
               >
                 <span>{activeSlide.primaryCtaLabel || 'Explore Our Club'}</span>
                 <ArrowRight className="w-5 h-5 text-[#F5D000]" />
@@ -88,9 +88,9 @@ export function HomepageHeroSlideshow({
 
               <Link
                 href={activeSlide.secondaryCtaHref || '/sponsors'}
-                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-300 hover:border-[#08783E] font-athletic font-bold text-lg uppercase tracking-wider transition"
+                className="inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#0D1410] hover:bg-[#141E18] text-white border-2 border-[#1E2B23] hover:border-[#08783E] font-athletic font-bold text-lg uppercase tracking-wider transition"
               >
-                <Shield className="w-5 h-5 text-[#08783E]" />
+                <Shield className="w-5 h-5 text-[#4ADE80]" />
                 <span>{activeSlide.secondaryCtaLabel || 'Partner With Us'}</span>
               </Link>
             </div>
@@ -103,7 +103,7 @@ export function HomepageHeroSlideshow({
                   onClick={() =>
                     setCurrentIndex((prev) => (prev - 1 + activeSlides.length) % activeSlides.length)
                   }
-                  className="p-2 rounded-lg bg-slate-100 hover:bg-[#08783E] text-slate-700 hover:text-white transition"
+                  className="p-2 rounded-lg bg-[#0D1410] hover:bg-[#08783E] text-slate-300 hover:text-white border border-[#1E2B23] transition"
                   aria-label="Previous hero slide"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -116,7 +116,7 @@ export function HomepageHeroSlideshow({
                       onClick={() => setCurrentIndex(idx)}
                       aria-label={`Go to slide ${idx + 1}`}
                       className={`h-2.5 rounded-full transition-all ${
-                        idx === currentIndex ? 'w-8 bg-[#08783E]' : 'w-2.5 bg-slate-300'
+                        idx === currentIndex ? 'w-8 bg-[#08783E]' : 'w-2.5 bg-slate-700'
                       }`}
                     />
                   ))}
@@ -124,7 +124,7 @@ export function HomepageHeroSlideshow({
                 <button
                   type="button"
                   onClick={() => setCurrentIndex((prev) => (prev + 1) % activeSlides.length)}
-                  className="p-2 rounded-lg bg-slate-100 hover:bg-[#08783E] text-slate-700 hover:text-white transition"
+                  className="p-2 rounded-lg bg-[#0D1410] hover:bg-[#08783E] text-slate-300 hover:text-white border border-[#1E2B23] transition"
                   aria-label="Next hero slide"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -135,14 +135,14 @@ export function HomepageHeroSlideshow({
 
           {/* Right Official Crest Showcase */}
           <div className="lg:col-span-4 flex flex-col items-center justify-center">
-            <div className="relative p-8 rounded-full bg-slate-50 border-2 border-slate-200 shadow-xl group hover:border-[#08783E]/40 transition-all">
+            <div className="relative p-8 rounded-full bg-[#0A0F0D] border-2 border-[#1E2B23] shadow-2xl group hover:border-[#08783E] transition-all">
               <ClubCrest
                 size={220}
                 customCrestUrl={settings.crestUrl}
                 alt={`${settings.clubName} Official Crest`}
               />
             </div>
-            <p className="mt-4 text-xs font-athletic font-bold uppercase tracking-widest text-[#08783E] text-center">
+            <p className="mt-4 text-xs font-athletic font-bold uppercase tracking-widest text-[#F5D000] text-center">
               OFFICIAL CLUB IDENTITY • EST. {settings.establishedYear}
             </p>
           </div>
@@ -183,8 +183,8 @@ export function MatchKickoffCountdown({ kickoffIso }: { kickoffIso: string }) {
 
   if (timeLeft.isPast) {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#08783E]/10 text-[#08783E] font-athletic font-black text-xs uppercase tracking-wider">
-        <Clock className="w-4 h-4" />
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 font-athletic font-black text-xs uppercase tracking-wider">
+        <Clock className="w-4 h-4 text-[#F5D000]" />
         <span>Match Time Reached</span>
       </div>
     );
@@ -200,12 +200,12 @@ export function MatchKickoffCountdown({ kickoffIso }: { kickoffIso: string }) {
       ].map((unit) => (
         <div
           key={unit.label}
-          className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5"
+          className="bg-[#0D1410] border border-[#1E2B23] rounded-lg px-2.5 py-1.5"
         >
-          <span className="block font-pedals font-athletic text-2xl font-black text-slate-900 leading-none">
+          <span className="block font-pedals font-athletic text-2xl font-black text-white leading-none">
             {String(unit.value).padStart(2, '0')}
           </span>
-          <span className="block text-[10px] font-bold text-slate-500 tracking-wider mt-0.5">
+          <span className="block text-[10px] font-bold text-slate-400 tracking-wider mt-0.5">
             {unit.label}
           </span>
         </div>

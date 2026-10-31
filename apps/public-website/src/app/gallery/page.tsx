@@ -28,22 +28,22 @@ export default function GalleryAndMediaPage({
       : mediaAssets.filter((m) => m.category === activeCat);
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* Header Banner - White Dominant */}
-      <section className="bg-slate-50 text-slate-900 py-12 border-b border-slate-200">
+    <div className="bg-black text-white min-h-screen">
+      {/* Header Banner */}
+      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+            <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
               OFFICIAL PHOTOGRAPHY & VIDEO ARCHIVE
             </span>
-            <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-slate-950 mt-2">
+            <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
               GALLERY & MEDIA LIBRARY
             </h1>
-            <p className="text-slate-600 text-base mt-1">
+            <p className="text-slate-300 text-base mt-1">
               Authentic moments from matches, training, tournaments, and community outreach.
             </p>
           </div>
-          <div className="p-2 rounded-full bg-white border border-slate-200 shadow-sm">
+          <div className="p-2 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shadow-md">
             <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>
@@ -56,8 +56,8 @@ export default function GalleryAndMediaPage({
             href="/gallery"
             className={`px-3.5 py-2 rounded-lg text-xs font-pedals font-athletic font-bold uppercase tracking-wider transition ${
               activeCat === 'ALL'
-                ? 'bg-[#08783E] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-[#08783E] text-white shadow-md'
+                : 'bg-[#141E18] text-slate-300 hover:bg-[#1C2B22] border border-[#1E2B23]'
             }`}
           >
             All Media ({mediaAssets.length})
@@ -68,8 +68,8 @@ export default function GalleryAndMediaPage({
               href={`/gallery?category=${encodeURIComponent(cat)}`}
               className={`px-3.5 py-2 rounded-lg text-xs font-pedals font-athletic font-bold uppercase tracking-wider transition ${
                 activeCat === cat
-                  ? 'bg-[#08783E] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  ? 'bg-[#08783E] text-white shadow-md'
+                  : 'bg-[#141E18] text-slate-300 hover:bg-[#1C2B22] border border-[#1E2B23]'
               }`}
             >
               {cat}
@@ -82,9 +82,9 @@ export default function GalleryAndMediaPage({
             {filteredMedia.map((asset) => (
               <div
                 key={asset.id}
-                className="rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm flex flex-col hover:border-slate-300 transition"
+                className="rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] shadow-xl flex flex-col hover:border-[#08783E] transition"
               >
-                <div className="h-60 bg-slate-100 relative flex items-center justify-center overflow-hidden">
+                <div className="h-60 bg-[#080D0A] relative flex items-center justify-center overflow-hidden">
                   {asset.url ? (
                     <img
                       src={asset.url}
@@ -99,24 +99,24 @@ export default function GalleryAndMediaPage({
                     {asset.category}
                   </span>
                   {asset.mediaType === 'video' && (
-                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-slate-900 text-white text-xs font-bold inline-flex items-center gap-1 shadow-sm">
+                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#141E18] border border-[#1E2B23] text-white text-xs font-bold inline-flex items-center gap-1 shadow-sm">
                       <Video className="w-3.5 h-3.5 text-[#F5D000]" /> Video
                     </span>
                   )}
                 </div>
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    <h2 className="font-pedals font-athletic text-xl font-bold uppercase text-slate-900">
+                    <h2 className="font-pedals font-athletic text-xl font-bold uppercase text-white">
                       {asset.title}
                     </h2>
-                    <p className="text-xs text-slate-600 mt-1">{asset.caption}</p>
+                    <p className="text-xs text-slate-300 mt-1">{asset.caption}</p>
                   </div>
                   {asset.externalVideoUrl && (
                     <a
                       href={asset.externalVideoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-extrabold uppercase text-[#08783E] hover:underline"
+                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-extrabold uppercase text-[#F5D000] hover:underline"
                     >
                       <span>Watch Video Highlight</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -127,12 +127,12 @@ export default function GalleryAndMediaPage({
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-slate-50 p-12 text-center border border-slate-200">
-            <Camera className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-            <h2 className="font-pedals font-athletic text-2xl font-bold uppercase text-slate-800">
+          <div className="rounded-2xl bg-[#0D1410] p-12 text-center border border-[#1E2B23]">
+            <Camera className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+            <h2 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
               Gallery Albums Awaiting Media Uploads
             </h2>
-            <p className="text-sm text-slate-500 max-w-lg mx-auto mt-1">
+            <p className="text-sm text-slate-400 max-w-lg mx-auto mt-1">
               Photographs and video highlights uploaded and published through the Control Centre appear here organized by album category.
             </p>
           </div>

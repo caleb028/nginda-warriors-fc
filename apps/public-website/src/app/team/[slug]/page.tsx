@@ -19,9 +19,9 @@ export default function PlayerProfilePage({
   }
 
   return (
-    <div className="bg-[#FFFDF2] min-h-screen">
+    <div className="bg-black text-white min-h-screen">
       {/* Player Hero Banner */}
-      <section className="bg-gradient-to-r from-[#063B25] via-[#08783E] to-[#063B25] text-white py-14 border-b-4 border-[#F5D000]">
+      <section className="bg-gradient-to-r from-black via-[#070C09] to-black text-white py-14 border-b border-[#1E2B23]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/team"
@@ -33,7 +33,7 @@ export default function PlayerProfilePage({
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-4 flex justify-center">
-              <div className="w-64 h-72 rounded-2xl bg-[#063B25] border-2 border-[#F5D000] overflow-hidden flex items-center justify-center relative shadow-2xl">
+              <div className="w-64 h-72 rounded-2xl bg-[#080D0A] border-2 border-[#1E2B23] overflow-hidden flex items-center justify-center relative shadow-2xl">
                 {player.photoUrl ? (
                   <img
                     src={player.photoUrl}
@@ -43,7 +43,7 @@ export default function PlayerProfilePage({
                 ) : (
                   <ClubCrest size={120} customCrestUrl={clubSettings.crestUrl} />
                 )}
-                <span className="absolute bottom-3 right-3 px-3 py-1 rounded bg-[#F5D000] text-[#063B25] font-athletic font-black text-2xl">
+                <span className="absolute bottom-3 right-3 px-3 py-1 rounded bg-[#08783E] text-white font-athletic font-black text-2xl shadow-md">
                   #{player.jerseyNumber}
                 </span>
               </div>
@@ -51,14 +51,14 @@ export default function PlayerProfilePage({
 
             <div className="md:col-span-8 space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="px-3 py-1 rounded-full bg-[#F5D000] text-[#063B25] font-athletic font-black text-xs uppercase tracking-wider">
+                <span className="px-3 py-1 rounded-full bg-[#08783E]/20 text-[#4ADE80] border border-[#08783E]/40 font-athletic font-black text-xs uppercase tracking-wider">
                   {player.positionGroup} • {player.specificRole}
                 </span>
-                <span className="px-3 py-1 rounded-full bg-white/10 text-emerald-100 text-xs font-bold uppercase">
+                <span className="px-3 py-1 rounded-full bg-[#141E18] text-slate-300 border border-[#1E2B23] text-xs font-bold uppercase">
                   Preferred Foot: {player.preferredFoot}
                 </span>
                 {player.isUnderageProtected && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300 text-amber-200 text-xs font-bold">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-500/40 text-amber-300 text-xs font-bold">
                     <ShieldAlert className="w-3.5 h-3.5" />
                     Youth Safeguarded Profile
                   </span>
@@ -69,12 +69,12 @@ export default function PlayerProfilePage({
                 <span className="font-athletic text-6xl sm:text-7xl font-black text-[#F5D000]">
                   #{player.jerseyNumber}
                 </span>
-                <h1 className="font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight">
+                <h1 className="font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight text-white">
                   {player.fullName}
                 </h1>
               </div>
 
-              <p className="text-emerald-50 text-base leading-relaxed max-w-2xl">
+              <p className="text-slate-300 text-base leading-relaxed max-w-2xl">
                 {player.biography}
               </p>
 
@@ -90,12 +90,12 @@ export default function PlayerProfilePage({
                 ].map((stat) => (
                   <div
                     key={stat.label}
-                    className="bg-[#063B25]/80 border border-[#F5D000]/40 rounded-xl p-3 text-center"
+                    className="bg-[#0D1410] border border-[#1E2B23] rounded-xl p-3 text-center shadow-md"
                   >
                     <span className="block font-athletic text-3xl font-black text-[#F5D000]">
                       {stat.value}
                     </span>
-                    <span className="block text-[10px] uppercase tracking-wider text-emerald-100 font-bold mt-0.5">
+                    <span className="block text-[10px] uppercase tracking-wider text-slate-400 font-bold mt-0.5">
                       {stat.label}
                     </span>
                   </div>
@@ -108,13 +108,13 @@ export default function PlayerProfilePage({
 
       {/* Season-Specific Statistics Table */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="font-athletic text-3xl font-black uppercase text-[#063B25] mb-4">
+        <h2 className="font-athletic text-3xl font-black uppercase text-white mb-4">
           Verified Season Statistics
         </h2>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+        <div className="bg-[#0D1410] rounded-2xl border border-[#1E2B23] overflow-hidden shadow-xl">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#063B25] text-[#F5D000] font-athletic text-sm uppercase tracking-wider">
+              <tr className="bg-[#080D0A] text-[#F5D000] font-athletic text-sm uppercase tracking-wider border-b border-[#1E2B23]">
                 <th className="py-3.5 px-4">Season / Competition</th>
                 <th className="py-3.5 px-4 text-center">Apps</th>
                 <th className="py-3.5 px-4 text-center">Starts</th>
@@ -124,12 +124,12 @@ export default function PlayerProfilePage({
                 <th className="py-3.5 px-4 text-center">YC / RC</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-sm">
-              <tr className="font-semibold bg-[#EEF7EF]/50">
-                <td className="py-3.5 px-4 text-[#063B25]">Current Club Record</td>
+            <tbody className="divide-y divide-[#18231C] text-sm">
+              <tr className="font-semibold bg-[#141E18]">
+                <td className="py-3.5 px-4 text-white">Current Club Record</td>
                 <td className="py-3.5 px-4 text-center">{player.appearances}</td>
                 <td className="py-3.5 px-4 text-center">{player.starts}</td>
-                <td className="py-3.5 px-4 text-center font-bold text-[#08783E]">{player.goals}</td>
+                <td className="py-3.5 px-4 text-center font-bold text-[#4ADE80]">{player.goals}</td>
                 <td className="py-3.5 px-4 text-center">{player.assists}</td>
                 <td className="py-3.5 px-4 text-center">{player.cleanSheets}</td>
                 <td className="py-3.5 px-4 text-center">
@@ -137,8 +137,8 @@ export default function PlayerProfilePage({
                 </td>
               </tr>
               {player.seasonStats.map((s, i) => (
-                <tr key={i}>
-                  <td className="py-3 px-4">
+                <tr key={i} className="text-slate-300 hover:bg-[#121B16]">
+                  <td className="py-3 px-4 text-white">
                     {s.seasonName} — {s.competitionName}
                   </td>
                   <td className="py-3 px-4 text-center">{s.appearances}</td>

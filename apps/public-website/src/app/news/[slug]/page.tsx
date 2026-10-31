@@ -34,8 +34,8 @@ export default function SingleArticlePage({
   }
 
   return (
-    <article className="bg-[#FFFDF2] min-h-screen">
-      <header className="bg-[#063B25] text-white py-14 border-b-4 border-[#F5D000]">
+    <article className="bg-black text-white min-h-screen">
+      <header className="bg-[#070C09] text-white py-14 border-b border-[#1E2B23]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
           <Link
             href="/news"
@@ -46,16 +46,16 @@ export default function SingleArticlePage({
           </Link>
 
           <div>
-            <span className="inline-block px-3 py-1 rounded bg-[#F5D000] text-[#063B25] font-athletic font-black text-xs uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 rounded bg-[#08783E] text-white font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
               {article.categoryName}
             </span>
           </div>
 
-          <h1 className="font-athletic text-4xl sm:text-6xl font-black uppercase leading-tight">
+          <h1 className="font-athletic text-4xl sm:text-6xl font-black uppercase leading-tight text-white">
             {article.headline}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-5 text-xs text-emerald-100 pt-2">
+          <div className="flex flex-wrap items-center gap-5 text-xs text-slate-300 pt-2">
             <span className="inline-flex items-center gap-1.5">
               <User className="w-4 h-4 text-[#F5D000]" />
               By {article.authorName}
@@ -72,7 +72,7 @@ export default function SingleArticlePage({
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         {article.featuredImageUrl && (
-          <div className="rounded-2xl overflow-hidden border-2 border-[#08783E] shadow-lg">
+          <div className="rounded-2xl overflow-hidden border-2 border-[#1E2B23] shadow-2xl">
             <img
               src={article.featuredImageUrl}
               alt={article.headline}
@@ -81,28 +81,28 @@ export default function SingleArticlePage({
           </div>
         )}
 
-        <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
-          <p className="text-lg font-semibold text-[#063B25] border-l-4 border-[#F5D000] pl-4 mb-6">
+        <div className="bg-[#0D1410] rounded-2xl p-8 border border-[#1E2B23] shadow-xl text-slate-200">
+          <p className="text-lg font-semibold text-white border-l-4 border-[#F5D000] pl-4 mb-6">
             {article.excerpt}
           </p>
-          <div className="text-base text-gray-800 leading-relaxed whitespace-pre-line space-y-4">
+          <div className="text-base text-slate-300 leading-relaxed whitespace-pre-line space-y-4">
             {article.body}
           </div>
         </div>
 
-        <div className="p-6 rounded-2xl bg-[#EEF7EF] border border-[#08783E]/20 flex items-center justify-between gap-4">
+        <div className="p-6 rounded-2xl bg-[#080D0A] border border-[#1E2B23] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />
             <div>
-              <p className="font-athletic text-lg font-black uppercase text-[#063B25]">
+              <p className="font-athletic text-lg font-black uppercase text-white">
                 {clubSettings.clubName} Media Desk
               </p>
-              <p className="text-xs text-gray-600">{clubSettings.tagline}</p>
+              <p className="text-xs text-slate-400">{clubSettings.tagline}</p>
             </div>
           </div>
           <Link
             href="/support"
-            className="px-4 py-2 rounded-lg bg-[#08783E] text-white font-athletic font-bold text-xs uppercase tracking-wider"
+            className="px-4 py-2 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-bold text-xs uppercase tracking-wider transition shadow-sm"
           >
             Support the Club
           </Link>

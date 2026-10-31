@@ -30,22 +30,22 @@ export default function NewsListingPage({
       : articles.filter((a) => a.categoryName === activeCategory);
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* Header Banner - White Dominant */}
-      <section className="bg-slate-50 text-slate-900 py-12 border-b border-slate-200">
+    <div className="bg-black text-white min-h-screen">
+      {/* Header Banner */}
+      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+            <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
               OFFICIAL CLUB PUBLISHING SYSTEM
             </span>
-            <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-slate-950 mt-2">
+            <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
               CLUB NEWS & MEDIA
             </h1>
-            <p className="text-slate-600 text-base mt-1">
+            <p className="text-slate-300 text-base mt-1">
               Verified announcements, match reports, transfers, interviews, and community stories.
             </p>
           </div>
-          <div className="p-2 rounded-full bg-white border border-slate-200 shadow-sm">
+          <div className="p-2 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shadow-md">
             <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>
@@ -58,8 +58,8 @@ export default function NewsListingPage({
             href="/news"
             className={`px-3.5 py-2 rounded-lg text-xs font-pedals font-athletic font-bold uppercase tracking-wider transition ${
               activeCategory === 'ALL'
-                ? 'bg-[#08783E] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-[#08783E] text-white shadow-md'
+                : 'bg-[#141E18] text-slate-300 hover:bg-[#1C2B22] border border-[#1E2B23]'
             }`}
           >
             All Categories ({articles.length})
@@ -70,8 +70,8 @@ export default function NewsListingPage({
               href={`/news?category=${encodeURIComponent(cat)}`}
               className={`px-3.5 py-2 rounded-lg text-xs font-pedals font-athletic font-bold uppercase tracking-wider transition ${
                 activeCategory === cat
-                  ? 'bg-[#08783E] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  ? 'bg-[#08783E] text-white shadow-md'
+                  : 'bg-[#141E18] text-slate-300 hover:bg-[#1C2B22] border border-[#1E2B23]'
               }`}
             >
               {cat}
@@ -85,9 +85,9 @@ export default function NewsListingPage({
               <Link
                 key={article.id}
                 href={`/news/${article.slug}`}
-                className="group rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-lg transition flex flex-col"
+                className="group rounded-2xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] shadow-xl hover:border-[#08783E] transition flex flex-col"
               >
-                <div className="h-52 bg-slate-100 relative flex items-center justify-center overflow-hidden">
+                <div className="h-52 bg-[#080D0A] relative flex items-center justify-center overflow-hidden">
                   {article.featuredImageUrl ? (
                     <img
                       src={article.featuredImageUrl}
@@ -110,25 +110,25 @@ export default function NewsListingPage({
                       )}{' '}
                       • {article.authorName}
                     </p>
-                    <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-slate-900 group-hover:text-[#08783E] transition-colors line-clamp-2">
+                    <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-white group-hover:text-[#F5D000] transition-colors line-clamp-2">
                       {article.headline}
                     </h2>
-                    <p className="text-sm text-slate-600 mt-2 line-clamp-3">{article.excerpt}</p>
+                    <p className="text-sm text-slate-300 mt-2 line-clamp-3">{article.excerpt}</p>
                   </div>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#08783E]">
-                    Read Full Article <ArrowRight className="w-3.5 h-3.5 text-[#08783E]" />
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-pedals font-athletic font-extrabold uppercase tracking-wider text-[#F5D000]">
+                    Read Full Article <ArrowRight className="w-3.5 h-3.5 text-[#F5D000]" />
                   </span>
                 </div>
               </Link>
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl bg-slate-50 p-12 text-center border border-slate-200">
-            <Newspaper className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-            <h2 className="font-pedals font-athletic text-2xl font-bold uppercase text-slate-800">
+          <div className="rounded-2xl bg-[#0D1410] p-12 text-center border border-[#1E2B23]">
+            <Newspaper className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+            <h2 className="font-pedals font-athletic text-2xl font-bold uppercase text-white">
               No Published Articles in This Category Yet
             </h2>
-            <p className="text-sm text-slate-500 max-w-lg mx-auto mt-1">
+            <p className="text-sm text-slate-400 max-w-lg mx-auto mt-1">
               Only articles marked as Published in the Nginda Warriors Control Centre are displayed to public visitors.
             </p>
           </div>

@@ -74,23 +74,23 @@ export function MpesaSupportForm({
   return (
     <form
       onSubmit={handleContribute}
-      className="bg-white rounded-2xl p-6 sm:p-8 border-2 border-[#08783E] shadow-lg space-y-5"
+      className="bg-[#0D1410] rounded-2xl p-6 sm:p-8 border-2 border-[#08783E] shadow-2xl space-y-5 text-white"
     >
-      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+      <div className="flex items-center justify-between border-b border-[#1E2B23] pb-4">
         <div>
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[#08783E]">
+          <span className="text-xs font-extrabold uppercase tracking-wider text-[#4ADE80]">
             SAFARICOM M-PESA CONTRIBUTION DESK
           </span>
-          <h3 className="font-athletic text-3xl font-black uppercase text-[#063B25]">
+          <h3 className="font-athletic text-3xl font-black uppercase text-white">
             Support Nginda Warriors FC
           </h3>
         </div>
-        <Smartphone className="w-8 h-8 text-[#08783E]" />
+        <Smartphone className="w-8 h-8 text-[#4ADE80]" />
       </div>
 
       {/* Preset Amounts */}
       <div>
-        <label className="block text-xs font-bold uppercase text-[#063B25] mb-2">
+        <label className="block text-xs font-bold uppercase text-slate-300 mb-2">
           Select or Enter Amount (KES) *
         </label>
         <div className="grid grid-cols-4 gap-2 mb-3">
@@ -101,8 +101,8 @@ export function MpesaSupportForm({
               onClick={() => setAmountKes(amt)}
               className={`py-2 rounded-lg font-athletic font-black text-base transition ${
                 amountKes === amt
-                  ? 'bg-[#08783E] text-white'
-                  : 'bg-[#EEF7EF] text-[#063B25] hover:bg-[#08783E]/20'
+                  ? 'bg-[#08783E] text-white shadow-md'
+                  : 'bg-[#141E18] text-slate-200 border border-[#1E2B23] hover:bg-[#1C2B22]'
               }`}
             >
               KES {Number(amt).toLocaleString()}
@@ -115,34 +115,34 @@ export function MpesaSupportForm({
           required
           value={amountKes}
           onChange={(e) => setAmountKes(e.target.value)}
-          className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm font-bold"
+          className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm font-bold focus:border-[#08783E] focus:outline-none"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+        <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
           Select Target Campaign
         </label>
         <select
           value={selectedCampaignId}
           onChange={(e) => setSelectedCampaignId(e.target.value)}
-          className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm bg-white"
+          className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
         >
           {campaigns.length > 0 ? (
             campaigns.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} value={c.id} className="bg-[#080D0A] text-white">
                 {c.title} (Ref: {c.accountReference})
               </option>
             ))
           ) : (
-            <option value="">General Club Support & Player Welfare</option>
+            <option value="" className="bg-[#080D0A] text-white">General Club Support & Player Welfare</option>
           )}
         </select>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             M-Pesa Phone Number *
           </label>
           <input
@@ -151,11 +151,11 @@ export function MpesaSupportForm({
             value={donorPhone}
             onChange={(e) => setDonorPhone(e.target.value)}
             placeholder="07XX XXX XXX"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Your Name (Optional)
           </label>
           <input
@@ -163,7 +163,7 @@ export function MpesaSupportForm({
             value={donorName}
             onChange={(e) => setDonorName(e.target.value)}
             placeholder="Supporter Name"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
       </div>
@@ -174,16 +174,16 @@ export function MpesaSupportForm({
           type="checkbox"
           checked={isAnonymous}
           onChange={(e) => setIsAnonymous(e.target.checked)}
-          className="rounded border-gray-300"
+          className="rounded border-[#1E2B23] bg-[#080D0A]"
         />
-        <label htmlFor="anon-check" className="text-gray-700 font-medium">
+        <label htmlFor="anon-check" className="text-slate-300 font-medium">
           Keep my contribution anonymous on public supporter lists
         </label>
       </div>
 
       {/* Payment Method Selection */}
-      <div className="space-y-2 pt-2 border-t border-gray-100">
-        <label className="block text-xs font-bold uppercase text-[#063B25]">
+      <div className="space-y-2 pt-2 border-t border-[#1E2B23]">
+        <label className="block text-xs font-bold uppercase text-slate-300">
           Payment Method
         </label>
         <div className="grid grid-cols-3 gap-2 text-xs">
@@ -198,10 +198,10 @@ export function MpesaSupportForm({
               onClick={() =>
                 setPaymentMethod(m.id as 'mpesa_stk' | 'mpesa_paybill' | 'mpesa_till')
               }
-              className={`py-2 px-2 rounded-lg font-bold border ${
+              className={`py-2 px-2 rounded-lg font-bold border transition ${
                 paymentMethod === m.id
-                  ? 'bg-[#063B25] text-[#F5D000] border-[#063B25]'
-                  : 'bg-gray-50 text-gray-700 border-gray-200'
+                  ? 'bg-[#08783E] text-white border-[#08783E]'
+                  : 'bg-[#141E18] text-slate-300 border-[#1E2B23]'
               }`}
             >
               {m.label}
@@ -210,8 +210,8 @@ export function MpesaSupportForm({
         </div>
 
         {paymentMethod !== 'mpesa_stk' && (
-          <div className="p-3.5 rounded-xl bg-[#EEF7EF] text-xs space-y-2 mt-2">
-            <p className="font-bold text-[#063B25]">
+          <div className="p-3.5 rounded-xl bg-[#080D0A] border border-[#1E2B23] text-xs space-y-2 mt-2">
+            <p className="font-bold text-[#F5D000]">
               {mpesaConfig.paybillNumber
                 ? `Official Paybill: ${mpesaConfig.paybillNumber} • Account: ${mpesaConfig.accountPrefix}`
                 : mpesaConfig.tillNumber
@@ -223,7 +223,7 @@ export function MpesaSupportForm({
               value={manualReceiptReference}
               onChange={(e) => setManualReceiptReference(e.target.value)}
               placeholder="Optional M-Pesa Receipt Code (e.g. SKN4X92L1P)"
-              className="w-full px-3 py-2 rounded border border-gray-300 bg-white text-xs uppercase"
+              className="w-full px-3 py-2 rounded border border-[#1E2B23] bg-[#0D1410] text-white text-xs uppercase focus:border-[#08783E] focus:outline-none"
             />
           </div>
         )}
@@ -232,26 +232,26 @@ export function MpesaSupportForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full py-3.5 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-[#063B25] font-athletic font-black text-lg uppercase tracking-wider shadow-md"
+        className="w-full py-3.5 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-slate-950 font-athletic font-black text-lg uppercase tracking-wider shadow-md transition active:scale-95"
       >
         {submitting ? 'Processing Request...' : 'Initiate Verified M-Pesa Contribution'}
       </button>
 
-      <div className="flex items-start gap-2 text-[11px] text-gray-500">
-        <Lock className="w-4 h-4 text-[#08783E] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-2 text-[11px] text-slate-400">
+        <Lock className="w-4 h-4 text-[#4ADE80] shrink-0 mt-0.5" />
         <span>
           <strong>Security Guarantee:</strong> This website never asks for your M-Pesa PIN. Contributions are recorded as Pending and only added to verified campaign totals after confirmation from the payment provider.
         </span>
       </div>
 
       {resultMsg && (
-        <div className="p-4 rounded-xl bg-[#EEF7EF] border border-[#08783E] text-[#063B25] text-xs font-bold flex items-start gap-2">
-          <CheckCircle2 className="w-5 h-5 text-[#08783E] shrink-0 mt-0.5" />
+        <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-xs font-bold flex items-start gap-2">
+          <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0 mt-0.5" />
           <span>{resultMsg}</span>
         </div>
       )}
       {errorMsg && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+        <div className="p-3 rounded-xl bg-red-950/60 border border-red-800 text-red-200 text-xs font-semibold">
           {errorMsg}
         </div>
       )}

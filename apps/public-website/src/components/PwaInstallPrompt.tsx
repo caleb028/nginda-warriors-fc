@@ -76,33 +76,33 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
 
   return (
     <>
-      <div className="fixed bottom-16 sm:bottom-4 left-3 right-3 sm:left-auto sm:right-4 z-50 sm:max-w-md bg-white border-2 border-[#08783E] rounded-2xl shadow-2xl p-4 transition-all animate-in fade-in slide-in-from-bottom-5">
+      <div className="fixed bottom-16 sm:bottom-4 left-3 right-3 sm:left-auto sm:right-4 z-50 sm:max-w-md bg-[#0D1410] border-2 border-[#08783E] rounded-2xl shadow-2xl p-4 transition-all animate-in fade-in slide-in-from-bottom-5 text-white">
         <div className="flex items-start gap-3">
-          <div className="p-1 rounded-full bg-slate-50 border border-slate-200 shrink-0 shadow-xs">
+          <div className="p-1 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shrink-0 shadow-xs">
             <ClubCrest size={44} customCrestUrl={crestUrl} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-1">
-              <h4 className="font-athletic text-base font-black uppercase tracking-wider text-slate-900 leading-tight">
+              <h4 className="font-athletic text-base font-black uppercase tracking-wider text-white leading-tight">
                 Install Nginda Warriors App
               </h4>
               <button
                 type="button"
                 onClick={handleDismiss}
-                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg"
+                className="p-1 text-slate-400 hover:text-white rounded-lg"
                 aria-label="Dismiss install banner"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-xs text-slate-600 mt-1 leading-normal">
+            <p className="text-xs text-slate-300 mt-1 leading-normal">
               Instant match updates, squad profiles & fixtures on your phone home screen. Works offline.
             </p>
             <div className="mt-3 flex items-center gap-2">
               <button
                 type="button"
                 onClick={handleInstallClick}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-black text-xs uppercase tracking-wider shadow-sm transition active:scale-95"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-athletic font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95"
               >
                 <Download className="w-4 h-4 text-[#F5D000]" />
                 <span>{isIos ? 'Install on iPhone' : 'Install Free App'}</span>
@@ -110,7 +110,7 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
               <button
                 type="button"
                 onClick={handleDismiss}
-                className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800"
+                className="px-3 py-2 text-xs font-semibold text-slate-400 hover:text-white"
               >
                 Maybe Later
               </button>
@@ -121,33 +121,33 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
 
       {/* iOS Installation Guide Modal */}
       {showIosGuide && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[#0D1410] border border-[#1E2B23] rounded-3xl p-6 shadow-2xl space-y-4 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-[#08783E]" />
-                <h3 className="font-athletic font-black text-lg uppercase tracking-wider text-slate-900">
+                <Smartphone className="w-5 h-5 text-[#4ADE80]" />
+                <h3 className="font-athletic font-black text-lg uppercase tracking-wider text-white">
                   Install on iOS Safari
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowIosGuide(false)}
-                className="p-1 text-slate-400 hover:text-slate-700 rounded-lg"
+                className="p-1 text-slate-400 hover:text-white rounded-lg"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="space-y-3 text-xs text-slate-700">
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div className="space-y-3 text-xs text-slate-200">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[#080D0A] border border-[#1E2B23]">
                 <span className="w-6 h-6 rounded-full bg-[#08783E] text-white flex items-center justify-center font-bold text-xs shrink-0">
                   1
                 </span>
                 <p>
-                  Tap the <strong className="inline-flex items-center gap-1 text-slate-900"><Share className="w-3.5 h-3.5 text-blue-600 inline" /> Share</strong> button at the bottom of Safari.
+                  Tap the <strong className="inline-flex items-center gap-1 text-[#F5D000]"><Share className="w-3.5 h-3.5 inline" /> Share</strong> button at the bottom of Safari.
                 </p>
               </div>
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[#080D0A] border border-[#1E2B23]">
                 <span className="w-6 h-6 rounded-full bg-[#08783E] text-white flex items-center justify-center font-bold text-xs shrink-0">
                   2
                 </span>
@@ -155,7 +155,7 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
                   Scroll down the share sheet and tap <strong>"Add to Home Screen"</strong>.
                 </p>
               </div>
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-[#080D0A] border border-[#1E2B23]">
                 <span className="w-6 h-6 rounded-full bg-[#08783E] text-white flex items-center justify-center font-bold text-xs shrink-0">
                   3
                 </span>
@@ -167,7 +167,7 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
             <button
               type="button"
               onClick={() => setShowIosGuide(false)}
-              className="w-full py-2.5 rounded-xl bg-[#08783E] text-white font-athletic font-bold text-sm uppercase tracking-wider"
+              className="w-full py-2.5 rounded-xl bg-[#08783E] text-white font-athletic font-bold text-sm uppercase tracking-wider hover:bg-[#063B25] transition shadow-md"
             >
               Got It
             </button>

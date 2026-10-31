@@ -38,12 +38,12 @@ export function WarriorsTVHub({
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] font-pedals font-athletic font-extrabold text-xs uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-wider">
               WARRIORS+ TV
             </span>
-            <span className="text-xs text-slate-500 font-medium">Official Digital Video Channel</span>
+            <span className="text-xs text-slate-400 font-medium">Official Digital Video Channel</span>
           </div>
-          <h2 className="font-pedals font-athletic text-3xl md:text-5xl font-black uppercase text-slate-900 tracking-wide">
+          <h2 className="font-pedals font-athletic text-3xl md:text-5xl font-black uppercase text-white tracking-wide">
             INSIDE NGINDA WARRIORS
           </h2>
         </div>
@@ -57,8 +57,8 @@ export function WarriorsTVHub({
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                   activeCategory === cat
-                    ? 'bg-[#08783E] text-white shadow-sm font-pedals font-athletic uppercase tracking-wider'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium'
+                    ? 'bg-[#08783E] text-white shadow-md font-pedals font-athletic uppercase tracking-wider'
+                    : 'bg-[#0D1410] hover:bg-[#16221B] text-slate-300 border border-[#1E2B23] font-medium'
                 }`}
               >
                 {cat}
@@ -70,20 +70,20 @@ export function WarriorsTVHub({
 
       {/* When NO videos are published yet by Admin */}
       {videos.length === 0 ? (
-        <div className="rounded-2xl bg-slate-50 border-2 border-dashed border-slate-300 p-10 md:p-14 text-center">
-          <div className="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center mx-auto mb-4 shadow-sm">
-            <Video className="w-8 h-8 text-[#08783E]" />
+        <div className="rounded-2xl bg-[#0D1410] border-2 border-dashed border-[#1E2B23] p-10 md:p-14 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#080D0A] border border-[#1E2B23] flex items-center justify-center mx-auto mb-4 shadow-md">
+            <Video className="w-8 h-8 text-[#4ADE80]" />
           </div>
-          <h3 className="font-pedals font-athletic text-2xl md:text-3xl font-black uppercase text-slate-900">
+          <h3 className="font-pedals font-athletic text-2xl md:text-3xl font-black uppercase text-white">
             Official Club Broadcasts Being Prepared
           </h3>
-          <p className="text-xs md:text-sm text-slate-600 max-w-xl mx-auto mt-2 leading-relaxed">
+          <p className="text-xs md:text-sm text-slate-300 max-w-xl mx-auto mt-2 leading-relaxed">
             Nginda Warriors FC publishes only genuine, verified club footage. Matchday highlights, player interviews, press conferences, and tunnel cam episodes will appear here once approved and published via the Control Centre.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/news"
-              className="px-5 py-2.5 rounded-lg bg-[#08783E] text-white font-pedals font-athletic font-bold text-xs uppercase tracking-wider hover:bg-[#063B25] transition shadow-sm"
+              className="px-5 py-2.5 rounded-lg bg-[#08783E] text-white font-pedals font-athletic font-bold text-xs uppercase tracking-wider hover:bg-[#063B25] transition shadow-md"
             >
               Read Latest Club News &rarr;
             </Link>
@@ -95,14 +95,14 @@ export function WarriorsTVHub({
           {featuredVideo && activeCategory === 'All' && (
             <div
               onClick={() => setActiveVideo(featuredVideo)}
-              className="relative rounded-2xl overflow-hidden mb-8 group cursor-pointer border border-slate-200 shadow-lg bg-slate-900 aspect-[16/9] md:aspect-[21/9] flex items-end p-6 md:p-10"
+              className="relative rounded-2xl overflow-hidden mb-8 group cursor-pointer border border-[#1E2B23] shadow-2xl bg-black aspect-[16/9] md:aspect-[21/9] flex items-end p-6 md:p-10"
             >
-              <div className="absolute inset-0 bg-slate-900/60 group-hover:scale-105 transition-transform duration-700 ease-out" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+              <div className="absolute inset-0 bg-black/60 group-hover:scale-105 transition-transform duration-700 ease-out" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white text-[#08783E] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
-                  <Play className="w-8 h-8 md:w-10 md:h-10 fill-current ml-1" />
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#08783E] text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                  <Play className="w-8 h-8 md:w-10 md:h-10 fill-current ml-1 text-[#F5D000]" />
                 </div>
               </div>
 
@@ -121,7 +121,7 @@ export function WarriorsTVHub({
                   {featuredVideo.title}
                 </h3>
                 {featuredVideo.description && (
-                  <p className="text-xs md:text-sm text-slate-200 mt-2 line-clamp-2">
+                  <p className="text-xs md:text-sm text-slate-300 mt-2 line-clamp-2">
                     {featuredVideo.description}
                   </p>
                 )}
@@ -135,14 +135,14 @@ export function WarriorsTVHub({
               <div
                 key={video.id}
                 onClick={() => setActiveVideo(video)}
-                className="group cursor-pointer rounded-xl overflow-hidden bg-white border border-slate-200 hover:border-[#08783E]/60 transition-all shadow-sm hover:shadow-md flex flex-col"
+                className="group cursor-pointer rounded-xl overflow-hidden bg-[#0D1410] border border-[#1E2B23] hover:border-[#08783E] transition-all shadow-md flex flex-col"
               >
-                <div className="relative aspect-[16/9] bg-slate-100 flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                  <Video className="w-12 h-12 text-slate-400 group-hover:scale-110 transition-transform duration-300" />
+                <div className="relative aspect-[16/9] bg-[#080D0A] flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
+                  <Video className="w-12 h-12 text-slate-600 group-hover:scale-110 transition-transform duration-300" />
                   <div className="absolute inset-0 flex items-center justify-center z-20 opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div className="w-10 h-10 rounded-full bg-white text-[#08783E] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                      <Play className="w-5 h-5 fill-current ml-0.5" />
+                    <div className="w-10 h-10 rounded-full bg-[#08783E] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Play className="w-5 h-5 fill-current ml-0.5 text-[#F5D000]" />
                     </div>
                   </div>
                   {video.duration && (
@@ -154,16 +154,16 @@ export function WarriorsTVHub({
 
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] font-bold text-[#08783E] uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-[#F5D000] uppercase tracking-wider">
                       {video.category}
                     </span>
-                    <h4 className="font-pedals font-athletic text-base font-bold uppercase text-slate-900 group-hover:text-[#08783E] transition-colors line-clamp-2 mt-1 leading-snug">
+                    <h4 className="font-pedals font-athletic text-base font-bold uppercase text-white group-hover:text-[#4ADE80] transition-colors line-clamp-2 mt-1 leading-snug">
                       {video.title}
                     </h4>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-3 flex items-center justify-between">
+                  <div className="text-[11px] text-slate-400 mt-3 flex items-center justify-between">
                     <span>{video.publishedAt || 'Official Video'}</span>
-                    <span className="text-[#08783E] font-semibold">Watch Now &rarr;</span>
+                    <span className="text-[#4ADE80] font-semibold">Watch Now &rarr;</span>
                   </div>
                 </div>
               </div>
@@ -174,29 +174,29 @@ export function WarriorsTVHub({
 
       {/* Video Modal Player */}
       {activeVideo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl">
-            <div className="flex items-center justify-between p-4 bg-slate-50 border-b border-slate-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="relative w-full max-w-4xl bg-[#0D1410] border border-[#1E2B23] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between p-4 bg-[#080D0A] border-b border-[#1E2B23]">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-[#08783E]/10 text-[#08783E] text-xs font-bold font-pedals font-athletic uppercase">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#08783E]/20 text-[#4ADE80] text-xs font-bold font-pedals font-athletic uppercase">
                   {activeVideo.category}
                 </span>
                 {activeVideo.duration && (
-                  <span className="text-xs text-slate-500">{activeVideo.duration}</span>
+                  <span className="text-xs text-slate-400">{activeVideo.duration}</span>
                 )}
               </div>
               <button
                 onClick={() => setActiveVideo(null)}
-                className="text-slate-500 hover:text-slate-800 p-1 rounded-lg hover:bg-slate-200"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-[#16221B]"
                 aria-label="Close video"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="relative aspect-video bg-slate-950 flex flex-col items-center justify-center text-center p-6">
-              <div className="w-16 h-16 rounded-full bg-white text-[#08783E] flex items-center justify-center shadow-xl mb-4">
-                <Play className="w-8 h-8 fill-current ml-1" />
+            <div className="relative aspect-video bg-black flex flex-col items-center justify-center text-center p-6">
+              <div className="w-16 h-16 rounded-full bg-[#08783E] text-white flex items-center justify-center shadow-xl mb-4">
+                <Play className="w-8 h-8 fill-current ml-1 text-[#F5D000]" />
               </div>
               <h3 className="font-pedals font-athletic text-2xl font-bold uppercase text-white max-w-xl">
                 {activeVideo.title}
@@ -211,8 +211,8 @@ export function WarriorsTVHub({
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 flex items-center justify-between">
-              <p className="text-xs text-slate-500">
+            <div className="p-4 bg-[#080D0A] flex items-center justify-between">
+              <p className="text-xs text-slate-400">
                 Official club video broadcast provided by Nginda Warriors FC Media.
               </p>
               <button

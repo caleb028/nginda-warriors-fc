@@ -62,18 +62,18 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white text-[#17231C] rounded-2xl p-6 sm:p-8 border-2 border-[#F5D000] shadow-xl space-y-4"
+      className="bg-[#0D1410] text-white rounded-2xl p-6 sm:p-8 border-2 border-[#1E2B23] shadow-2xl space-y-4"
     >
-      <h3 className="font-athletic text-3xl font-black uppercase text-[#063B25]">
+      <h3 className="font-athletic text-3xl font-black uppercase text-white">
         Official Partnership Inquiry Form
       </h3>
-      <p className="text-xs text-gray-600">
+      <p className="text-xs text-slate-300">
         Submit your details below. Inquiries are delivered directly to the Nginda Warriors Control Centre for executive follow-up.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Contact Name *
           </label>
           <input
@@ -82,11 +82,11 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={contactName}
             onChange={(e) => setContactName(e.target.value)}
             placeholder="e.g. Jane Mwangi"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Business / Organization Name *
           </label>
           <input
@@ -95,14 +95,14 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder="e.g. Highlands Agro Ltd"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Phone Number *
           </label>
           <input
@@ -111,11 +111,11 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="e.g. 0712 345 678"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Email Address *
           </label>
           <input
@@ -124,31 +124,31 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="partnerships@company.co.ke"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Package of Interest *
           </label>
           <select
             value={packageOfInterest}
             onChange={(e) => setPackageOfInterest(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm bg-white"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
           >
             {packages.map((p) => (
-              <option key={p} value={p}>
+              <option key={p} value={p} className="bg-[#080D0A] text-white">
                 {p}
               </option>
             ))}
-            <option value="Custom Bespoke Partnership">Custom Bespoke Partnership</option>
+            <option value="Custom Bespoke Partnership" className="bg-[#080D0A] text-white">Custom Bespoke Partnership</option>
           </select>
         </div>
         <div>
-          <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+          <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
             Optional Estimated Budget (KES)
           </label>
           <input
@@ -157,13 +157,13 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
             value={budgetKes}
             onChange={(e) => setBudgetKes(e.target.value)}
             placeholder="Optional (KES)"
-            className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+        <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
           Partnership Goals & Message *
         </label>
         <textarea
@@ -172,27 +172,27 @@ export function SponsorInquiryForm({ packages }: { packages: string[] }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Tell us how your business would like to partner with Nginda Warriors FC..."
-          className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm"
+          className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
         />
       </div>
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-[#063B25] font-athletic font-black text-lg uppercase tracking-wider shadow-md disabled:opacity-50"
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-slate-950 font-athletic font-black text-lg uppercase tracking-wider shadow-lg disabled:opacity-50 transition active:scale-95"
       >
         <Send className="w-4 h-4" />
         <span>{submitting ? 'Submitting Inquiry...' : 'Submit Official Partnership Inquiry'}</span>
       </button>
 
       {successMsg && (
-        <div className="p-4 rounded-xl bg-[#EEF7EF] border border-[#08783E] text-[#063B25] text-xs font-bold flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-[#08783E] shrink-0" />
+        <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-xs font-bold flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
       {errorMsg && (
-        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+        <div className="p-3 rounded-xl bg-red-950/60 border border-red-800 text-red-200 text-xs font-semibold">
           {errorMsg}
         </div>
       )}

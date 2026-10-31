@@ -58,17 +58,17 @@ export default function FanMembershipPage() {
   };
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* Header Banner - White Dominant */}
-      <section className="bg-slate-50 text-slate-900 py-12 border-b border-slate-200">
+    <div className="bg-black text-white min-h-screen">
+      {/* Header Banner */}
+      <section className="bg-[#070C09] text-white py-12 border-b border-[#1E2B23]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="px-3 py-1 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
+          <span className="px-3 py-1 rounded-full bg-[#08783E]/20 border border-[#08783E]/40 text-[#4ADE80] font-pedals font-athletic font-extrabold text-xs uppercase tracking-widest">
             OFFICIAL SUPPORTER COMMUNITY
           </span>
-          <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-slate-950 mt-2">
+          <h1 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
             JOIN THE WARRIORS FAN MEMBERSHIP
           </h1>
-          <p className="text-slate-600 text-base mt-1 max-w-2xl">
+          <p className="text-slate-300 text-base mt-1 max-w-2xl">
             Register as an official Nginda Warriors FC supporter and customize how you receive matchday alerts and club announcements.
           </p>
         </div>
@@ -77,16 +77,16 @@ export default function FanMembershipPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5"
+          className="bg-[#0D1410] rounded-2xl p-6 sm:p-8 border border-[#1E2B23] shadow-xl space-y-5 text-white"
         >
-          <div className="flex items-center gap-2 text-[#08783E] font-pedals font-athletic font-bold uppercase text-sm">
-            <Users className="w-5 h-5 text-[#08783E]" />
+          <div className="flex items-center gap-2 text-[#4ADE80] font-pedals font-athletic font-bold uppercase text-sm">
+            <Users className="w-5 h-5 text-[#F5D000]" />
             <span>Supporter Registration Form</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Full Name *
               </label>
               <input
@@ -95,11 +95,11 @@ export default function FanMembershipPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Your Full Name"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Phone Number *
               </label>
               <input
@@ -108,14 +108,14 @@ export default function FanMembershipPage() {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="07XX XXX XXX"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Email Address (Optional)
               </label>
               <input
@@ -123,11 +123,11 @@ export default function FanMembershipPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="supporter@example.com"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Ward / Location / Branch
               </label>
               <input
@@ -135,52 +135,55 @@ export default function FanMembershipPage() {
                 value={wardOrLocation}
                 onChange={(e) => setWardOrLocation(e.target.value)}
                 placeholder="e.g. Nginda / Maragua"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white placeholder-slate-500 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
+            <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
               Supporter Category
             </label>
             <select
               value={membershipTier}
               onChange={(e) => setMembershipTier(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm bg-white focus:border-[#08783E] focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
             >
-              <option value="Community Supporter">Community Supporter</option>
-              <option value="Matchday Gold Member">Matchday Gold Member</option>
-              <option value="Diaspora Warrior Supporter">Diaspora Warrior Supporter</option>
+              <option value="Community Supporter" className="bg-[#080D0A] text-white">Community Supporter</option>
+              <option value="Matchday Gold Member" className="bg-[#080D0A] text-white">Matchday Gold Member</option>
+              <option value="Diaspora Warrior Supporter" className="bg-[#080D0A] text-white">Diaspora Warrior Supporter</option>
             </select>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-            <p className="text-xs font-extrabold uppercase text-slate-700">
+          <div className="p-4 rounded-xl bg-[#080D0A] border border-[#1E2B23] space-y-2">
+            <p className="text-xs font-extrabold uppercase text-[#F5D000]">
               Communication Preferences
             </p>
-            <div className="flex flex-wrap gap-6 text-xs font-semibold text-slate-600">
-              <label className="inline-flex items-center gap-2">
+            <div className="flex flex-wrap gap-6 text-xs font-semibold text-slate-300">
+              <label className="inline-flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={commSms}
                   onChange={(e) => setCommSms(e.target.checked)}
+                  className="rounded border-[#1E2B23] bg-[#0D1410]"
                 />
                 <span>Matchday SMS Updates</span>
               </label>
-              <label className="inline-flex items-center gap-2">
+              <label className="inline-flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={commWhatsapp}
                   onChange={(e) => setCommWhatsapp(e.target.checked)}
+                  className="rounded border-[#1E2B23] bg-[#0D1410]"
                 />
                 <span>WhatsApp Community Broadcasts</span>
               </label>
-              <label className="inline-flex items-center gap-2">
+              <label className="inline-flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={commEmail}
                   onChange={(e) => setCommEmail(e.target.checked)}
+                  className="rounded border-[#1E2B23] bg-[#0D1410]"
                 />
                 <span>Email Newsletter</span>
               </label>
@@ -190,19 +193,19 @@ export default function FanMembershipPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-lg uppercase tracking-wider shadow-sm transition"
+            className="w-full py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-lg uppercase tracking-wider shadow-md transition active:scale-95"
           >
             {submitting ? 'Registering Membership...' : 'Complete Supporter Registration'}
           </button>
 
           {successMsg && (
-            <div className="p-4 rounded-xl bg-[#08783E]/10 border border-[#08783E]/30 text-[#08783E] text-xs font-bold flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-[#08783E] shrink-0" />
+            <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-xs font-bold flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-[#4ADE80] shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+            <div className="p-3 rounded-xl bg-red-950/60 border border-red-800 text-red-200 text-xs font-semibold">
               {errorMsg}
             </div>
           )}

@@ -59,8 +59,8 @@ export function MerchandiseCatalogClient({
   return (
     <div className="space-y-8">
       {orderNotice && (
-        <div className="p-4 rounded-xl bg-[#EEF7EF] border border-[#08783E] text-[#063B25] text-sm font-bold flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-[#08783E]" />
+        <div className="p-4 rounded-xl bg-[#082012] border border-[#08783E] text-[#4ADE80] text-sm font-bold flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 text-[#4ADE80]" />
           <span>{orderNotice}</span>
         </div>
       )}
@@ -69,10 +69,10 @@ export function MerchandiseCatalogClient({
         {products.map((product) => (
           <div
             key={product.id}
-            className="rounded-2xl bg-white border border-gray-200 overflow-hidden shadow-sm flex flex-col justify-between"
+            className="rounded-2xl bg-[#0D1410] border border-[#1E2B23] overflow-hidden shadow-xl flex flex-col justify-between text-white"
           >
             <div>
-              <div className="h-60 bg-[#063B25] flex items-center justify-center relative">
+              <div className="h-60 bg-[#080D0A] flex items-center justify-center relative">
                 {product.imageUrl ? (
                   <img
                     src={product.imageUrl}
@@ -82,26 +82,26 @@ export function MerchandiseCatalogClient({
                 ) : (
                   <ClubCrest size={96} customCrestUrl={crestUrl} />
                 )}
-                <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#F5D000] text-[#063B25] font-athletic font-bold text-xs uppercase">
+                <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#F5D000] text-slate-950 font-athletic font-bold text-xs uppercase shadow-sm">
                   {product.category}
                 </span>
-                <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded bg-[#08783E] text-white text-xs font-bold uppercase">
+                <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded bg-[#08783E] text-white text-xs font-bold uppercase shadow-sm">
                   {product.stockStatus.replace(/_/g, ' ')}
                 </span>
               </div>
               <div className="p-5">
-                <h3 className="font-athletic text-2xl font-black uppercase text-[#063B25]">
+                <h3 className="font-athletic text-2xl font-black uppercase text-white">
                   {product.name}
                 </h3>
-                <p className="font-athletic text-2xl font-black text-[#08783E] mt-1">
+                <p className="font-athletic text-2xl font-black text-[#F5D000] mt-1">
                   KES {product.priceKes.toLocaleString()}
                 </p>
-                <p className="text-xs text-gray-600 mt-2">{product.description}</p>
+                <p className="text-xs text-slate-300 mt-2">{product.description}</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {product.availableSizes.map((sz) => (
                     <span
                       key={sz}
-                      className="px-2 py-0.5 rounded bg-[#EEF7EF] text-[#063B25] text-xs font-bold"
+                      className="px-2 py-0.5 rounded bg-[#141E18] text-slate-200 border border-[#1E2B23] text-xs font-bold"
                     >
                       {sz}
                     </span>
@@ -118,7 +118,7 @@ export function MerchandiseCatalogClient({
                   setSelectedProduct(product);
                   setSelectedSize(product.availableSizes[0] || 'L');
                 }}
-                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-[#063B25] font-athletic font-black text-base uppercase tracking-wider disabled:opacity-40"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-slate-950 font-athletic font-black text-base uppercase tracking-wider disabled:opacity-40 shadow-md transition active:scale-95"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Order via WhatsApp</span>
@@ -129,33 +129,33 @@ export function MerchandiseCatalogClient({
       </div>
 
       {selectedProduct && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <form
             onSubmit={handleOrder}
-            className="bg-white rounded-2xl max-w-md w-full p-6 border-2 border-[#08783E] space-y-4"
+            className="bg-[#0D1410] rounded-2xl max-w-md w-full p-6 border-2 border-[#08783E] space-y-4 text-white shadow-2xl"
           >
-            <h3 className="font-athletic text-2xl font-black uppercase text-[#063B25]">
+            <h3 className="font-athletic text-2xl font-black uppercase text-white">
               Order: {selectedProduct.name}
             </h3>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+                <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                   Size
                 </label>
                 <select
                   value={selectedSize}
                   onChange={(e) => setSelectedSize(e.target.value)}
-                  className="w-full px-3 py-2 rounded border border-gray-300 text-sm bg-white"
+                  className="w-full px-3 py-2 rounded-lg border border-[#1E2B23] text-sm bg-[#080D0A] text-white focus:border-[#08783E] focus:outline-none"
                 >
                   {selectedProduct.availableSizes.map((s) => (
-                    <option key={s} value={s}>
+                    <option key={s} value={s} className="bg-[#080D0A] text-white">
                       {s}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+                <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                   Quantity
                 </label>
                 <input
@@ -164,13 +164,13 @@ export function MerchandiseCatalogClient({
                   max="20"
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
-                  className="w-full px-3 py-2 rounded border border-gray-300 text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm focus:border-[#08783E] focus:outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Your Name *
               </label>
               <input
@@ -178,12 +178,12 @@ export function MerchandiseCatalogClient({
                 required
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className="w-full px-3 py-2 rounded border border-gray-300 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+              <label className="block text-xs font-bold uppercase text-slate-300 mb-1">
                 Phone / WhatsApp Number *
               </label>
               <input
@@ -191,7 +191,7 @@ export function MerchandiseCatalogClient({
                 required
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
-                className="w-full px-3 py-2 rounded border border-gray-300 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[#1E2B23] bg-[#080D0A] text-white text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
 
@@ -199,13 +199,13 @@ export function MerchandiseCatalogClient({
               <button
                 type="button"
                 onClick={() => setSelectedProduct(null)}
-                className="flex-1 py-2.5 rounded-lg border border-gray-300 text-xs font-bold uppercase"
+                className="flex-1 py-2.5 rounded-lg border border-[#1E2B23] bg-[#141E18] text-slate-300 text-xs font-bold uppercase hover:bg-[#1C2B22]"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 rounded-lg bg-[#08783E] text-white font-athletic font-bold text-sm uppercase tracking-wider"
+                className="flex-1 py-2.5 rounded-lg bg-[#08783E] text-white font-athletic font-bold text-sm uppercase tracking-wider hover:bg-[#063B25] transition"
               >
                 Confirm (KES {(selectedProduct.priceKes * quantity).toLocaleString()})
               </button>
