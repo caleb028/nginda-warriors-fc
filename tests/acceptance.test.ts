@@ -51,7 +51,11 @@ test('Criteria 1: Official Crest Preservation & Identity Elements', () => {
   const db = readDatabase();
   assert.equal(db.clubSettings.clubName, 'Nginda Warriors FC');
   assert.equal(db.clubSettings.establishedYear, 2024);
-  assert.equal(db.clubSettings.crestUrl, '/brand/nginda-warriors-crest.svg');
+  assert.ok(
+    db.clubSettings.crestUrl === '/brand/nginda-warriors-crest.png' ||
+      db.clubSettings.crestUrl === '/brand/nginda-warriors-crest.svg',
+    'Official crest URL must reference official crest asset'
+  );
   assert.equal(db.clubSettings.tagline, 'One Team. One Community. One Warrior Spirit.');
 });
 

@@ -179,7 +179,7 @@ export function SupporterHubClient({
               {/* Pass Top Banner */}
               <div className="relative z-10 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full p-1 bg-[#0A0F0D] border border-[#1E2B23] flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl p-1 bg-[#0A0F0D] border border-[#1E2B23] flex items-center justify-center">
                     <ClubCrest size={40} />
                   </div>
                   <div>
@@ -378,7 +378,7 @@ export function SupporterHubClient({
               <div className="bg-[#080D0A] p-6 rounded-xl border border-[#1E2B23] mb-6">
                 <div className="flex items-center justify-center gap-4 md:gap-8">
                   <div className="text-center">
-                    <div className="w-14 h-14 mx-auto mb-2 rounded-full bg-[#0A0F0D] border border-[#1E2B23] flex items-center justify-center shadow-md">
+                    <div className="w-14 h-14 mx-auto mb-2 rounded-xl bg-[#0A0F0D] border border-[#1E2B23] flex items-center justify-center shadow-md">
                       <ClubCrest size={40} />
                     </div>
                     <div className="font-pedals font-athletic text-base font-bold uppercase text-white">

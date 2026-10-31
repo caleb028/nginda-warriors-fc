@@ -36,7 +36,7 @@ export default function FinancialTransparencyPage() {
               Verified supporter contributions, campaign targets, approved expenditure categories, and remaining balances. Donor personal details are strictly protected.
             </p>
           </div>
-          <div className="p-2 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shadow-md">
+          <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
             <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>

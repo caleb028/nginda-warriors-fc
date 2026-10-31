@@ -25,24 +25,31 @@ export function ClubCrest({
   customCrestUrl,
   alt = 'Nginda Warriors FC Official Crest (Est. 2024)',
 }: ClubCrestProps) {
-  const isCustomAsset =
+  const crestSrc =
     customCrestUrl &&
     customCrestUrl.trim() !== '' &&
-    customCrestUrl !== '/brand/nginda-warriors-crest.svg';
+    customCrestUrl !== '/brand/nginda-warriors-crest.svg'
+      ? customCrestUrl
+      : '/brand/nginda-warriors-crest.png';
 
-  if (isCustomAsset) {
-    return (
-      <img
-        src={customCrestUrl}
-        alt={alt}
-        width={size}
-        height={size}
-        style={{ width: size, height: size, objectFit: 'contain' }}
-        className={`select-none shrink-0 ${className}`}
-      />
-    );
-  }
+  return (
+    <img
+      src={crestSrc}
+      alt={alt}
+      width={Math.round(size * 1.5)}
+      height={size}
+      style={{ maxHeight: size, width: 'auto', objectFit: 'contain' }}
+      className={`select-none shrink-0 inline-block ${className}`}
+      loading="eager"
+    />
+  );
+}
 
+export function LegacyClubCrestSvg({
+  size = 64,
+  className = '',
+  alt = 'Nginda Warriors FC Heritage Crest',
+}: Omit<ClubCrestProps, 'customCrestUrl'>) {
   return (
     <svg
       width={size}

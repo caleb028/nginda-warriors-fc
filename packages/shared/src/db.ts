@@ -158,7 +158,7 @@ export function createInitialDatabaseState(): NgindaDatabaseSchema {
       shortName: 'Nginda Warriors',
       establishedYear: 2024,
       tagline: 'One Team. One Community. One Warrior Spirit.',
-      crestUrl: '/brand/nginda-warriors-crest.svg',
+      crestUrl: '/brand/nginda-warriors-crest.png',
       warriorGreen: INITIAL_BRAND_TOKENS.warriorGreen,
       deepForestGreen: INITIAL_BRAND_TOKENS.deepForestGreen,
       crestYellow: INITIAL_BRAND_TOKENS.crestYellow,

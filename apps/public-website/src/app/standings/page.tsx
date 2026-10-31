@@ -23,7 +23,7 @@ export default function LeagueStandingsPage() {
               Competition standings with Nginda Warriors FC highlighted in official club colours.
             </p>
           </div>
-          <div className="p-2 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shadow-md">
+          <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
             <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
           </div>
         </div>

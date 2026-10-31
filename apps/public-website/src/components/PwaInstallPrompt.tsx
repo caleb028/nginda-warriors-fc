@@ -78,7 +78,7 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
     <>
       <div className="fixed bottom-16 sm:bottom-4 left-3 right-3 sm:left-auto sm:right-4 z-50 sm:max-w-md bg-[#0D1410] border-2 border-[#08783E] rounded-2xl shadow-2xl p-4 transition-all animate-in fade-in slide-in-from-bottom-5 text-white">
         <div className="flex items-start gap-3">
-          <div className="p-1 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shrink-0 shadow-xs">
+          <div className="p-1.5 rounded-xl bg-[#0A0F0D] border border-[#1E2B23] shrink-0 shadow-xs flex items-center justify-center">
             <ClubCrest size={44} customCrestUrl={crestUrl} />
           </div>
           <div className="flex-1 min-w-0">

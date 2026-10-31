@@ -42,7 +42,7 @@ export default function SponsorsAndPartnershipPage() {
           </div>
 
           <div className="lg:col-span-4 flex justify-center">
-            <div className="p-3 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shadow-xl">
+            <div className="p-3.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-xl flex items-center justify-center">
               <ClubCrest size={180} customCrestUrl={clubSettings.crestUrl} />
             </div>
           </div>

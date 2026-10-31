@@ -6,16 +6,16 @@
   "id": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FFFFFF",
+  "background_color": "#000000",
   "theme_color": "#08783E",
   "scope": "/",
   "categories": ["sports", "news"],
   "icons": [
     {
-      "src": "/brand/nginda-warriors-crest.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/brand/nginda-warriors-crest.png",
+      "sizes": "1024x682",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icon-192.png",

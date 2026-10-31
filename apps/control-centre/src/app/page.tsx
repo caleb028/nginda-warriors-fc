@@ -427,7 +427,7 @@ export default function ControlCentreApp() {
                     System Owner & Super Administrator • Full authorized control of Nginda Warriors FC modules.
                   </p>
                 </div>
-                <div className="p-2 rounded-full bg-slate-50 border border-slate-200 shadow-xs">
+                <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 shadow-xs flex items-center justify-center">
                   <ClubCrest size={72} customCrestUrl={clubSettings.crestUrl} />
                 </div>
               </div>

@@ -55,7 +55,7 @@ export function AuthAndBootstrapGate({
         {/* Top Branded Header */}
         <div className="bg-white text-slate-900 p-8 text-center border-b border-slate-200">
           <div className="flex justify-center mb-4">
-            <div className="p-2 rounded-full bg-slate-50 border border-slate-200 shadow-xs">
+            <div className="p-3 rounded-2xl bg-slate-900 border border-slate-800 shadow-md flex items-center justify-center">
               <ClubCrest size={80} customCrestUrl={crestUrl} />
             </div>
           </div>

@@ -799,7 +799,7 @@ export default function PublicHomePage() {
         <section className="py-20 bg-black text-white border-b border-[#1E2B23] relative overflow-hidden">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
             <div className="flex justify-center">
-              <div className="p-2 rounded-full bg-[#0A0F0D] border border-[#1E2B23] shadow-md">
+              <div className="p-2.5 rounded-2xl bg-[#0A0F0D] border border-[#1E2B23] shadow-md flex items-center justify-center">
                 <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
               </div>
             </div>

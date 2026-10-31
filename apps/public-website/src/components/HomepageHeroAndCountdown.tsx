@@ -135,11 +135,12 @@ export function HomepageHeroSlideshow({
 
           {/* Right Official Crest Showcase */}
           <div className="lg:col-span-4 flex flex-col items-center justify-center">
-            <div className="relative p-8 rounded-full bg-[#0A0F0D] border-2 border-[#1E2B23] shadow-2xl group hover:border-[#08783E] transition-all">
+            <div className="relative p-6 sm:p-8 rounded-3xl bg-[#0A0F0D]/90 border-2 border-[#1E2B23] shadow-2xl group hover:border-[#08783E] transition-all flex items-center justify-center">
               <ClubCrest
                 size={220}
                 customCrestUrl={settings.crestUrl}
                 alt={`${settings.clubName} Official Crest`}
+                className="w-auto h-auto max-h-56 max-w-full drop-shadow-xl"
               />
             </div>
             <p className="mt-4 text-xs font-athletic font-bold uppercase tracking-widest text-[#F5D000] text-center">

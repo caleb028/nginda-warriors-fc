@@ -98,27 +98,18 @@ export function PublicShell({
         <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-md text-white shadow-xl border-b border-[#1E2B23]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-20">
-              {/* Official Club Crest & Title */}
+              {/* Official Club Logo Only (Brand identity without navbar text / est. year) */}
               <Link
                 href="/"
-                className="flex items-center gap-3 group focus:outline-none py-1"
+                className="flex items-center group focus:outline-none focus:ring-2 focus:ring-[#08783E] rounded-xl py-1 transition-transform"
                 aria-label={settings.clubName}
               >
-                <div className="p-1 rounded-full bg-[#0A0F0D] border border-[#1E2B23] group-hover:scale-105 group-hover:border-[#08783E] transition-all shadow-md">
-                  <ClubCrest
-                    size={52}
-                    customCrestUrl={settings.crestUrl}
-                    alt={`${settings.clubName} Official Crest`}
-                  />
-                </div>
-                <div className="hidden sm:block">
-                  <span className="font-athletic text-lg font-black uppercase tracking-wider text-white block leading-tight">
-                    {settings.clubName}
-                  </span>
-                  <span className="text-[10px] font-athletic font-extrabold uppercase tracking-widest text-[#F5D000] block">
-                    EST. {settings.establishedYear || 2024} • WARRIORS
-                  </span>
-                </div>
+                <ClubCrest
+                  size={64}
+                  customCrestUrl={settings.crestUrl}
+                  alt={`${settings.clubName} Official Crest`}
+                  className="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105 drop-shadow-md"
+                />
               </Link>
 
               {/* Desktop Primary Navigation */}
@@ -345,7 +336,7 @@ export function PublicShell({
               {/* Column 1: Identity & Crest */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-1 rounded-full bg-[#0A0F0D] border border-[#1E2B23]">
+                  <div className="p-1.5 rounded-xl bg-[#0A0F0D] border border-[#1E2B23] flex items-center justify-center">
                     <ClubCrest size={60} customCrestUrl={settings.crestUrl} />
                   </div>
                   <div>
