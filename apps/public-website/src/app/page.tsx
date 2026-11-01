@@ -150,10 +150,9 @@ export default function PublicHomePage() {
               </div>
             </MotionReveal>
 
-            <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-6" once={false}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Card A: Next Fixture / Live Match */}
-              <StaggerItem className="h-full">
-                <div className="rounded-2xl bg-[#141414] border border-[#262626] shadow-xl p-6 flex flex-col justify-between h-full">
+              <div className="rounded-2xl bg-[#141414] border border-[#262626] shadow-xl p-6 flex flex-col justify-between h-full">
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <span className="px-3 py-1 rounded-full bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
@@ -490,14 +489,13 @@ export default function PublicHomePage() {
                   </Link>
                 </div>
               </div>
-              </StaggerItem>
-            </StaggerContainer>
+            </div>
           </div>
         </section>
       )}
 
       {/* 2.5 WARRIORS+ TV - Deep Black Surface */}
-      <section id="warriors-tv" className="py-20 bg-black text-white border-b border-[#262626]">
+      <section id="warriors-tv" className="py-16 sm:py-20 bg-black text-white border-b border-[#262626] relative z-10 clear-both">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <WarriorsTVHub videos={publishedVideos} />
         </div>

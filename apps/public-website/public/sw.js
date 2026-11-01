@@ -1,29 +1,31 @@
-// Nginda Warriors FC — Service Worker (Always-Fresh Network-First with Offline Fallback)
-const CACHE_NAME = 'nginda-warriors-v3-fresh';
+// Nginda Warriors FC — Service Worker (Instant Fresh Cache Invalidation)
+const CACHE_NAME = 'nginda-warriors-v7-fresh-live';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {
+  // Activate immediately without waiting for existing tabs/PWA sessions to close
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(['/offline.html', '/manifest.json']).catch(() => {});
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
+  // Aggressively purge every single old cache
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
+            console.log('[SW] Purging outdated cache:', key);
             return caches.delete(key);
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
@@ -40,10 +42,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. HTML navigation: STRICT NETWORK-FIRST (Always fetch live from server)
+  // 2. HTML navigation: STRICT NETWORK-FIRST WITH NO-STORE
+  // Guarantees mobile users receive fresh HTML on every app open
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req, { cache: 'no-cache' })
+      fetch(req, { cache: 'no-store' })
         .catch(async () => {
           const cached = await caches.match(req);
           if (cached) return cached;
@@ -56,7 +59,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Static assets: Network-first, only fallback to cache if network fails
+  // 3. Static assets & fonts: Network-first
   event.respondWith(
     fetch(req).catch(() => {
       return caches.match(req);
@@ -72,8 +75,8 @@ self.addEventListener('push', (event) => {
     const title = data.title || 'Nginda Warriors FC';
     const options = {
       body: data.body || 'New update from Nginda Warriors FC',
-      icon: '/brand/nginda-warriors-crest.svg',
-      badge: '/brand/nginda-warriors-crest.svg',
+      icon: '/brand/nginda-warriors-crest.png',
+      badge: '/brand/nginda-warriors-crest.png',
       data: { url: data.url || '/' },
       vibrate: [100, 50, 100],
     };

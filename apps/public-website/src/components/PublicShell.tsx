@@ -386,7 +386,7 @@ export function PublicShell({
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 pb-16 xl:pb-0">{children}</main>
+        <main className="flex-1 pb-24 xl:pb-0">{children}</main>
 
         {/* Sleek Borussia Dortmund Black & Yellow Footer */}
         <footer className="bg-[#050505] text-slate-300 border-t border-[#222222]">

@@ -76,6 +76,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Nginda Warriors FC" />
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
         <link rel="apple-touch-icon" href="/brand/nginda-warriors-crest.png" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -94,10 +97,26 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
+                var refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', function() {
+                  if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                  }
+                });
+
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                  navigator.serviceWorker.register('/sw.js?v=20261101_18').then(function(reg) {
                     reg.update();
                   }).catch(function() {});
+                });
+
+                document.addEventListener('visibilitychange', function() {
+                  if (document.visibilityState === 'visible') {
+                    navigator.serviceWorker.getRegistration().then(function(reg) {
+                      if (reg) reg.update();
+                    });
+                  }
                 });
               }
             `,
