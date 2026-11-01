@@ -15,16 +15,40 @@ import {
   writeDatabase,
 } from '@nginda-warriors/shared/server';
 
-async function saveDatabaseAndSync(db: Parameters<typeof writeDatabase>[0], path: string = '/') {
+async function saveDatabaseAndSync(
+  db: Parameters<typeof writeDatabase>[0],
+  path: string = '/',
+  hostHeader?: string | null
+) {
   writeDatabase(db);
-  const publicUrl = process.env.PUBLIC_WEBSITE_URL;
-  if (publicUrl) {
+
+  const syncTargets: string[] = [];
+  if (process.env.PUBLIC_WEBSITE_URL) {
+    syncTargets.push(process.env.PUBLIC_WEBSITE_URL);
+  }
+  if (hostHeader) {
+    const proto = hostHeader.includes('localhost') ? 'http' : 'https';
+    syncTargets.push(`${proto}://${hostHeader}`);
+  }
+  if (process.env.NODE_ENV !== 'production') {
+    syncTargets.push('http://localhost:3000');
+  }
+
+  const payload = JSON.stringify({ database: db, path });
+
+  for (const baseUrl of Array.from(new Set(syncTargets))) {
     try {
-      await fetch(new URL('/api/revalidate', publicUrl), {
+      await fetch(new URL('/api/sync', baseUrl), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path }),
-      });
+        body: payload,
+      }).catch(() => null);
+
+      await fetch(new URL('/api/revalidate', baseUrl), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload,
+      }).catch(() => null);
     } catch {
       // Non-blocking sync call across internal service binding
     }
@@ -205,15 +229,25 @@ export async function POST(req: NextRequest) {
       const now = new Date().toISOString();
       const idx = payload.id ? db.fixtures.findIndex((f) => f.id === payload.id) : -1;
 
+      let safeKickoff = now;
+      if (payload.kickoffAt) {
+        try {
+          const parsed = new Date(payload.kickoffAt);
+          if (!isNaN(parsed.getTime())) {
+            safeKickoff = parsed.toISOString();
+          }
+        } catch {}
+      }
+
       const fixtureRecord = {
         id: idx >= 0 ? db.fixtures[idx].id : createUuid(),
         competitionName: payload.competitionName || 'FKF Regional League',
         seasonName: payload.seasonName || '2026/2027 Season',
-        opponentName: String(payload.opponentName).trim(),
+        opponentName: String(payload.opponentName || 'Opponent FC').trim(),
         opponentCrestUrl: payload.opponentCrestUrl || '',
-        venue: String(payload.venue).trim(),
+        venue: String(payload.venue || 'Nginda Home Ground').trim(),
         isHome: payload.isHome !== undefined ? Boolean(payload.isHome) : true,
-        kickoffAt: payload.kickoffAt || now,
+        kickoffAt: safeKickoff,
         timezone: 'Africa/Nairobi',
         matchStatus: payload.matchStatus || 'scheduled',
         homeScore:
@@ -243,6 +277,10 @@ export async function POST(req: NextRequest) {
         db.fixtures.unshift(fixtureRecord);
       }
 
+      if (fixtureRecord.matchStatus === 'fulltime') {
+        recalculateStandingsFromVerifiedFixtures(db);
+      }
+
       recordAuditLog(db, {
         actorUserId: session.userId,
         actorName: session.fullName,
@@ -253,8 +291,8 @@ export async function POST(req: NextRequest) {
         summary: `${idx >= 0 ? 'Updated' : 'Created'} fixture vs ${fixtureRecord.opponentName} (${fixtureRecord.publicationStatus})`,
       });
 
-      await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, fixture: fixtureRecord });
+      await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
+      return NextResponse.json({ ok: true, fixture: fixtureRecord, database: db });
     }
 
     if (action === 'delete_fixture') {
@@ -271,8 +309,8 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Deleted fixture: Nginda Warriors vs ${target?.opponentName || payload.id}`,
       });
-      await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
+      return NextResponse.json({ ok: true, database: db });
     }
 
     if (action === 'clear_fixture_result') {
@@ -297,8 +335,8 @@ export async function POST(req: NextRequest) {
         targetId: fixture.id,
         summary: `Cleared match score & result for vs ${fixture.opponentName}`,
       });
-      await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, fixture });
+      await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
+      return NextResponse.json({ ok: true, fixture, database: db });
     }
 
     if (action === 'quick_update_score') {
@@ -318,6 +356,10 @@ export async function POST(req: NextRequest) {
         fixture.publicationStatus = payload.publicationStatus;
       }
       fixture.updatedAt = new Date().toISOString();
+
+      if (fixture.matchStatus === 'fulltime') {
+        recalculateStandingsFromVerifiedFixtures(db);
+      }
 
       if (payload.scorerName) {
         fixture.events.push({
@@ -343,8 +385,8 @@ export async function POST(req: NextRequest) {
         summary: `Updated score vs ${fixture.opponentName}: ${fixture.homeScore} - ${fixture.awayScore} (${fixture.matchStatus})`,
       });
 
-      await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, fixture });
+      await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
+      return NextResponse.json({ ok: true, fixture, database: db });
     }
 
     if (action === 'save_match_report') {

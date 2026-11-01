@@ -24,9 +24,7 @@ export default function TeamSquadPage() {
       <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-widest">
-              OFFICIAL SQUAD DIRECTORY • EST. {clubSettings.establishedYear}
-            </span>
+            
             <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
               THE WARRIORS SQUAD
             </h1>
@@ -48,9 +46,7 @@ export default function TeamSquadPage() {
         <section>
           <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-6">
             <div>
-              <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-                AUTHENTIC SQUAD MOMENTS • PITCH & MATCHDAY
-              </span>
+              
               <h2 className="font-athletic text-3xl font-black uppercase text-white mt-1">
                 WARRIORS SQUAD IN ACTION
               </h2>

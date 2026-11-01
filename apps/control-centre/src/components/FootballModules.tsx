@@ -610,13 +610,20 @@ export function FootballModules({
         <form
           onSubmit={async (e) => {
             e.preventDefault();
+            let safeKickoff = new Date().toISOString();
+            if (kickoffAt) {
+              const d = new Date(kickoffAt);
+              if (!isNaN(d.getTime())) {
+                safeKickoff = d.toISOString();
+              }
+            }
             await onMutate('save_fixture', {
               opponentName,
               competitionName,
               seasonName,
               venue,
               isHome,
-              kickoffAt: new Date(kickoffAt).toISOString(),
+              kickoffAt: safeKickoff,
               publicationStatus: fixturePubStatus,
             });
             setOpponentName('');

@@ -314,7 +314,7 @@ export function PublicShell({
                       {settings.clubName}
                     </h3>
                     <p className="text-xs font-athletic font-black uppercase tracking-widest text-[#FDE100]">
-                      EST. {settings.establishedYear} • WARRIOR SPIRIT
+                      WARRIOR SPIRIT
                     </p>
                   </div>
                 </div>
@@ -335,7 +335,7 @@ export function PublicShell({
                 <ul className="space-y-2.5 text-sm text-slate-400">
                   <li>
                     <Link href="/about" className="hover:text-[#FDE100] transition">
-                      About the Club & History (Est. 2024)
+                      About the Club & History
                     </Link>
                   </li>
                   <li>

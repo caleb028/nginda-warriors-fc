@@ -15,10 +15,7 @@ export default function SponsorsAndPartnershipPage() {
       <section className="py-14 sm:py-18 bg-[#0A0A0A] border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-8 space-y-5">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-widest">
-              <Sparkles className="w-3.5 h-3.5 text-[#FDE100]" />
-              COMMERCIAL PARTNERSHIP PROGRAMME • EST. {clubSettings.establishedYear}
-            </span>
+            
 
             <h1 className="font-athletic text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-none text-white">
               PARTNER WITH THE WARRIORS. GROW WITH THE COMMUNITY.
@@ -82,9 +79,7 @@ export default function SponsorsAndPartnershipPage() {
         {/* Official Sponsorship Packages (Bronze, Silver, Gold, Main Kit Sponsor) */}
         <section>
           <div className="mb-8">
-            <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-              CONFIGURABLE KES PARTNERSHIP TIERS
-            </span>
+            
             <h2 className="font-athletic text-3xl sm:text-4xl font-black uppercase text-white mt-1">
               Official Sponsorship Packages
             </h2>

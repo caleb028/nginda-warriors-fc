@@ -236,7 +236,29 @@
       "updatedAt": "2026-10-31T22:51:04.381Z"
     }
   ],
-  "fixtures": [],
+  "fixtures": [
+    {
+      "id": "fixture-maragua-united-1",
+      "competitionName": "FKF Regional League",
+      "seasonName": "2026/2027 Season",
+      "opponentName": "Maragua United FC",
+      "opponentCrestUrl": "",
+      "venue": "Nginda Home Ground",
+      "isHome": true,
+      "kickoffAt": "2026-11-08T12:00:00.000Z",
+      "timezone": "Africa/Nairobi",
+      "matchStatus": "scheduled",
+      "homeScore": null,
+      "awayScore": null,
+      "motmVotingOpen": false,
+      "publicationStatus": "published",
+      "events": [],
+      "lineups": [],
+      "report": null,
+      "createdAt": "2026-11-01T10:00:00.000Z",
+      "updatedAt": "2026-11-01T10:00:00.000Z"
+    }
+  ],
   "standings": [],
   "articles": [
     {

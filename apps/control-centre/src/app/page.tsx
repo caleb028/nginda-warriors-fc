@@ -185,6 +185,23 @@ export default function ControlCentreApp() {
       } else {
         setStatusNotice('Changes synchronized live with database and public website.');
         setTimeout(() => setStatusNotice(''), 3500);
+
+        if (typeof window !== 'undefined') {
+          const syncBody = data.database ? { database: data.database } : data.fixture ? { fixture: data.fixture } : null;
+          if (syncBody) {
+            fetch('/api/sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(syncBody),
+            }).catch(() => null);
+            fetch('/api/revalidate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ path: '/fixtures' }),
+            }).catch(() => null);
+          }
+        }
+
         await loadState();
       }
     } catch {

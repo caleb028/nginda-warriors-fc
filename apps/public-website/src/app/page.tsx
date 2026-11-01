@@ -125,10 +125,7 @@ export default function PublicHomePage() {
             <MotionReveal y={24} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
-                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-                    AFRICA/NAIROBI TIME (EAT) • OFFICIAL MATCH HUB
-                  </span>
-                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase tracking-wide text-white mt-1">
+                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase tracking-wide text-white">
                     {matchMeta.title}
                   </h2>
                 </div>
@@ -458,10 +455,7 @@ export default function PublicHomePage() {
             <MotionReveal y={24} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
-                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-                    PITCH ACTION & SQUAD GALLERY • EST. {clubSettings.establishedYear}
-                  </span>
-                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
+                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white">
                     WARRIORS IN ACTION
                   </h2>
                 </div>
@@ -647,10 +641,7 @@ export default function PublicHomePage() {
             <MotionReveal y={24} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
-                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-                    OFFICIAL CLUB MEDIA DESK
-                  </span>
-                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
+                  <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white">
                     {newsMeta.title}
                   </h2>
                 </div>
@@ -800,9 +791,6 @@ export default function PublicHomePage() {
             <MotionReveal y={20} once={false}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                  <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-                    COMMERCIAL PARTNERSHIPS
-                  </span>
                   <h2 className="font-athletic text-3xl font-black uppercase text-white">
                     {sponsorsMeta.title}
                   </h2>
@@ -867,10 +855,7 @@ export default function PublicHomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <MotionReveal y={24} once={false}>
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider">
-                WARRIORS SUPPORTERS HUB
-              </span>
-              <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-3">
+              <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white">
                 EMPOWERED BY OUR FANS
               </h2>
               <p className="text-sm sm:text-base text-slate-300 mt-2">

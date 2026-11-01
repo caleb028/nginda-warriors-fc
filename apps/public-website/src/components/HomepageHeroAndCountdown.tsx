@@ -61,11 +61,6 @@ export function HomepageHeroSlideshow({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Hero Copy */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] text-xs font-athletic font-extrabold tracking-widest uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-[#FDE100]" />
-              <span>OFFICIAL DIGITAL PLATFORM • EST. {settings.establishedYear}</span>
-            </div>
-
             <h1 className="font-athletic text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95] text-white">
               {activeSlide.headline || settings.clubName}
             </h1>
@@ -164,12 +159,9 @@ export function HomepageHeroSlideshow({
                   />
                 </div>
 
-                {/* Bottom Overlay & Badge */}
+                {/* Bottom Overlay */}
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 z-10">
-                  <span className="inline-block px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md">
-                    OFFICIAL MATCHDAY SQUAD • EST. {settings.establishedYear}
-                  </span>
-                  <p className="mt-1 text-xs font-athletic font-bold uppercase tracking-wider text-slate-200">
+                  <p className="text-xs font-athletic font-bold uppercase tracking-wider text-slate-200">
                     Nginda Warriors FC First Team
                   </p>
                 </div>

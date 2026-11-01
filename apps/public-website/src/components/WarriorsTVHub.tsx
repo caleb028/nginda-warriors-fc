@@ -53,7 +53,6 @@ export function WarriorsTVHub({
             <span className="px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-wider">
               WARRIORS+ TV
             </span>
-            <span className="text-xs text-slate-400 font-medium">Official Digital Video Channel</span>
           </div>
           <h2 className="font-athletic text-3xl md:text-5xl font-black uppercase text-white tracking-wide">
             INSIDE NGINDA WARRIORS
@@ -219,7 +218,7 @@ export function WarriorsTVHub({
                 </p>
               )}
               <div className="mt-4 px-4 py-1 rounded-full bg-[#FDE100] text-black font-black text-xs font-bold tracking-wider uppercase">
-                Warriors HD Streaming Feed • Est. 2024
+                Warriors Video Feed
               </div>
             </div>
 

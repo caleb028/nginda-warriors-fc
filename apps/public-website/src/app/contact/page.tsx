@@ -57,9 +57,7 @@ export default function ContactClubPage() {
       {/* Header Banner */}
       <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-extrabold text-xs uppercase tracking-widest">
-            OFFICIAL COMMUNICATIONS DESK
-          </span>
+          
           <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
             CONTACT NGINDA WARRIORS FC
           </h1>

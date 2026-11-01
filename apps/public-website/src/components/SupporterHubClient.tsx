@@ -186,9 +186,7 @@ export function SupporterHubClient({
                     <h4 className="font-athletic text-lg font-black uppercase text-white tracking-wider leading-none">
                       NGINDA WARRIORS FC
                     </h4>
-                    <span className="text-[10px] text-[#FDE100] font-athletic uppercase tracking-widest font-extrabold">
-                      OFFICIAL SUPPORTER PASS • EST. 2024
-                    </span>
+                    
                   </div>
                 </div>
 

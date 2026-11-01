@@ -17,9 +17,7 @@ export default function AboutClubPage() {
       <section className="bg-[#0A0A0A] text-white py-12 sm:py-16 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3">
-            <span className="inline-block px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-widest">
-              ESTABLISHED {clubSettings.establishedYear} • OFFICIAL CLUB IDENTITY
-            </span>
+            
             <h1 className="font-athletic text-5xl sm:text-6xl font-black uppercase tracking-tight text-white">
               ABOUT {clubSettings.clubName}
             </h1>
