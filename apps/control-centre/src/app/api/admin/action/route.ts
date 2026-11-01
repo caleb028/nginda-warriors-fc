@@ -27,6 +27,14 @@ async function saveDatabaseAndSync(
   if (process.env.PUBLIC_WEBSITE_URL) {
     syncTargets.push(process.env.PUBLIC_WEBSITE_URL);
   }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    syncTargets.push(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
+  }
+  if (process.env.VERCEL_URL) {
+    syncTargets.push(`https://${process.env.VERCEL_URL}`);
+  }
+  syncTargets.push('https://nginda-warriors-fc-c549.vercel.app');
+
   if (hostHeader) {
     const proto = hostHeader.includes('localhost') ? 'http' : 'https';
     syncTargets.push(`${proto}://${hostHeader}`);

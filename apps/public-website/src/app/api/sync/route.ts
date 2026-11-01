@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { readDatabase, writeDatabase } from '@nginda-warriors/shared/server';
+import { readDatabase, writeDatabase, getDatabaseTimestamp } from '@nginda-warriors/shared/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,13 +27,21 @@ export async function POST(req: NextRequest) {
     revalidatePath('/gallery');
 
     const freshDb = readDatabase();
-    return NextResponse.json({
-      ok: true,
-      synced: true,
-      fixturesCount: freshDb.fixtures.length,
-      playersCount: freshDb.players.length,
-      articlesCount: freshDb.articles.length,
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+        synced: true,
+        updatedAt: getDatabaseTimestamp(),
+        fixturesCount: freshDb.fixtures.length,
+        playersCount: freshDb.players.length,
+        articlesCount: freshDb.articles.length,
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        },
+      }
+    );
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Database sync failed';
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
@@ -42,11 +50,19 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   const db = readDatabase();
-  return NextResponse.json({
-    ok: true,
-    fixturesCount: db.fixtures.length,
-    playersCount: db.players.length,
-    articlesCount: db.articles.length,
-    status: 'ready',
-  });
+  return NextResponse.json(
+    {
+      ok: true,
+      updatedAt: getDatabaseTimestamp(),
+      fixturesCount: db.fixtures.length,
+      playersCount: db.players.length,
+      articlesCount: db.articles.length,
+      status: 'ready',
+    },
+    {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      },
+    }
+  );
 }

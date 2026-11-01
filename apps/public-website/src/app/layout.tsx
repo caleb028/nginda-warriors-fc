@@ -3,6 +3,7 @@ import './globals.css';
 import { getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { PublicShell } from '../components/PublicShell';
 import { PreventZoom } from '../components/PreventZoom';
+import { LiveSyncListener } from '../components/LiveSyncListener';
 
 export const dynamic = 'force-dynamic';
 
@@ -101,6 +102,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <PreventZoom />
+        <LiveSyncListener />
         <PublicShell settings={clubSettings}>{children}</PublicShell>
       </body>
     </html>

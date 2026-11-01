@@ -176,6 +176,10 @@ export default function ControlCentreApp() {
         const actionData = await actionRes.json();
         if (actionData.ok && actionData.database) {
           setDatabase(actionData.database);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('nginda_live_database', JSON.stringify(actionData.database));
+            localStorage.setItem('nginda_db_timestamp', String(Date.now()));
+          }
         }
         if (actionData.publicWebsiteUrl) {
           setPublicWebsiteUrl(actionData.publicWebsiteUrl);
@@ -215,20 +219,55 @@ export default function ControlCentreApp() {
         if (typeof window !== 'undefined') {
           const syncBody = data.database ? { database: data.database } : data.fixture ? { fixture: data.fixture } : null;
           if (syncBody) {
-            fetch('/api/sync', {
+            const origin = window.location.origin;
+            const payloadStr = JSON.stringify(syncBody);
+
+            // 1. Direct fetch to public-website root sync
+            fetch(`${origin}/api/sync`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(syncBody),
+              body: payloadStr,
             }).catch(() => null);
-            fetch('/api/revalidate', {
+
+            // 2. Direct fetch to public-website revalidate
+            fetch(`${origin}/api/revalidate`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ path: '/fixtures' }),
             }).catch(() => null);
+
+            // 3. Fallback relative fetch
+            fetch('/api/sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: payloadStr,
+            }).catch(() => null);
+
+            // 4. Update localStorage for instant multi-tab sync
+            if (data.database) {
+              localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
+              localStorage.setItem('nginda_db_timestamp', String(Date.now()));
+            }
+
+            // 5. Broadcast to any open public website tabs
+            if ('BroadcastChannel' in window) {
+              try {
+                const bc = new BroadcastChannel('nginda_warriors_live_sync');
+                bc.postMessage({ type: 'DATABASE_UPDATED', database: data.database });
+                bc.close();
+              } catch {}
+            }
           }
         }
 
         await loadState();
+        if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+          try {
+            const bc = new BroadcastChannel('nginda_warriors_live_sync');
+            bc.postMessage({ type: 'DATABASE_UPDATED' });
+            bc.close();
+          } catch {}
+        }
       }
     } catch {
       alert('Network error communicating with Control Centre API.');

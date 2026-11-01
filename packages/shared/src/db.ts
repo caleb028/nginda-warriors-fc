@@ -488,8 +488,28 @@ export function createInitialDatabaseState(): NgindaDatabaseSchema {
   };
 }
 
+declare global {
+  var __NGINDA_DATABASE_CACHE__: NgindaDatabaseSchema | undefined;
+  var __NGINDA_CACHE_TIMESTAMP__: number | undefined;
+}
+
 export function readDatabase(): NgindaDatabaseSchema {
   const filePath = getSharedDatabaseFilePath();
+
+  if (globalThis.__NGINDA_DATABASE_CACHE__) {
+    try {
+      if (fs.existsSync(filePath)) {
+        const stat = fs.statSync(filePath);
+        if (globalThis.__NGINDA_CACHE_TIMESTAMP__ && stat.mtimeMs > globalThis.__NGINDA_CACHE_TIMESTAMP__) {
+          const raw = fs.readFileSync(filePath, 'utf8');
+          globalThis.__NGINDA_DATABASE_CACHE__ = JSON.parse(raw);
+          globalThis.__NGINDA_CACHE_TIMESTAMP__ = stat.mtimeMs;
+        }
+      }
+    } catch {}
+    return globalThis.__NGINDA_DATABASE_CACHE__;
+  }
+
   if (!fs.existsSync(filePath)) {
     // Check bundled data if available
     const rootDir = resolveMonorepoRoot();
@@ -501,6 +521,8 @@ export function readDatabase(): NgindaDatabaseSchema {
         try {
           fs.writeFileSync(filePath, raw, 'utf8');
         } catch {}
+        globalThis.__NGINDA_DATABASE_CACHE__ = data;
+        globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
         return data;
       } catch {}
     }
@@ -509,21 +531,30 @@ export function readDatabase(): NgindaDatabaseSchema {
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
     } catch {}
+    globalThis.__NGINDA_DATABASE_CACHE__ = initial;
+    globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
     return initial;
   }
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(raw) as NgindaDatabaseSchema;
+    const data = JSON.parse(raw) as NgindaDatabaseSchema;
+    globalThis.__NGINDA_DATABASE_CACHE__ = data;
+    globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+    return data;
   } catch {
     const initial = createInitialDatabaseState();
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
     } catch {}
+    globalThis.__NGINDA_DATABASE_CACHE__ = initial;
+    globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
     return initial;
   }
 }
 
 export function writeDatabase(db: NgindaDatabaseSchema): void {
+  globalThis.__NGINDA_DATABASE_CACHE__ = db;
+  globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
   const filePath = getSharedDatabaseFilePath();
   try {
     const tempPath = `${filePath}.tmp`;
@@ -536,6 +567,10 @@ export function writeDatabase(db: NgindaDatabaseSchema): void {
       console.warn('writeDatabase fallback warning:', e);
     }
   }
+}
+
+export function getDatabaseTimestamp(): number {
+  return globalThis.__NGINDA_CACHE_TIMESTAMP__ || Date.now();
 }
 
 export function recordAuditLog(
