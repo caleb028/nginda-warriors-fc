@@ -447,9 +447,19 @@ export function PublicShell({
             </div>
 
             <div className="mt-12 pt-8 border-t border-[#222222] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-              <p>
-                © {new Date().getFullYear()} {settings.clubName} (Est. {settings.establishedYear}). All rights reserved.
-              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <p>
+                  © {new Date().getFullYear()} {settings.clubName} (Est. {settings.establishedYear}). All rights reserved.
+                </p>
+                <span>•</span>
+                <Link
+                  href="/manage"
+                  className="hover:text-[#FDE100] transition flex items-center gap-1 text-slate-500 hover:underline"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]/70" />
+                  <span>Control Centre</span>
+                </Link>
+              </div>
               <p className="text-[#FDE100] font-athletic font-black tracking-wider uppercase">
                 One Team. One Community. One Warrior Spirit.
               </p>

@@ -44,6 +44,20 @@ const nextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: '/manage',
+        permanent: false,
+      },
+      {
+        source: '/admin/:path*',
+        destination: '/manage/:path*',
+        permanent: false,
+      },
+    ];
+  },
   webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,

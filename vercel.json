@@ -31,6 +31,20 @@
       }
     },
     {
+      "source": "/admin",
+      "destination": {
+        "service": "control-centre",
+        "path": "/manage"
+      }
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": {
+        "service": "control-centre",
+        "path": "/manage/$1"
+      }
+    },
+    {
       "source": "/",
       "destination": {
         "service": "public-website"
