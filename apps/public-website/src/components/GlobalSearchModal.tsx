@@ -187,29 +187,51 @@ export function GlobalSearchModal({
         {/* Search Results */}
         <div className="p-3 max-h-[65vh] overflow-y-auto no-scrollbar space-y-1">
           {results.length > 0 ? (
-            results.map((item) => (
-              <Link
-                key={item.id}
-                href={item.href}
-                onClick={onClose}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#0D0D0D] flex items-center justify-center border border-white/10 group-hover:border-[#FDE100]">
-                    {getCategoryIcon(item.category)}
+            results.map((item) => {
+              const isCrossService = item.href.startsWith('/manage') || item.href.startsWith('http');
+              const inner = (
+                <>
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-[#0D0D0D] flex items-center justify-center border border-white/10 group-hover:border-[#FDE100]">
+                      {getCategoryIcon(item.category)}
+                    </div>
+                    <div>
+                      <h5 className="font-athletic text-base font-bold uppercase text-white group-hover:text-[#FDE100] transition-colors leading-tight">
+                        {item.title}
+                      </h5>
+                      <p className="text-xs text-white/60 line-clamp-1">{item.subtitle}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h5 className="font-athletic text-base font-bold uppercase text-white group-hover:text-[#FDE100] transition-colors leading-tight">
-                      {item.title}
-                    </h5>
-                    <p className="text-xs text-white/60 line-clamp-1">{item.subtitle}</p>
-                  </div>
-                </div>
-                <span className="text-[10px] uppercase font-bold text-white/40 group-hover:text-[#FDE100]">
-                  {item.category}
-                </span>
-              </Link>
-            ))
+                  <span className="text-[10px] uppercase font-bold text-white/40 group-hover:text-[#FDE100]">
+                    {item.category}
+                  </span>
+                </>
+              );
+
+              if (isCrossService) {
+                return (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    onClick={onClose}
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition group"
+                  >
+                    {inner}
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  onClick={onClose}
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition group"
+                >
+                  {inner}
+                </Link>
+              );
+            })
           ) : (
             <div className="py-8 text-center text-white/60 text-xs">
               No matching club items found for &ldquo;{query}&rdquo;.

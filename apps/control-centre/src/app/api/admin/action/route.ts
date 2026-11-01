@@ -80,7 +80,9 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     session,
-    publicWebsiteUrl: process.env.PUBLIC_WEBSITE_URL || '/',
+    publicWebsiteUrl:
+      process.env.PUBLIC_WEBSITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://nginda-warriors-fc-c549.vercel.app'),
     database: {
       ...db,
       users: safeUsers,

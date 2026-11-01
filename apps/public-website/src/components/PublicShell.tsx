@@ -180,7 +180,7 @@ export function PublicShell({
                 })}
               </nav>
 
-              {/* Desktop Action Area: Search, Support CTA (Clean without language pill) */}
+              {/* Desktop Action Area: Search, Admin Shortcut, Support CTA */}
               <div className="hidden sm:flex items-center gap-3">
                 <button
                   type="button"
@@ -192,6 +192,16 @@ export function PublicShell({
                   <Search className="w-4 h-4 text-slate-400 group-hover:text-[#FDE100]" />
                   <span className="hidden md:inline">Search</span>
                 </button>
+
+                <a
+                  href="/manage"
+                  className="p-2.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-slate-300 hover:text-[#FDE100] border border-[#262626] hover:border-[#FDE100]/40 transition flex items-center gap-1.5 text-xs font-bold font-athletic tracking-wider uppercase"
+                  title="Club Official Control Centre"
+                  aria-label="Club Official Control Centre"
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#FDE100]" />
+                  <span className="hidden lg:inline">Admin</span>
+                </a>
 
                 <Link
                   href="/support"
@@ -291,6 +301,18 @@ export function PublicShell({
                 >
                   <span>{t.hero.partnerWithUs}</span>
                 </Link>
+              </div>
+
+              <div className="pt-3 border-t border-[#262626] flex items-center justify-between">
+                <span className="text-[11px] font-athletic uppercase tracking-widest text-slate-400">Club Administration</span>
+                <a
+                  href="/manage"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] hover:bg-[#202020] text-[#FDE100] border border-[#333333] hover:border-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider transition"
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#FDE100]" />
+                  <span>Control Centre</span>
+                </a>
               </div>
             </div>
           )}
@@ -452,13 +474,14 @@ export function PublicShell({
                   © {new Date().getFullYear()} {settings.clubName} (Est. {settings.establishedYear}). All rights reserved.
                 </p>
                 <span>•</span>
-                <Link
+                <a
                   href="/manage"
-                  className="hover:text-[#FDE100] transition flex items-center gap-1 text-slate-500 hover:underline"
+                  className="hover:text-[#FDE100] transition flex items-center gap-1.5 text-slate-400 hover:underline font-athletic uppercase tracking-wider text-[11px]"
+                  title="Club Official Control Centre"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]/70" />
-                  <span>Control Centre</span>
-                </Link>
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]" />
+                  <span>Admin Control Centre</span>
+                </a>
               </div>
               <p className="text-[#FDE100] font-athletic font-black tracking-wider uppercase">
                 One Team. One Community. One Warrior Spirit.

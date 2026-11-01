@@ -484,10 +484,17 @@ export default function ControlCentreApp() {
 
             {/* View Public Website */}
             <a
-              href={publicWebsiteUrl || '/'}
+              href={
+                typeof window !== 'undefined' && window.location.origin
+                  ? `${window.location.origin}/`
+                  : publicWebsiteUrl && publicWebsiteUrl !== '/'
+                  ? publicWebsiteUrl
+                  : 'https://nginda-warriors-fc-c549.vercel.app/'
+              }
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition border border-slate-200 hover:border-slate-300"
+              title="Open Official Public Website"
             >
               <Globe className="w-3.5 h-3.5 text-[#08783E]" />
               <span className="hidden sm:inline">Public Site</span>

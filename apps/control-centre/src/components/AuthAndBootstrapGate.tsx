@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ClubCrest } from '@nginda-warriors/shared';
-import { KeyRound, Lock, ShieldCheck, UserCheck } from 'lucide-react';
+import { ArrowLeft, KeyRound, Lock, ShieldCheck, UserCheck } from 'lucide-react';
 import { adminApiUrl } from '../utils/api';
 
 export function AuthAndBootstrapGate({
@@ -183,6 +183,20 @@ export function AuthAndBootstrapGate({
             <span>Protected by Role-Based Access Control & Audit Logging</span>
           </div>
         </form>
+
+        <div className="p-4 bg-slate-100 border-t border-slate-200 text-center">
+          <a
+            href={
+              typeof window !== 'undefined' && window.location.origin
+                ? `${window.location.origin}/`
+                : 'https://nginda-warriors-fc-c549.vercel.app/'
+            }
+            className="inline-flex items-center gap-2 text-xs font-athletic font-bold uppercase tracking-wider text-slate-600 hover:text-[#08783E] transition"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Return to Public Club Website</span>
+          </a>
+        </div>
       </div>
     </div>
   );
