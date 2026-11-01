@@ -2,19 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════════════
+   Al-Hilal Official Typography System (Control Centre)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* 1. Al-Hilal Font (Luxury High-Contrast Display & Headline Serif) */
 @font-face {
-  font-family: 'Pedals';
-  src: local('Pedals'), local('Pedals Regular'), local('Pedals Bold'), local('Pedals-Bold');
-  font-weight: 100 900;
+  font-family: 'Al-Hilal Font';
+  src: url('/manage/fonts/Al-HilalFont-Regular.woff2') format('woff2'), url('/fonts/Al-HilalFont-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
+  font-family: 'Al-Hilal Font';
+  src: url('/manage/fonts/Al-HilalFont-Bold.woff2') format('woff2'), url('/fonts/Al-HilalFont-Bold.woff2') format('woff2');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. 29LT Bukra Wide (Wide Geometric Kicker, Badges & Subtitle Sans) */
+@font-face {
+  font-family: '29LT Bukra Wide';
+  src: url('/manage/fonts/29LTBukraWide-Light.woff2') format('woff2'), url('/fonts/29LTBukraWide-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra Wide';
+  src: url('/manage/fonts/29LTBukraWide-Regular.woff2') format('woff2'), url('/fonts/29LTBukraWide-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra Wide';
+  src: url('/manage/fonts/29LTBukraWide-Medium.woff2') format('woff2'), url('/fonts/29LTBukraWide-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra Wide';
+  src: url('/manage/fonts/29LTBukraWide-SemiBold.woff2') format('woff2'), url('/fonts/29LTBukraWide-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra Wide';
+  src: url('/manage/fonts/29LTBukraWide-Bold.woff2') format('woff2'), url('/fonts/29LTBukraWide-Bold.woff2') format('woff2');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3. 29LT Bukra (Clean Geometric Body Text, Editorial & Articles Sans) */
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('/manage/fonts/29LTBukra-Light.woff2') format('woff2'), url('/fonts/29LTBukra-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('/manage/fonts/29LTBukra-Regular.woff2') format('woff2'), url('/fonts/29LTBukra-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('/manage/fonts/29LTBukra-Medium.woff2') format('woff2'), url('/fonts/29LTBukra-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('/manage/fonts/29LTBukra-SemiBold.woff2') format('woff2'), url('/manage/fonts/29LTBukra-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('/manage/fonts/29LTBukra-Bold.woff2') format('woff2'), url('/fonts/29LTBukra-Bold.woff2') format('woff2');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Legacy Pedals font fallback */
+@font-face {
   font-family: 'Pedals';
-  src: local('Pedals Italic'), local('Pedals-Italic');
+  src: local('Pedals'), local('Pedals Regular'), local('Pedals Bold'), local('Pedals-Bold');
   font-weight: 100 900;
-  font-style: italic;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -30,8 +126,9 @@
   --charcoal: #0F172A;
   --text-muted: #64748B;
 
-  --font-heading: 'Pedals', 'Chakra Petch', 'Kanit', 'Barlow Condensed', -apple-system, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Al-Hilal Font', 'Barlow Condensed', 'Kanit', 'Chakra Petch', -apple-system, sans-serif;
+  --font-kicker: '29LT Bukra Wide', -apple-system, sans-serif;
+  --font-body: '29LT Bukra', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 html {
@@ -57,11 +154,18 @@ body {
   scrollbar-width: none;
 }
 
-h1, h2, h3, h4, .font-athletic, .font-pedals {
+h1, h2, h3, h4, .font-athletic, .font-pedals, .font-display, .font-heading {
   font-family: var(--font-heading);
-  font-style: italic;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
+}
+
+.font-kicker, .font-wide, .font-bukra-wide {
+  font-family: var(--font-kicker);
+  letter-spacing: 0.04em;
+}
+
+.font-body, .font-bukra {
+  font-family: var(--font-body);
 }
 
 *:focus-visible {

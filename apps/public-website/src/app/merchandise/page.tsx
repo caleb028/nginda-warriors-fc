@@ -14,12 +14,14 @@ export default function MerchandiseStorePage() {
       <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            
-            <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
-              WARRIORS MERCHANDISE
+            <span className="font-wide text-xs sm:text-sm font-bold uppercase tracking-widest text-[#FDE100]">
+              Official Club Store
+            </span>
+            <h1 className="font-athletic text-4xl sm:text-6xl font-black uppercase text-white mt-1">
+              NGINDA WARRIORS OFFICIAL STORE
             </h1>
-            <p className="text-slate-300 text-base mt-1">
-              Official replica jerseys, scarves, caps, and training shirts with direct WhatsApp ordering.
+            <p className="font-wide text-sm sm:text-base text-slate-300 mt-2">
+              Introducing our official kits and merchandise for the 2026/27 season.
             </p>
           </div>
           <div className="p-2.5 rounded-2xl bg-[#0A0A0A] border border-[#262626] shadow-md flex items-center justify-center">
