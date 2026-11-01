@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import {
+  ClubCrest,
   NgindaDatabaseSchema,
   Player,
   PositionGroup,
@@ -16,6 +17,7 @@ import {
   RefreshCw,
   Trash2,
   Trophy,
+  Upload,
   UserCheck,
   Users,
   Zap,
@@ -62,6 +64,7 @@ export function FootballModules({
 
   // --- FIXTURE STATE ---
   const [opponentName, setOpponentName] = useState('');
+  const [opponentCrestUrl, setOpponentCrestUrl] = useState('');
   const [competitionName, setCompetitionName] = useState('FKF Regional League');
   const [seasonName, setSeasonName] = useState('2026/2027 Season');
   const [venue, setVenue] = useState('Nginda Home Ground');
@@ -619,6 +622,7 @@ export function FootballModules({
             }
             await onMutate('save_fixture', {
               opponentName,
+              opponentCrestUrl: opponentCrestUrl.trim(),
               competitionName,
               seasonName,
               venue,
@@ -627,6 +631,7 @@ export function FootballModules({
               publicationStatus: fixturePubStatus,
             });
             setOpponentName('');
+            setOpponentCrestUrl('');
           }}
           className="bg-white rounded-2xl p-6 border-2 border-[#08783E] space-y-4"
         >
@@ -729,6 +734,67 @@ export function FootballModules({
             </div>
           </div>
 
+          {/* Opponent Logo (Optional - opponent with NO logo unless uploaded) */}
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block text-xs font-bold uppercase text-[#063B25]">
+                  Opponent Club Logo (Optional)
+                </label>
+                <p className="text-[11px] text-slate-500">
+                  Leave empty if no logo is available. The opponent will display with <strong>no logo</strong> on all website fixtures until you upload one.
+                </p>
+              </div>
+              {opponentCrestUrl && (
+                <button
+                  type="button"
+                  onClick={() => setOpponentCrestUrl('')}
+                  className="text-xs font-bold text-red-600 hover:underline"
+                >
+                  ✕ Remove Opponent Logo
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <input
+                type="text"
+                value={opponentCrestUrl}
+                onChange={(e) => setOpponentCrestUrl(e.target.value)}
+                placeholder="Paste opponent logo image URL (https://... or /uploads/...)"
+                className="flex-1 w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+              />
+
+              <label className="shrink-0 cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold uppercase transition">
+                <Upload className="w-3.5 h-3.5 text-[#08783E]" />
+                <span>Upload Logo File</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => setOpponentCrestUrl(reader.result as string);
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </label>
+
+              {opponentCrestUrl ? (
+                <div className="w-10 h-10 rounded-lg border border-slate-300 p-1 bg-white flex items-center justify-center shrink-0 shadow-sm">
+                  <img src={opponentCrestUrl} alt="Opponent Crest Preview" className="w-full h-full object-contain" />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-lg border border-dashed border-slate-300 flex items-center justify-center text-[9px] text-slate-400 font-bold uppercase text-center shrink-0">
+                  No Logo
+                </div>
+              )}
+            </div>
+          </div>
+
           <button
             type="submit"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#F5D000] text-[#063B25] font-athletic font-black text-base uppercase tracking-wider"
@@ -756,19 +822,83 @@ export function FootballModules({
                       {f.competitionName} • {f.isHome ? 'HOME' : 'AWAY'} • {f.matchStatus} •{' '}
                       {f.publicationStatus}
                     </span>
-                    <p className="font-athletic text-2xl font-black uppercase text-[#063B25]">
-                      {f.isHome
-                        ? `Nginda Warriors FC vs ${f.opponentName}`
-                        : `${f.opponentName} vs Nginda Warriors FC`}
-                    </p>
-                    <p className="text-xs text-gray-500">
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                      <div className="flex items-center gap-1.5">
+                        {f.isHome ? (
+                          <ClubCrest size={22} customCrestUrl={db.clubSettings.crestUrl} />
+                        ) : f.opponentCrestUrl ? (
+                          <img src={f.opponentCrestUrl} alt={f.opponentName} className="w-5 h-5 object-contain" />
+                        ) : (
+                          <span className="px-1 py-0.2 rounded bg-slate-100 text-[9px] text-slate-500 font-bold border border-slate-200">No logo</span>
+                        )}
+                        <span className="font-athletic text-xl sm:text-2xl font-black uppercase text-[#063B25]">
+                          {f.isHome ? 'Nginda Warriors FC' : f.opponentName}
+                        </span>
+                      </div>
+                      <span className="text-xs font-bold text-slate-400">vs</span>
+                      <div className="flex items-center gap-1.5">
+                        {!f.isHome ? (
+                          <ClubCrest size={22} customCrestUrl={db.clubSettings.crestUrl} />
+                        ) : f.opponentCrestUrl ? (
+                          <img src={f.opponentCrestUrl} alt={f.opponentName} className="w-5 h-5 object-contain" />
+                        ) : (
+                          <span className="px-1 py-0.2 rounded bg-slate-100 text-[9px] text-slate-500 font-bold border border-slate-200">No logo</span>
+                        )}
+                        <span className="font-athletic text-xl sm:text-2xl font-black uppercase text-[#063B25]">
+                          {f.isHome ? f.opponentName : 'Nginda Warriors FC'}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
                       Venue: {f.venue} • Kickoff: {new Date(f.kickoffAt).toLocaleString('en-KE')}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <span className="px-4 py-1.5 rounded-lg bg-[#063B25] text-[#F5D000] font-athletic font-black text-2xl">
                       {f.homeScore ?? '-'} : {f.awayScore ?? '-'}
                     </span>
+                    <label
+                      className="cursor-pointer px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1"
+                      title={f.opponentCrestUrl ? 'Change Opponent Logo' : 'Upload Opponent Logo'}
+                    >
+                      <Upload className="w-3.5 h-3.5 text-[#08783E]" />
+                      <span className="hidden sm:inline">{f.opponentCrestUrl ? 'Change Logo' : 'Add Logo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              onMutate('save_fixture', {
+                                ...f,
+                                opponentCrestUrl: reader.result as string,
+                              });
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                      />
+                    </label>
+                    {f.opponentCrestUrl && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Remove logo for ${f.opponentName}? Opponent will have no logo.`)) {
+                            onMutate('save_fixture', {
+                              ...f,
+                              opponentCrestUrl: '',
+                            });
+                          }
+                        }}
+                        className="p-1.5 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 transition text-xs font-bold"
+                        title="Remove Opponent Logo"
+                      >
+                        ✕
+                      </button>
+                    )}
                     {(typeof f.homeScore === 'number' || typeof f.awayScore === 'number') && (
                       <button
                         type="button"
@@ -860,9 +990,16 @@ export function FootballModules({
               {activeFix && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-[#08783E]/40 p-5 rounded-xl border border-[#F5D000]/30">
                   <div className="text-center space-y-2">
-                    <p className="font-athletic text-xl font-bold uppercase">
-                      {activeFix.isHome ? 'Nginda Warriors FC' : activeFix.opponentName} (Home)
-                    </p>
+                    <div className="flex items-center justify-center gap-2">
+                      {activeFix.isHome ? (
+                        <ClubCrest size={28} customCrestUrl={db.clubSettings.crestUrl} />
+                      ) : activeFix.opponentCrestUrl ? (
+                        <img src={activeFix.opponentCrestUrl} alt={activeFix.opponentName} className="w-7 h-7 object-contain" />
+                      ) : null}
+                      <p className="font-athletic text-xl font-bold uppercase">
+                        {activeFix.isHome ? 'Nginda Warriors FC' : activeFix.opponentName} (Home)
+                      </p>
+                    </div>
                     <div className="flex items-center justify-center gap-3">
                       <button
                         type="button"
@@ -902,9 +1039,16 @@ export function FootballModules({
                   </div>
 
                   <div className="text-center space-y-2">
-                    <p className="font-athletic text-xl font-bold uppercase">
-                      {activeFix.isHome ? activeFix.opponentName : 'Nginda Warriors FC'} (Away)
-                    </p>
+                    <div className="flex items-center justify-center gap-2">
+                      {!activeFix.isHome ? (
+                        <ClubCrest size={28} customCrestUrl={db.clubSettings.crestUrl} />
+                      ) : activeFix.opponentCrestUrl ? (
+                        <img src={activeFix.opponentCrestUrl} alt={activeFix.opponentName} className="w-7 h-7 object-contain" />
+                      ) : null}
+                      <p className="font-athletic text-xl font-bold uppercase">
+                        {activeFix.isHome ? activeFix.opponentName : 'Nginda Warriors FC'} (Away)
+                      </p>
+                    </div>
                     <div className="flex items-center justify-center gap-3">
                       <button
                         type="button"

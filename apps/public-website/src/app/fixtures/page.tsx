@@ -68,7 +68,18 @@ export default function FixturesAndResultsPage() {
                   </span>
                 </div>
                 <div className="grid grid-cols-3 items-center text-center">
-                  <div>
+                  <div className="flex flex-col items-center">
+                    <div className="h-10 flex items-center justify-center mb-1">
+                      {match.isHome ? (
+                        <ClubCrest size={36} customCrestUrl={clubSettings.crestUrl} />
+                      ) : match.opponentCrestUrl ? (
+                        <img
+                          src={match.opponentCrestUrl}
+                          alt={match.opponentName}
+                          className="w-9 h-9 object-contain"
+                        />
+                      ) : null}
+                    </div>
                     <p className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
                       {match.isHome ? clubSettings.clubName : match.opponentName}
                     </p>
@@ -76,7 +87,18 @@ export default function FixturesAndResultsPage() {
                   <div className="font-athletic text-4xl sm:text-5xl font-black text-white">
                     {match.homeScore ?? 0} - {match.awayScore ?? 0}
                   </div>
-                  <div>
+                  <div className="flex flex-col items-center">
+                    <div className="h-10 flex items-center justify-center mb-1">
+                      {!match.isHome ? (
+                        <ClubCrest size={36} customCrestUrl={clubSettings.crestUrl} />
+                      ) : match.opponentCrestUrl ? (
+                        <img
+                          src={match.opponentCrestUrl}
+                          alt={match.opponentName}
+                          className="w-9 h-9 object-contain"
+                        />
+                      ) : null}
+                    </div>
                     <p className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
                       {match.isHome ? match.opponentName : clubSettings.clubName}
                     </p>
@@ -122,15 +144,37 @@ export default function FixturesAndResultsPage() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4 pt-1">
-                      <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
-                        {fixture.isHome ? clubSettings.clubName : fixture.opponentName}
-                      </span>
+                      <div className="flex items-center gap-2.5">
+                        {fixture.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : fixture.opponentCrestUrl ? (
+                          <img
+                            src={fixture.opponentCrestUrl}
+                            alt={fixture.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {fixture.isHome ? clubSettings.clubName : fixture.opponentName}
+                        </span>
+                      </div>
                       <span className="px-3 py-0.5 rounded bg-[#1A1A1A] text-[#FDE100] font-athletic font-black text-base border border-[#262626]">
                         VS
                       </span>
-                      <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
-                        {fixture.isHome ? fixture.opponentName : clubSettings.clubName}
-                      </span>
+                      <div className="flex items-center gap-2.5">
+                        {!fixture.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : fixture.opponentCrestUrl ? (
+                          <img
+                            src={fixture.opponentCrestUrl}
+                            alt={fixture.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {fixture.isHome ? fixture.opponentName : clubSettings.clubName}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-1">
@@ -197,15 +241,37 @@ export default function FixturesAndResultsPage() {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4 pt-1">
-                      <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
-                        {result.isHome ? clubSettings.clubName : result.opponentName}
-                      </span>
+                      <div className="flex items-center gap-2.5">
+                        {result.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : result.opponentCrestUrl ? (
+                          <img
+                            src={result.opponentCrestUrl}
+                            alt={result.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {result.isHome ? clubSettings.clubName : result.opponentName}
+                        </span>
+                      </div>
                       <span className="px-4 py-1 rounded-lg bg-[#0D0D0D] border border-[#262626] text-[#FDE100] font-athletic font-black text-2xl">
                         {result.homeScore ?? 0} - {result.awayScore ?? 0}
                       </span>
-                      <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
-                        {result.isHome ? result.opponentName : clubSettings.clubName}
-                      </span>
+                      <div className="flex items-center gap-2.5">
+                        {!result.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : result.opponentCrestUrl ? (
+                          <img
+                            src={result.opponentCrestUrl}
+                            alt={result.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {result.isHome ? result.opponentName : clubSettings.clubName}
+                        </span>
+                      </div>
                     </div>
 
                     {result.events.filter((e) => ['goal', 'penalty_goal'].includes(e.eventType))

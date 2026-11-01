@@ -166,16 +166,29 @@ export default function PublicHomePage() {
                         {nextMatch.competitionName} • {nextMatch.seasonName}
                       </div>
 
-                      <div className="grid grid-cols-3 items-center gap-2 py-3 bg-[#0D0D0D] rounded-xl px-4 border border-[#262626]">
-                        <div className="text-center">
-                          <div className="flex justify-center mb-1.5">
-                            <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />
+                      <div className="grid grid-cols-3 items-center gap-2 py-4 bg-[#0D0D0D] rounded-xl px-4 border border-[#262626]">
+                        {/* HOME TEAM */}
+                        <div className="text-center flex flex-col items-center">
+                          <div className="h-12 flex items-center justify-center mb-1.5">
+                            {nextMatch.isHome ? (
+                              <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />
+                            ) : nextMatch.opponentCrestUrl ? (
+                              <img
+                                src={nextMatch.opponentCrestUrl}
+                                alt={nextMatch.opponentName}
+                                className="w-12 h-12 object-contain"
+                              />
+                            ) : null}
                           </div>
                           <p className="font-athletic font-bold text-sm uppercase leading-tight text-white">
-                            { nextMatch.isHome ? clubSettings.shortName : nextMatch.opponentName }
+                            {nextMatch.isHome ? clubSettings.shortName : nextMatch.opponentName}
                           </p>
+                          <span className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">
+                            {nextMatch.isHome ? 'Home' : 'Away'}
+                          </span>
                         </div>
 
+                        {/* VS OR SCORE */}
                         <div className="text-center">
                           {typeof nextMatch.homeScore === 'number' &&
                           typeof nextMatch.awayScore === 'number' ? (
@@ -189,18 +202,25 @@ export default function PublicHomePage() {
                           )}
                         </div>
 
-                        <div className="text-center">
-                          <div className="w-12 h-12 mx-auto mb-1.5 rounded-full bg-[#1A1A1A] border border-[#262626] flex items-center justify-center font-athletic font-black text-lg text-slate-200">
-                            {(nextMatch.isHome
-                              ? nextMatch.opponentName
-                              : clubSettings.shortName
-                            )
-                              .slice(0, 2)
-                              .toUpperCase()}
+                        {/* AWAY TEAM */}
+                        <div className="text-center flex flex-col items-center">
+                          <div className="h-12 flex items-center justify-center mb-1.5">
+                            {!nextMatch.isHome ? (
+                              <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />
+                            ) : nextMatch.opponentCrestUrl ? (
+                              <img
+                                src={nextMatch.opponentCrestUrl}
+                                alt={nextMatch.opponentName}
+                                className="w-12 h-12 object-contain"
+                              />
+                            ) : null}
                           </div>
                           <p className="font-athletic font-bold text-sm uppercase leading-tight text-white">
                             {nextMatch.isHome ? nextMatch.opponentName : clubSettings.shortName}
                           </p>
+                          <span className="text-[10px] text-slate-400 font-bold uppercase mt-0.5">
+                            {nextMatch.isHome ? 'Away' : 'Home'}
+                          </span>
                         </div>
                       </div>
 
@@ -266,23 +286,47 @@ export default function PublicHomePage() {
                         {formatNairobiDateTime(latestResult.kickoffAt)}
                       </p>
 
-                      <div className="bg-[#0D0D0D] rounded-xl p-4 border border-[#262626]">
+                      <div className="bg-[#0D0D0D] rounded-xl p-4 border border-[#262626] space-y-2">
+                        {/* HOME */}
                         <div className="flex items-center justify-between py-1.5">
-                          <span className="font-athletic text-lg font-bold uppercase text-white">
-                            {latestResult.isHome
-                              ? clubSettings.clubName
-                              : latestResult.opponentName}
-                          </span>
+                          <div className="flex items-center gap-2.5">
+                            {latestResult.isHome ? (
+                              <ClubCrest size={28} customCrestUrl={clubSettings.crestUrl} />
+                            ) : latestResult.opponentCrestUrl ? (
+                              <img
+                                src={latestResult.opponentCrestUrl}
+                                alt={latestResult.opponentName}
+                                className="w-7 h-7 object-contain"
+                              />
+                            ) : null}
+                            <span className="font-athletic text-lg font-bold uppercase text-white">
+                              {latestResult.isHome
+                                ? clubSettings.clubName
+                                : latestResult.opponentName}
+                            </span>
+                          </div>
                           <span className="font-athletic text-3xl font-black text-[#FDE100]">
                             {latestResult.homeScore ?? 0}
                           </span>
                         </div>
+                        {/* AWAY */}
                         <div className="flex items-center justify-between py-1.5 border-t border-[#262626]">
-                          <span className="font-athletic text-lg font-bold uppercase text-white">
-                            {latestResult.isHome
-                              ? latestResult.opponentName
-                              : clubSettings.clubName}
-                          </span>
+                          <div className="flex items-center gap-2.5">
+                            {!latestResult.isHome ? (
+                              <ClubCrest size={28} customCrestUrl={clubSettings.crestUrl} />
+                            ) : latestResult.opponentCrestUrl ? (
+                              <img
+                                src={latestResult.opponentCrestUrl}
+                                alt={latestResult.opponentName}
+                                className="w-7 h-7 object-contain"
+                              />
+                            ) : null}
+                            <span className="font-athletic text-lg font-bold uppercase text-white">
+                              {latestResult.isHome
+                                ? latestResult.opponentName
+                                : clubSettings.clubName}
+                            </span>
+                          </div>
                           <span className="font-athletic text-3xl font-black text-[#FDE100]">
                             {latestResult.awayScore ?? 0}
                           </span>

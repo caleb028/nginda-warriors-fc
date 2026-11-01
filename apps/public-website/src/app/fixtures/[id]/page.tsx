@@ -94,14 +94,16 @@ export default function SingleMatchCentrePage({
 
           <div className="grid grid-cols-3 items-center gap-4 bg-[#141414] border-2 border-[#262626] rounded-2xl p-6 sm:p-8 text-center shadow-2xl">
             <div>
-              <div className="flex justify-center mb-3">
+              <div className="flex justify-center mb-3 min-h-[76px] items-center">
                 {fixture.isHome ? (
                   <ClubCrest size={76} customCrestUrl={clubSettings.crestUrl} />
-                ) : (
-                  <div className="w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#FDE100] flex items-center justify-center font-athletic font-black text-2xl text-[#FDE100]">
-                    {fixture.opponentName.slice(0, 2).toUpperCase()}
-                  </div>
-                )}
+                ) : fixture.opponentCrestUrl ? (
+                  <img
+                    src={fixture.opponentCrestUrl}
+                    alt={fixture.opponentName}
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                  />
+                ) : null}
               </div>
               <h1 className="font-athletic text-2xl sm:text-4xl font-black uppercase text-white">
                 {fixture.isHome ? clubSettings.clubName : fixture.opponentName}
@@ -130,14 +132,16 @@ export default function SingleMatchCentrePage({
             </div>
 
             <div>
-              <div className="flex justify-center mb-3">
+              <div className="flex justify-center mb-3 min-h-[76px] items-center">
                 {!fixture.isHome ? (
                   <ClubCrest size={76} customCrestUrl={clubSettings.crestUrl} />
-                ) : (
-                  <div className="w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#FDE100] flex items-center justify-center font-athletic font-black text-2xl text-[#FDE100]">
-                    {fixture.opponentName.slice(0, 2).toUpperCase()}
-                  </div>
-                )}
+                ) : fixture.opponentCrestUrl ? (
+                  <img
+                    src={fixture.opponentCrestUrl}
+                    alt={fixture.opponentName}
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                  />
+                ) : null}
               </div>
               <h2 className="font-athletic text-2xl sm:text-4xl font-black uppercase text-white">
                 {fixture.isHome ? fixture.opponentName : clubSettings.clubName}
