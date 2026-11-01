@@ -32,12 +32,22 @@ export function getSafeClientIp(headers: { get: (name: string) => string | null 
 
 // CSRF Origin verification for cookie-authenticated mutations
 export function assertValidCsrfOrigin(headers: { get: (name: string) => string | null }): void {
+  const authHeader = headers.get('authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return;
+  }
+
   const origin = headers.get('origin');
   const host = headers.get('host');
   if (origin && host) {
     try {
       const originHost = new URL(origin).host;
-      if (originHost !== host && !originHost.includes('localhost') && !originHost.includes('127.0.0.1')) {
+      if (
+        originHost !== host &&
+        !originHost.includes('localhost') &&
+        !originHost.includes('127.0.0.1') &&
+        !(originHost.endsWith('.vercel.app') && host.endsWith('.vercel.app'))
+      ) {
         throw new Error('CSRF validation failed: Origin mismatch.');
       }
     } catch (e: unknown) {
@@ -254,13 +264,56 @@ export function signAdminSession(user: AdminUser): string {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '12h' });
 }
 
+export function extractAdminToken(req: {
+  cookies: { get: (name: string) => { value: string } | undefined };
+  headers: { get: (name: string) => string | null };
+}): string | undefined {
+  const cookieToken = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+  if (cookieToken) return cookieToken;
+  const authHeader = req.headers.get('authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.slice(7).trim();
+  }
+  return undefined;
+}
+
 export function verifyAdminSessionToken(token?: string | null): AdminSessionPayload | null {
   if (!token) return null;
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as AdminSessionPayload;
+    if (!decoded || !decoded.userId) return null;
+
     const db = readDatabase();
     const user = db.users.find((u) => u.id === decoded.userId && u.isActive);
-    if (!user) return null;
+    if (!user) {
+      // In serverless multi-container environments where /tmp may be newly initialized:
+      if (decoded.roleCode && (decoded.isOwnerSuperAdmin || decoded.roleCode === 'SUPER_ADMIN')) {
+        const restoredUser: AdminUser = {
+          id: decoded.userId,
+          fullName: decoded.fullName || 'Super Administrator',
+          email: decoded.email,
+          roleCode: decoded.roleCode,
+          isOwnerSuperAdmin: Boolean(decoded.isOwnerSuperAdmin),
+          isActive: true,
+          passwordHash: '',
+          tokenVersion: decoded.tokenVersion || 1,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        db.users.push(restoredUser);
+        writeDatabase(db);
+
+        return {
+          userId: decoded.userId,
+          email: decoded.email,
+          fullName: decoded.fullName || 'Super Administrator',
+          roleCode: decoded.roleCode,
+          isOwnerSuperAdmin: Boolean(decoded.isOwnerSuperAdmin),
+          tokenVersion: decoded.tokenVersion || 1,
+        };
+      }
+      return null;
+    }
     if (user.tokenVersion && decoded.tokenVersion && decoded.tokenVersion !== user.tokenVersion) {
       return null;
     }

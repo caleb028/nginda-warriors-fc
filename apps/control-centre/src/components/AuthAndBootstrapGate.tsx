@@ -30,6 +30,7 @@ export function AuthAndBootstrapGate({
       const res = await fetch(adminApiUrl('/api/admin/auth'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(
           bootstrapped
             ? { action: 'login', email, password }
@@ -40,6 +41,9 @@ export function AuthAndBootstrapGate({
       if (!res.ok || !data.ok) {
         setErrorMsg(data.error || 'Authentication failed.');
       } else {
+        if (data.token && typeof window !== 'undefined') {
+          localStorage.setItem('nginda_control_session_token', data.token);
+        }
         onAuthenticated();
       }
     } catch {

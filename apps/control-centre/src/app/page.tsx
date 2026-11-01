@@ -145,15 +145,34 @@ export default function ControlCentreApp() {
     };
   }, [sidebarOpen]);
 
+  const getAuthHeaders = () => {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('nginda_control_session_token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+    return headers;
+  };
+
   const loadState = async () => {
     try {
-      const authRes = await fetch(adminApiUrl('/api/admin/auth'));
+      const authRes = await fetch(adminApiUrl('/api/admin/auth'), {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+      });
       const authData = await authRes.json();
       setBootstrapped(Boolean(authData.bootstrapped));
       setSession(authData.session || null);
 
       if (authData.session) {
-        const actionRes = await fetch(adminApiUrl('/api/admin/action'));
+        const actionRes = await fetch(adminApiUrl('/api/admin/action'), {
+          headers: getAuthHeaders(),
+          credentials: 'include',
+        });
         const actionData = await actionRes.json();
         if (actionData.ok && actionData.database) {
           setDatabase(actionData.database);
@@ -176,11 +195,18 @@ export default function ControlCentreApp() {
       setStatusNotice('Applying changes...');
       const res = await fetch(adminApiUrl('/api/admin/action'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
+        credentials: 'include',
         body: JSON.stringify({ action, payload }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
+        if (data.error && data.error.includes('UNAUTHORIZED')) {
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('nginda_control_session_token');
+          }
+          setSession(null);
+        }
         alert(data.error || 'Action failed.');
       } else {
         setStatusNotice('Changes synchronized live with database and public website.');
@@ -210,9 +236,13 @@ export default function ControlCentreApp() {
   };
 
   const handleLogout = async () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('nginda_control_session_token');
+    }
     await fetch(adminApiUrl('/api/admin/auth'), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
+      credentials: 'include',
       body: JSON.stringify({ action: 'logout' }),
     });
     setSession(null);

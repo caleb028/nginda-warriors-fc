@@ -4,6 +4,7 @@ import {
   assertValidCsrfOrigin,
   authenticateAdminUser,
   bootstrapOwnerSuperAdmin,
+  extractAdminToken,
   getSafeClientIp,
   isSystemBootstrapped,
   revokeUserSessions,
@@ -13,7 +14,7 @@ import {
 
 export async function GET(req: NextRequest) {
   const bootstrapped = isSystemBootstrapped();
-  const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+  const token = extractAdminToken(req);
   const session = verifyAdminSessionToken(token);
 
   return NextResponse.json({
@@ -30,7 +31,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { action } = body;
 
-    const isSecure = process.env.NODE_ENV === 'production';
+    const host = req.headers.get('host') || '';
+    const isSecure =
+      process.env.NODE_ENV === 'production' &&
+      !host.includes('localhost') &&
+      !host.includes('127.0.0.1');
 
     if (action === 'bootstrap_owner') {
       const { user, token } = bootstrapOwnerSuperAdmin({
@@ -43,6 +48,7 @@ export async function POST(req: NextRequest) {
       const res = NextResponse.json({
         ok: true,
         user,
+        token,
         message: 'Primary Super Administrator ownership established successfully.',
       });
 
@@ -76,6 +82,7 @@ export async function POST(req: NextRequest) {
       const res = NextResponse.json({
         ok: true,
         user,
+        token,
         message: 'Signed in to Nginda Warriors Control Centre.',
       });
 
@@ -90,7 +97,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'logout') {
-      const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+      const token = extractAdminToken(req);
       const session = verifyAdminSessionToken(token);
       if (session) {
         revokeUserSessions(session.userId);

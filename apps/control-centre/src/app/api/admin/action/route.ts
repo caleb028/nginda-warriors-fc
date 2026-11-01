@@ -6,6 +6,7 @@ import {
   assertAuthorizedAdmin,
   assertValidCsrfOrigin,
   createUuid,
+  extractAdminToken,
   readDatabase,
   recalculateStandingsFromVerifiedFixtures,
   reconcileMpesaTransaction,
@@ -56,7 +57,7 @@ async function saveDatabaseAndSync(
 }
 
 export async function GET(req: NextRequest) {
-  const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+  const token = extractAdminToken(req);
   const session = verifyAdminSessionToken(token);
   if (!session) {
     return NextResponse.json(
@@ -82,7 +83,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     assertValidCsrfOrigin(req.headers);
-    const token = req.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+    const token = extractAdminToken(req);
     const body = await req.json();
     const { action, payload } = body;
 
