@@ -451,7 +451,7 @@ export default function PublicHomePage() {
         </div>
       </section>
 
-      {/* 3. FEATURED SQUAD - Sleek Pitch Surface */}
+      {/* 3. FEATURED SQUAD / WARRIORS IN ACTION - Sleek Pitch Surface */}
       {isSectionVisible('featured_squad') && (
         <section className="py-16 bg-[#0A0A0A] text-white border-b border-[#262626]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -459,96 +459,139 @@ export default function PublicHomePage() {
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
                 <div>
                   <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
-                    FIRST TEAM DIRECTORY • EST. {clubSettings.establishedYear}
+                    PITCH ACTION & SQUAD GALLERY • EST. {clubSettings.establishedYear}
                   </span>
                   <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-1">
-                    {squadMeta.title}
+                    WARRIORS IN ACTION
                   </h2>
                 </div>
                 <Link
-                  href="/team"
+                  href="/gallery"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-sm uppercase tracking-wider transition shadow-md"
                 >
-                  <span>Explore Full Squad</span>
-                  <ArrowRight className="w-4 h-4 text-[#FDE100]" />
+                  <span>Explore Full Gallery</span>
+                  <ArrowRight className="w-4 h-4 text-black" />
                 </Link>
               </div>
             </MotionReveal>
 
-            {featuredPlayers.length > 0 ? (
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" once={false} stagger={0.12}>
-                {featuredPlayers.slice(0, 4).map((player) => (
-                  <StaggerItem key={player.id} className="h-full">
+            {/* Authentic Club Photography Showcase (Pure Visuals Without Hypothetical Names or Data) */}
+            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" once={false} stagger={0.12}>
+              {/* Photo 1: Matchday Squad Lineup */}
+              <StaggerItem className="h-full">
+                <Link
+                  href="/gallery"
+                  className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                >
+                  <div className="relative h-72 sm:h-80 bg-[#0D0D0D] overflow-hidden">
+                    <img
+                      src="/uploads/hero-matchday-warriors.jpg"
+                      alt="Nginda Warriors FC Matchday Squad"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </Link>
+              </StaggerItem>
+
+              {/* Photo 2: Warriors Players on Match Pitch */}
+              <StaggerItem className="h-full">
+                <Link
+                  href="/gallery"
+                  className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                >
+                  <div className="relative h-72 sm:h-80 bg-[#0D0D0D] overflow-hidden">
+                    <img
+                      src="/uploads/warriors-match-players.png"
+                      alt="Nginda Warriors FC Match Players"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </Link>
+              </StaggerItem>
+
+              {/* Photo 3: Warriors Team Huddle */}
+              <StaggerItem className="h-full">
+                <Link
+                  href="/gallery"
+                  className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                >
+                  <div className="relative h-72 sm:h-80 bg-[#0D0D0D] overflow-hidden">
+                    <img
+                      src="/uploads/team-huddle-warriors.jpg"
+                      alt="Nginda Warriors FC Pre-Match Huddle"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </Link>
+              </StaggerItem>
+
+              {/* Photo 4: Official Presentation */}
+              <StaggerItem className="h-full">
+                <Link
+                  href="/gallery"
+                  className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                >
+                  <div className="relative h-72 sm:h-80 bg-[#0D0D0D] overflow-hidden">
+                    <img
+                      src="/uploads/club-official-patron.jpg"
+                      alt="Nginda Warriors FC Club Presentation"
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </Link>
+              </StaggerItem>
+            </StaggerContainer>
+
+            {/* Official Squad Profiles Registered in Control Centre (Appears when real players are published) */}
+            {featuredPlayers.length > 0 && (
+              <div className="mt-10">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-athletic text-2xl font-black uppercase text-white">
+                    Official Squad Profiles
+                  </h3>
+                  <Link
+                    href="/team"
+                    className="text-xs font-athletic font-bold uppercase text-[#FDE100] hover:underline"
+                  >
+                    View All →
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {featuredPlayers.slice(0, 4).map((player) => (
                     <Link
+                      key={player.id}
                       href={`/team/${player.slug}`}
-                      className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100]/60 shadow-xl transition-all duration-300 flex flex-col h-full hover:scale-[1.02]"
+                      className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition-all flex flex-col"
                     >
-                    <div className="relative h-64 bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
-                      <span className="absolute top-3 right-4 font-athletic text-6xl font-black text-[#15201A] select-none">
-                        #{player.jerseyNumber}
-                      </span>
-                      {player.photoUrl ? (
-                        <img
-                          src={player.photoUrl}
-                          alt={player.fullName}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      ) : (
-                        <ClubCrest size={96} customCrestUrl={clubSettings.crestUrl} />
-                      )}
-                      <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
-                        #{player.jerseyNumber} • {player.positionGroup.slice(0, -1)}
+                      <div className="relative h-64 bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
+                        {player.photoUrl ? (
+                          <img
+                            src={player.photoUrl}
+                            alt={player.fullName}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          />
+                        ) : (
+                          <ClubCrest size={96} customCrestUrl={clubSettings.crestUrl} />
+                        )}
+                        <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider">
+                          #{player.jerseyNumber} • {player.positionGroup.slice(0, -1)}
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
+                      <div className="p-4 flex-1">
+                        <h4 className="font-athletic text-xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
                           {player.fullName}
-                        </h3>
-                        <p className="text-xs font-semibold text-slate-400 mt-0.5">
-                          {player.specificRole} • Preferred Foot: {player.preferredFoot}
+                        </h4>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {player.specificRole}
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-[#262626] grid grid-cols-3 text-center text-xs">
-                        <div>
-                          <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                            {player.appearances}
-                          </span>
-                          <span className="text-[10px] uppercase text-slate-400 font-bold">
-                            Apps
-                          </span>
-                        </div>
-                        <div>
-                          <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                            {player.goals}
-                          </span>
-                          <span className="text-[10px] uppercase text-slate-400 font-bold">
-                            Goals
-                          </span>
-                        </div>
-                        <div>
-                          <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                            {player.assists}
-                          </span>
-                          <span className="text-[10px] uppercase text-slate-400 font-bold">
-                            Assists
-                          </span>
-                        </div>
-                      </div>
-                    </div>
                     </Link>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            ) : (
-              <div className="rounded-2xl bg-[#141414] border-2 border-dashed border-[#262626] p-10 text-center shadow-md">
-                <Users className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                <h3 className="font-athletic text-2xl font-bold uppercase text-white">
-                  Official Squad Profiles Being Prepared
-                </h3>
-                <p className="text-sm text-slate-400 max-w-xl mx-auto mt-1">
-                  Nginda Warriors FC never displays fabricated player profiles. Official squad members appear here automatically as soon as they are approved and published in the Control Centre.
-                </p>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -577,7 +620,7 @@ export default function PublicHomePage() {
                     className="inline-flex items-center gap-2 text-xs font-athletic font-black uppercase tracking-wider text-[#FDE100] hover:text-[#FFE600] transition"
                   >
                     <span>View Technical Bench & Squad</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 text-black bg-[#FDE100] rounded-full p-0.5" />
                   </Link>
                 </div>
               </div>

@@ -44,6 +44,68 @@ export default function TeamSquadPage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
+        {/* Squad in Action Photography Showcase (Genuine Photos Without Hypothetical Names or Data) */}
+        <section>
+          <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-6">
+            <div>
+              <span className="text-xs font-athletic font-extrabold uppercase tracking-widest text-[#FDE100]">
+                AUTHENTIC SQUAD MOMENTS • PITCH & MATCHDAY
+              </span>
+              <h2 className="font-athletic text-3xl font-black uppercase text-white mt-1">
+                WARRIORS SQUAD IN ACTION
+              </h2>
+            </div>
+            <Link
+              href="/gallery"
+              className="text-xs font-athletic font-bold uppercase text-[#FDE100] hover:underline"
+            >
+              View Full Gallery →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition flex flex-col group">
+              <div className="relative h-72 bg-[#0D0D0D] overflow-hidden">
+                <img
+                  src="/uploads/hero-matchday-warriors.jpg"
+                  alt="Nginda Warriors FC Matchday Squad"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition flex flex-col group">
+              <div className="relative h-72 bg-[#0D0D0D] overflow-hidden">
+                <img
+                  src="/uploads/warriors-match-players.png"
+                  alt="Nginda Warriors FC Pitch Squad"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition flex flex-col group">
+              <div className="relative h-72 bg-[#0D0D0D] overflow-hidden">
+                <img
+                  src="/uploads/team-huddle-warriors.jpg"
+                  alt="Nginda Warriors FC Squad Huddle"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition flex flex-col group">
+              <div className="relative h-72 bg-[#0D0D0D] overflow-hidden">
+                <img
+                  src="/uploads/club-official-patron.jpg"
+                  alt="Nginda Warriors FC Club Leadership"
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
         {players.length > 0 ? (
           POSITION_GROUPS.map((group) => {
             const groupPlayers = players.filter((p) => p.positionGroup === group);
@@ -138,13 +200,13 @@ export default function TeamSquadPage() {
             );
           })
         ) : (
-          <div className="rounded-2xl bg-[#141414] border-2 border-dashed border-[#262626] p-12 text-center space-y-3">
-            <Users className="w-12 h-12 text-slate-500 mx-auto" />
-            <h2 className="font-athletic text-3xl font-black uppercase text-white">
-              Squad Directory Awaiting Official Publication
-            </h2>
+          <div className="rounded-2xl bg-[#141414] border border-[#262626] p-8 text-center space-y-2">
+            <Users className="w-10 h-10 text-slate-500 mx-auto" />
+            <h3 className="font-athletic text-2xl font-bold uppercase text-white">
+              Official Squad Profiles Being Prepared
+            </h3>
             <p className="text-sm text-slate-400 max-w-xl mx-auto">
-              Goalkeepers, Defenders, Midfielders, and Forwards added and published by the Super Admin in the Control Centre appear here automatically.
+              Nginda Warriors FC upholds strict integrity and does not publish fabricated player data. Individual player profiles with verified squad numbers and statistics will be displayed here once approved in the Control Centre.
             </p>
           </div>
         )}
