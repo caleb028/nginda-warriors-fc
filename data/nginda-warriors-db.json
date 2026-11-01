@@ -146,15 +146,15 @@
     {
       "id": "f7e2d757-1a2c-4b83-b2a4-861d10c46004",
       "sectionKey": "featured_squad",
-      "title": "THE WARRIORS SQUAD",
-      "subtitle": "First Team Profiles & Technical Bench",
+      "title": "FEARLESS FIRST TEAM",
+      "subtitle": "ONE CLUB. ONE WARRIOR SPIRIT.",
       "description": "Meet the approved players and coaching staff representing Nginda Warriors FC.",
       "primaryCtaLabel": "Full Squad Directory",
       "primaryCtaHref": "/team",
       "isVisible": true,
       "displayOrder": 2,
       "publicationStatus": "published",
-      "updatedAt": "2026-10-31T21:43:49.076Z"
+      "updatedAt": "2026-11-01T10:14:00.843Z"
     },
     {
       "id": "67d9d2a8-f397-48b7-ae20-5964ebb81010",
@@ -228,12 +228,12 @@
       "fullName": "Peter Gitau",
       "roleTitle": "Team Gaffer & Head Coach",
       "category": "Technical Bench",
-      "photoUrl": "/uploads/peter-gitau-head-coach.png",
+      "photoUrl": "/uploads/peter-gitau-portrait.png",
       "biography": "Head Coach and Team Gaffer of Nginda Warriors FC. Instilling fearless attacking football, tactical discipline, and sporting excellence for Nginda Warriors FC.",
       "displayOrder": 1,
       "publicationStatus": "published",
       "createdAt": "2024-01-01T00:00:00.000Z",
-      "updatedAt": "2026-10-31T22:51:04.381Z"
+      "updatedAt": "2026-11-01T10:14:00.843Z"
     }
   ],
   "fixtures": [
@@ -268,13 +268,13 @@
       "categoryName": "Training updates",
       "excerpt": "Head Coach and Team Gaffer Peter Gitau emphasizes high-intensity tactical discipline, unity, and fearless attacking football as the squad steps up preparations.",
       "body": "Nginda Warriors FC Head Coach and Team Gaffer Peter Gitau has spoken passionately about the club's trajectory, praising the players' dedication and tactical adaptability.\n\n\"Our warrior spirit begins on the training pitch,\" said Coach Gitau. \"We demand discipline, rapid transitions, and total commitment to the jersey. The community of Nginda deserves a football club that fights for every point and showcases genuine excellence on the pitch.\"\n\nUnder Coach Gitau's leadership, the Warriors continue rigorous training sessions focusing on match fitness, set-piece execution, and defensive solidity ahead of upcoming competitive league fixtures.",
-      "featuredImageUrl": "/uploads/peter-gitau-head-coach.png",
+      "featuredImageUrl": "/uploads/team-huddle-red-warriors.jpg",
       "authorName": "Club Media Desk",
       "isFeatured": true,
       "publicationStatus": "published",
       "publishedAt": "2026-10-30T10:00:00.000Z",
       "createdAt": "2026-10-30T10:00:00.000Z",
-      "updatedAt": "2026-10-31T22:51:04.382Z"
+      "updatedAt": "2026-11-01T10:14:00.842Z"
     }
   ],
   "galleryAlbums": [
@@ -365,10 +365,22 @@
       "caption": "Nginda Warriors FC Head Coach and Team Gaffer Peter Gitau giving pitchside tactical instructions.",
       "category": "Training",
       "mediaType": "image",
-      "url": "/uploads/peter-gitau-head-coach.png",
+      "url": "/uploads/peter-gitau-portrait.png",
       "displayOrder": 5,
       "publicationStatus": "published",
       "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-team-huddle-red-6",
+      "albumId": "album-first-team-matchday",
+      "title": "Warriors Pre-Match Unity Circle",
+      "caption": "Nginda Warriors FC players locked in a united pre-match huddle on the pitch in official red match kits.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/team-huddle-red-warriors.jpg",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2026-11-01T10:14:00.843Z"
     }
   ],
   "events": [],

@@ -90,6 +90,29 @@ export default function SingleArticlePage({
           </div>
         </div>
 
+        {article.slug === 'team-gaffer-peter-gitau-outlines-vision' && (
+          <div className="rounded-2xl bg-[#141414] border-2 border-[#262626] p-6 flex flex-col sm:flex-row items-center gap-6 shadow-xl">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-black shrink-0 border-2 border-[#FDE100] shadow-md">
+              <img
+                src="/uploads/peter-gitau-portrait.png"
+                alt="Head Coach Peter Gitau"
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div className="space-y-1 text-center sm:text-left">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] border border-[#FDE100]/30 font-athletic font-black text-xs uppercase tracking-wider">
+                Head Coach & Team Gaffer
+              </span>
+              <h3 className="font-athletic text-2xl font-black uppercase text-white">
+                Peter Gitau
+              </h3>
+              <p className="text-xs text-slate-300 italic">
+                Leading Nginda Warriors FC preparations with high intensity, unity, and fearless attacking football.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="p-6 rounded-2xl bg-[#0D0D0D] border border-[#262626] flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <ClubCrest size={48} customCrestUrl={clubSettings.crestUrl} />

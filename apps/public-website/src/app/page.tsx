@@ -88,8 +88,8 @@ export default function PublicHomePage() {
   );
   const squadMeta = getSectionMeta(
     'featured_squad',
-    'FEATURED WARRIORS SQUAD',
-    'Approved First Team Profiles'
+    'FEARLESS FIRST TEAM',
+    'ONE CLUB. ONE WARRIOR SPIRIT.'
   );
   const newsMeta = getSectionMeta(
     'latest_news',
@@ -487,7 +487,7 @@ export default function PublicHomePage() {
                 </Link>
               </StaggerItem>
 
-              {/* Photo 2: Warriors Players on Match Pitch */}
+              {/* Photo 2: Warriors Pre-Match Unity Circle (Red Kits) */}
               <StaggerItem className="h-full">
                 <Link
                   href="/gallery"
@@ -495,8 +495,8 @@ export default function PublicHomePage() {
                 >
                   <div className="relative h-72 sm:h-80 bg-[#0D0D0D] overflow-hidden">
                     <img
-                      src="/uploads/warriors-match-players.png"
-                      alt="Nginda Warriors FC Match Players"
+                      src="/uploads/team-huddle-red-warriors.jpg"
+                      alt="Nginda Warriors FC Red Kits Unity Circle"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -592,7 +592,7 @@ export default function PublicHomePage() {
             <div className="mt-12 rounded-2xl bg-[#141414] border-2 border-[#262626] hover:border-[#FDE100] transition-all p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
               <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden bg-black shrink-0 border-2 border-[#FDE100] shadow-lg">
                 <img
-                  src="/uploads/peter-gitau-head-coach.png"
+                  src="/uploads/peter-gitau-portrait.png"
                   alt="Team Gaffer Peter Gitau"
                   className="w-full h-full object-cover object-top hover:scale-105 transition-transform"
                 />
