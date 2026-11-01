@@ -124,7 +124,7 @@ export default function PublicHomePage() {
         settings={clubSettings}
         latestResult={latestResult}
         nextMatch={nextMatch}
-        upcomingFixtures={snapshot.fixtures.filter(
+        upcomingFixtures={(snapshot.upcomingFixtures || []).filter(
           (f) => f.id !== nextMatch?.id && f.matchStatus === 'scheduled'
         )}
       />

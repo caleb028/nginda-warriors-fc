@@ -644,6 +644,7 @@ export interface PublicWebsiteSnapshot {
   players: Player[];
   featuredPlayers: Player[];
   staff: StaffMember[];
+  fixtures: Fixture[];
   upcomingFixtures: Fixture[];
   liveFixtures: Fixture[];
   completedFixtures: Fixture[];
@@ -800,6 +801,7 @@ export function getPublicWebsiteSnapshot(): PublicWebsiteSnapshot {
     players: publishedPlayers,
     featuredPlayers: featuredPlayers.length > 0 ? featuredPlayers : publishedPlayers.slice(0, 4),
     staff: publishedStaff,
+    fixtures: publishedFixtures,
     upcomingFixtures,
     liveFixtures,
     completedFixtures,
