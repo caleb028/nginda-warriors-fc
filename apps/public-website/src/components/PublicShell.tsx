@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ClubCrest,
   ClubSettings,
@@ -138,184 +139,259 @@ export function PublicShell({
                 isScrolled ? 'h-14 sm:h-16' : 'h-18 sm:h-20'
               }`}
             >
-              {/* Official Club Logo Only */}
-              <Link
-                href="/"
-                className="flex items-center group focus:outline-none focus:ring-2 focus:ring-[#FDE100] rounded-xl py-1 transition-transform"
-                aria-label={settings.clubName}
-              >
-                <ClubCrest
-                  size={isScrolled ? 56 : 64}
-                  customCrestUrl={settings.crestUrl}
-                  alt={`${settings.clubName} Official Crest`}
-                  className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 drop-shadow-md ${
-                    isScrolled ? 'h-12 sm:h-14' : 'h-14 sm:h-16'
-                  }`}
-                />
-              </Link>
-
-              {/* Desktop Primary Navigation */}
-              <nav
-                className="hidden xl:flex items-center gap-1"
-                aria-label="Main navigation"
-              >
-                {primaryNav.map((item) => {
-                  const isActive =
-                    item.href === '/'
-                      ? pathname === '/'
-                      : pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`px-3 py-2 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition-all ${
-                        isActive
-                          ? 'bg-[#FDE100]/15 text-[#FDE100] border-b-2 border-[#FDE100]'
-                          : 'text-slate-200 hover:bg-[#1A1A1A] hover:text-[#FDE100]'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </nav>
-
-              {/* Desktop Action Area: Search, Admin Shortcut, Support CTA */}
-              <div className="hidden sm:flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className="p-2.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] hover:border-[#FDE100]/40 transition flex items-center gap-1.5 text-xs font-bold font-athletic tracking-wider uppercase"
-                  title="Search club site (Ctrl+K)"
-                  aria-label="Search club site"
-                >
-                  <Search className="w-4 h-4 text-slate-400 group-hover:text-[#FDE100]" />
-                  <span className="hidden md:inline">Search</span>
-                </button>
-
-                <a
-                  href="/manage"
-                  className="p-2.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-slate-300 hover:text-[#FDE100] border border-[#262626] hover:border-[#FDE100]/40 transition flex items-center gap-1.5 text-xs font-bold font-athletic tracking-wider uppercase"
-                  title="Club Official Control Centre"
-                  aria-label="Club Official Control Centre"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#FDE100]" />
-                  <span className="hidden lg:inline">Admin</span>
-                </a>
-
+              {/* DESKTOP HEADER (xl:flex) */}
+              <div className="hidden xl:flex items-center justify-between w-full">
+                {/* Official Club Logo Only */}
                 <Link
-                  href="/support"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-sm uppercase tracking-wider shadow-lg shadow-[#FDE100]/10 hover:scale-105 transition-all active:scale-95"
+                  href="/"
+                  className="flex items-center group focus:outline-none focus:ring-2 focus:ring-[#FDE100] rounded-xl py-1 transition-transform"
+                  aria-label={settings.clubName}
                 >
-                  <HeartHandshake className="w-4 h-4 text-black" />
-                  <span>{t.nav.supportClub}</span>
+                  <ClubCrest
+                    size={isScrolled ? 56 : 64}
+                    customCrestUrl={settings.crestUrl}
+                    alt={`${settings.clubName} Official Crest`}
+                    className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 drop-shadow-md ${
+                      isScrolled ? 'h-12 sm:h-14' : 'h-14 sm:h-16'
+                    }`}
+                  />
                 </Link>
-              </div>
 
-              {/* Mobile Action Buttons */}
-              <div className="xl:hidden flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className="inline-flex items-center justify-center p-2 rounded-lg bg-[#141414] text-slate-200 hover:text-[#FDE100] hover:bg-[#202020] border border-[#262626] focus:outline-none min-h-[44px] min-w-[44px]"
-                  title="Search club site"
-                  aria-label="Search club site"
+                {/* Desktop Primary Navigation */}
+                <nav
+                  className="flex items-center gap-1"
+                  aria-label="Main navigation"
                 >
-                  <Search className="w-5 h-5 text-slate-300" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="inline-flex items-center justify-center p-2 rounded-lg bg-[#141414] text-slate-200 hover:text-[#FDE100] hover:bg-[#202020] border border-[#262626] focus:outline-none min-h-[44px] min-w-[44px]"
-                  aria-expanded={mobileMenuOpen}
-                  aria-label="Toggle navigation menu"
-                >
-                  {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Navigation Drawer */}
-          {mobileMenuOpen && (
-            <div className="xl:hidden bg-[#0D0D0D] border-t border-[#262626] px-4 pt-4 pb-6 space-y-4 shadow-2xl animate-in fade-in slide-in-from-top-3">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {primaryNav.map((item) => {
-                  const isActive =
-                    item.href === '/'
-                      ? pathname === '/'
-                      : pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`px-3 py-2.5 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition ${
-                        isActive
-                          ? 'bg-[#FDE100] text-black shadow-md'
-                          : 'bg-[#161616] text-slate-200 hover:bg-[#222222] hover:text-[#FDE100]'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-
-              <div className="border-t border-[#262626] pt-3">
-                <p className="text-[11px] uppercase tracking-widest text-[#FDE100] font-athletic font-black mb-2">
-                  Club Community & Engagement
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {secondaryNav.map((item) => {
-                    const Icon = item.icon;
+                  {primaryNav.map((item) => {
+                    const isActive =
+                      item.href === '/'
+                        ? pathname === '/'
+                        : pathname.startsWith(item.href);
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#141414] text-slate-300 hover:text-[#FDE100] hover:bg-[#1C1C1C] text-xs font-semibold border border-[#262626] transition"
+                        className={`px-3 py-2 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition-all ${
+                          isActive
+                            ? 'bg-[#FDE100]/15 text-[#FDE100] border-b-2 border-[#FDE100]'
+                            : 'text-slate-200 hover:bg-[#1A1A1A] hover:text-[#FDE100]'
+                        }`}
                       >
-                        <Icon className="w-4 h-4 text-[#FDE100]" />
-                        <span>{item.label}</span>
+                        {item.label}
                       </Link>
                     );
                   })}
+                </nav>
+
+                {/* Desktop Action Area: Search, Admin Shortcut, Support CTA */}
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSearchOpen(true)}
+                    className="p-2.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] hover:border-[#FDE100]/40 transition flex items-center gap-1.5 text-xs font-bold font-athletic tracking-wider uppercase"
+                    title="Search club site (Ctrl+K)"
+                    aria-label="Search club site"
+                  >
+                    <Search className="w-4 h-4 text-slate-400 group-hover:text-[#FDE100]" />
+                    <span className="hidden md:inline">Search</span>
+                  </button>
+
+                  <a
+                    href="/manage"
+                    className="p-2.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-slate-300 hover:text-[#FDE100] border border-[#262626] hover:border-[#FDE100]/40 transition flex items-center gap-1.5 text-xs font-bold font-athletic tracking-wider uppercase"
+                    title="Club Official Control Centre"
+                    aria-label="Club Official Control Centre"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#FDE100]" />
+                    <span className="hidden lg:inline">Admin</span>
+                  </a>
+
+                  <Link
+                    href="/support"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-sm uppercase tracking-wider shadow-lg shadow-[#FDE100]/10 hover:scale-105 transition-all active:scale-95"
+                  >
+                    <HeartHandshake className="w-4 h-4 text-black" />
+                    <span>{t.nav.supportClub}</span>
+                  </Link>
                 </div>
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row gap-2">
-                <Link
-                  href="/support"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-base uppercase tracking-wider shadow-md transition active:scale-95"
+              {/* MOBILE HEADER: RB Leipzig Signature Mobile Navigation (IMAGE 2) */}
+              <div className="xl:hidden flex items-center justify-between w-full h-14 sm:h-16 relative">
+                {/* 1. Left: ☰ Menü Trigger */}
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="flex items-center gap-1.5 py-2 px-1 text-white hover:text-[#FDE100] focus:outline-none min-h-[44px] transition active:scale-95 group"
+                  aria-expanded={mobileMenuOpen}
+                  aria-label="Open navigation menu"
                 >
-                  <HeartHandshake className="w-5 h-5 text-black" />
-                  <span>{t.nav.supportClub}</span>
-                </Link>
-                <Link
-                  href="/sponsors"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 border-[#333333] bg-[#141414] text-white font-athletic font-bold text-base uppercase tracking-wider hover:border-[#FDE100] transition"
-                >
-                  <span>{t.hero.partnerWithUs}</span>
-                </Link>
-              </div>
+                  <Menu className="w-6 h-6 text-white group-hover:text-[#FDE100]" />
+                  <span className="font-athletic font-black text-sm uppercase tracking-wider text-white group-hover:text-[#FDE100]">
+                    Menü
+                  </span>
+                </button>
 
-              <div className="pt-3 border-t border-[#262626] flex items-center justify-between">
-                <span className="text-[11px] font-athletic uppercase tracking-widest text-slate-400">Club Administration</span>
-                <a
-                  href="/manage"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161616] hover:bg-[#202020] text-[#FDE100] border border-[#333333] hover:border-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider transition"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#FDE100]" />
-                  <span>Control Centre</span>
-                </a>
+                {/* 2. Center: Official Club Crest Centered (RB Leipzig layout) */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-auto">
+                  <Link
+                    href="/"
+                    className="flex items-center justify-center group focus:outline-none"
+                    aria-label={settings.clubName}
+                  >
+                    <ClubCrest
+                      size={isScrolled ? 48 : 54}
+                      customCrestUrl={settings.crestUrl}
+                      alt={`${settings.clubName} Official Crest`}
+                      className="w-auto h-11 sm:h-12 object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </Link>
+                </div>
+
+                {/* 3. Right: 🎟️ Tickets / Support Action */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSearchOpen(true)}
+                    className="p-2 text-slate-300 hover:text-[#FDE100] transition"
+                    title="Search"
+                    aria-label="Search"
+                  >
+                    <Search className="w-5 h-5" />
+                  </button>
+
+                  <Link
+                    href="/support"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all"
+                  >
+                    <HeartHandshake className="w-3.5 h-3.5 text-black" />
+                    <span>Tickets</span>
+                  </Link>
+                </div>
               </div>
             </div>
-          )}
+          </div>
+
+          {/* RB LEIPZIG SIGNATURE FULL-SCREEN ANIMATED MOBILE MENU */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="xl:hidden fixed inset-0 z-50 bg-[#000000]/98 backdrop-blur-2xl flex flex-col justify-between p-5 sm:p-8 overflow-y-auto"
+              >
+                {/* Top Bar inside Menu */}
+                <div className="flex items-center justify-between border-b border-[#262626] pb-4">
+                  <button
+                    type="button"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 py-2 px-3 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-white border border-[#262626] transition active:scale-95"
+                    aria-label="Close menu"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                    <span className="font-athletic font-black text-xs uppercase tracking-wider text-slate-200">
+                      Close
+                    </span>
+                  </button>
+
+                  <ClubCrest
+                    size={48}
+                    customCrestUrl={settings.crestUrl}
+                    alt={`${settings.clubName} Crest`}
+                    className="w-auto h-11 object-contain"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setSearchOpen(true);
+                    }}
+                    className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] transition"
+                    title="Search"
+                    aria-label="Search"
+                  >
+                    <Search className="w-4 h-4 text-slate-300" />
+                  </button>
+                </div>
+
+                {/* Main Navigation Links List with Staggered Motion */}
+                <div className="py-6 space-y-1">
+                  {primaryNav.map((item, index) => {
+                    const isActive =
+                      item.href === '/'
+                        ? pathname === '/'
+                        : pathname.startsWith(item.href);
+                    return (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.04 * index, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <Link
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={`group flex items-center justify-between py-3 px-4 rounded-xl text-xl sm:text-2xl font-athletic font-black uppercase tracking-wider transition ${
+                            isActive
+                              ? 'bg-[#FDE100] text-black shadow-md'
+                              : 'text-white hover:bg-[#141414] hover:text-[#FDE100]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`text-xs font-mono font-bold ${isActive ? 'text-black/60' : 'text-slate-500'}`}>
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <span>{item.label}</span>
+                          </div>
+                          <span className={`text-sm transition-transform group-hover:translate-x-1 ${isActive ? 'text-black' : 'text-slate-500 group-hover:text-[#FDE100]'}`}>
+                            &rarr;
+                          </span>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                {/* Bottom Quick Actions (Tickets, Partner With Us & Admin) */}
+                <div className="border-t border-[#262626] pt-5 space-y-3">
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <Link
+                      href="/support"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95"
+                    >
+                      <HeartHandshake className="w-4 h-4 text-black" />
+                      <span>{t.nav.supportClub}</span>
+                    </Link>
+                    <Link
+                      href="/sponsors"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#333333] bg-[#141414] text-white hover:border-[#FDE100] font-athletic font-bold text-xs uppercase tracking-wider transition"
+                    >
+                      <span>{t.hero.partnerWithUs}</span>
+                    </Link>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-[11px] font-athletic uppercase tracking-widest text-slate-500">
+                      Nginda Warriors FC (Est. 2024)
+                    </span>
+                    <a
+                      href="/manage"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-[#FDE100] border border-[#262626] hover:border-[#FDE100] font-athletic font-black text-[11px] uppercase tracking-wider transition"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]" />
+                      <span>Control Centre</span>
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </header>
 
         {/* Main Content Area */}

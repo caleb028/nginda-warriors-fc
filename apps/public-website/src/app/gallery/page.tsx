@@ -97,7 +97,7 @@ export default function GalleryAndMediaPage({
                     {asset.category}
                   </span>
                   {asset.mediaType === 'video' && (
-                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#1A1A1A] border border-[#262626] text-white text-xs font-bold inline-flex items-center gap-1 shadow-sm">
+                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#1A1A1A] border border-[#262626] text-white text-xs font-bold inline-flex items-center gap-1 shadow-sm z-10">
                       <Video className="w-3.5 h-3.5 text-[#FDE100]" /> Video
                     </span>
                   )}

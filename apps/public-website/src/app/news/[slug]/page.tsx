@@ -72,11 +72,15 @@ export default function SingleArticlePage({
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         {article.featuredImageUrl && (
-          <div className="rounded-2xl overflow-hidden border-2 border-[#262626] shadow-2xl">
+          <div className="rounded-2xl overflow-hidden border-2 border-[#262626] shadow-2xl relative">
             <img
               src={article.featuredImageUrl}
               alt={article.headline}
               className="w-full max-h-[460px] object-cover"
+            />
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"
+              aria-hidden="true"
             />
           </div>
         )}

@@ -67,6 +67,7 @@ export default function TeamSquadPage() {
                   alt="Nginda Warriors FC Matchday Squad"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
               </div>
             </div>
 
@@ -77,6 +78,7 @@ export default function TeamSquadPage() {
                   alt="Nginda Warriors FC Pitch Squad"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
               </div>
             </div>
 
@@ -87,6 +89,7 @@ export default function TeamSquadPage() {
                   alt="Nginda Warriors FC Squad Huddle"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
               </div>
             </div>
 
@@ -97,6 +100,7 @@ export default function TeamSquadPage() {
                   alt="Nginda Warriors FC Club Leadership"
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
               </div>
             </div>
           </div>
@@ -229,7 +233,8 @@ export default function TeamSquadPage() {
                         alt={coach.fullName}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/20 to-transparent pointer-events-none" />
+                      <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm z-10">
                         {coach.roleTitle}
                       </div>
                     </div>
@@ -279,7 +284,8 @@ export default function TeamSquadPage() {
                         alt={official.fullName}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-[#1A1A1A] text-slate-200 border border-[#262626] font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-black/20 to-transparent pointer-events-none" />
+                      <div className="absolute bottom-3 left-3 px-3 py-1 rounded bg-[#1A1A1A] text-slate-200 border border-[#262626] font-athletic font-bold text-xs uppercase tracking-wider shadow-sm z-10">
                         {official.roleTitle}
                       </div>
                     </div>

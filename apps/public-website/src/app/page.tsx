@@ -4,6 +4,7 @@ import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/ser
 import {
   HomepageHeroSlideshow,
   MatchKickoffCountdown,
+  RbMatchRail,
 } from '../components/HomepageHeroAndCountdown';
 import { WarriorsTVHub } from '../components/WarriorsTVHub';
 import { TacticalPitchBoard } from '../components/TacticalPitchBoard';
@@ -115,8 +116,18 @@ export default function PublicHomePage() {
 
   return (
     <div className="bg-black text-white">
-      {/* 1. HOMEPAGE HERO */}
+      {/* 1. HOMEPAGE HERO (Al-Hilal Deep Black Gradient & RB Leipzig Card) */}
       <HomepageHeroSlideshow settings={clubSettings} slides={visibleHeroSlides} />
+
+      {/* 2. RB LEIPZIG SIGNATURE HORIZONTAL MATCH TICKER RAIL (IMAGE 2) */}
+      <RbMatchRail
+        settings={clubSettings}
+        latestResult={latestResult}
+        nextMatch={nextMatch}
+        upcomingFixtures={snapshot.fixtures.filter(
+          (f) => f.id !== nextMatch?.id && f.matchStatus === 'scheduled'
+        )}
+      />
 
       {/* 2. MATCH CENTRE + LATEST RESULT + LEAGUE POSITION - Sleek Pitch Surface */}
       {isSectionVisible('match_centre') && (
@@ -615,6 +626,10 @@ export default function PublicHomePage() {
                         ) : (
                           <ClubCrest size={96} customCrestUrl={clubSettings.crestUrl} />
                         )}
+                        <div
+                          className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"
+                          aria-hidden="true"
+                        />
                         <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider">
                           #{player.jerseyNumber} • {player.positionGroup.slice(0, -1)}
                         </div>
@@ -717,7 +732,11 @@ export default function PublicHomePage() {
                       ) : (
                         <ClubCrest size={76} customCrestUrl={clubSettings.crestUrl} />
                       )}
-                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-xs uppercase tracking-wider shadow-sm">
+                      <div
+                        className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"
+                        aria-hidden="true"
+                      />
+                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-xs uppercase tracking-wider shadow-sm z-10">
                         {article.categoryName}
                       </span>
                     </div>

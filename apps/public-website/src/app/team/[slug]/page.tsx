@@ -43,7 +43,8 @@ export default function PlayerProfilePage({
                 ) : (
                   <ClubCrest size={120} customCrestUrl={clubSettings.crestUrl} />
                 )}
-                <span className="absolute bottom-3 right-3 px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-2xl shadow-md">
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-3 right-3 z-10 px-3 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-2xl shadow-md">
                   #{player.jerseyNumber}
                 </span>
               </div>
