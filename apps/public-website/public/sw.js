@@ -1,8 +1,7 @@
 // Nginda Warriors FC — Service Worker (Offline Support & PWA Caching)
-const CACHE_NAME = 'nginda-warriors-v1';
+const CACHE_NAME = 'nginda-warriors-v2';
 const STATIC_ASSETS = [
-  '/',
-  '/brand/nginda-warriors-crest.svg',
+  '/brand/nginda-warriors-crest.png',
   '/manifest.json',
   '/offline.html',
 ];
