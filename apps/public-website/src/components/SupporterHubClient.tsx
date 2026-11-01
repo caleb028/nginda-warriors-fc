@@ -4,11 +4,9 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { ClubCrest, Player } from '@nginda-warriors/shared';
 import {
-  Award,
   Calendar,
   CheckCircle2,
   Flame,
-  QrCode,
   Trophy,
   Users,
 } from 'lucide-react';
@@ -24,13 +22,8 @@ export function SupporterHubClient({
   nextOpponent = null,
   nextMatchDate = null,
 }: SupporterHubClientProps) {
-  // Tabs: 'pass' | 'motm' | 'predictor'
-  const [activeTab, setActiveTab] = useState<'pass' | 'motm' | 'predictor'>('pass');
-
-  // Digital Pass State
-  const [passName, setPassName] = useState('');
-  const [passTown, setPassTown] = useState('');
-  const [passNumber, setPassNumber] = useState('NW-2024-0001');
+  // Tabs: 'motm' | 'predictor'
+  const [activeTab, setActiveTab] = useState<'motm' | 'predictor'>('motm');
 
   // Predictor State
   const [predWarriors, setPredWarriors] = useState('0');
@@ -54,27 +47,10 @@ export function SupporterHubClient({
     setHasVoted(true);
   };
 
-  const generateNewPassId = () => {
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
-    setPassNumber(`NW-2024-${randomNum}`);
-  };
-
   return (
     <div className="w-full">
       {/* Navigation Tabs */}
       <div className="flex border-b border-[#262626] mb-8 overflow-x-auto no-scrollbar">
-        <button
-          onClick={() => setActiveTab('pass')}
-          className={`py-4 px-6 font-athletic text-base uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap ${
-            activeTab === 'pass'
-              ? 'border-[#FDE100] text-[#FDE100] bg-[#FDE100]/10'
-              : 'border-transparent text-slate-400 hover:text-white'
-          }`}
-        >
-          <Award className="w-4 h-4 text-[#FDE100]" />
-          Digital Supporter Pass
-        </button>
-
         <button
           onClick={() => setActiveTab('motm')}
           className={`py-4 px-6 font-athletic text-base uppercase tracking-wider font-bold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap ${
@@ -99,141 +75,6 @@ export function SupporterHubClient({
           Match & Score Predictor
         </button>
       </div>
-
-      {/* TAB 1: DIGITAL SUPPORTER PASS */}
-      {activeTab === 'pass' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Customizer Controls */}
-          <div className="lg:col-span-5 bg-[#141414] p-6 rounded-2xl border border-[#262626] shadow-xl">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FDE100]" />
-              <span className="font-athletic text-xs uppercase tracking-wider text-[#FDE100] font-bold">
-                Instant Fan ID Generator
-              </span>
-            </div>
-            <h3 className="font-athletic text-2xl font-black uppercase text-white mb-2">
-              YOUR DIGITAL WARRIOR PASS
-            </h3>
-            <p className="text-xs text-slate-300 mb-6">
-              Claim your personalized digital club membership card. Carry your Warrior spirit on your device or save it for matchdays.
-            </p>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                  Supporter Full Name
-                </label>
-                <input
-                  type="text"
-                  value={passName}
-                  onChange={(e) => setPassName(e.target.value)}
-                  placeholder="Enter your full name"
-                  className="w-full px-3 py-2 rounded-lg bg-[#0D0D0D] border border-[#262626] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
-                  Home Town / Branch
-                </label>
-                <input
-                  type="text"
-                  value={passTown}
-                  onChange={(e) => setPassTown(e.target.value)}
-                  placeholder="e.g. Nginda, Murang'a, Nairobi"
-                  className="w-full px-3 py-2 rounded-lg bg-[#0D0D0D] border border-[#262626] text-white placeholder-slate-500 text-sm focus:border-[#262626] focus:outline-none"
-                />
-              </div>
-
-              <div className="pt-2 flex gap-2">
-                <button
-                  type="button"
-                  onClick={generateNewPassId}
-                  className="flex-1 py-2 px-3 rounded-lg bg-[#1A1A1A] hover:bg-[#222222] border border-[#262626] text-xs font-bold text-slate-200 uppercase tracking-wider transition"
-                >
-                  Generate New ID
-                </button>
-                <button
-                  type="button"
-                  onClick={() => alert(`Pass #${passNumber} ready! Screenshot card or save it to your device.`)}
-                  className="flex-1 py-2 px-3 rounded-lg bg-[#FDE100] text-black text-xs font-black font-athletic uppercase tracking-wider hover:bg-[#FFE600] transition shadow-md"
-                >
-                  Save Pass
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Rendered Digital Pass Card (Photorealistic VIP Pass) */}
-          <div className="lg:col-span-7 flex justify-center">
-            <div className="w-full max-w-md aspect-[1.58/1] rounded-2xl overflow-hidden shadow-2xl relative p-6 border-2 border-[#262626] bg-gradient-to-br from-[#141414] via-[#0A0A0A] to-[#000000] flex flex-col justify-between text-white select-none">
-              <div
-                className="absolute inset-0 opacity-10 pointer-events-none"
-                style={{
-                  backgroundImage:
-                    'repeating-linear-gradient(45deg, #FDE100 0, #FDE100 1px, transparent 0, transparent 50%)',
-                  backgroundSize: '16px 16px',
-                }}
-              />
-
-              {/* Pass Top Banner */}
-              <div className="relative z-10 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl p-1 bg-[#0A0A0A] border border-[#262626] flex items-center justify-center">
-                    <ClubCrest size={40} />
-                  </div>
-                  <div>
-                    <h4 className="font-athletic text-lg font-black uppercase text-white tracking-wider leading-none">
-                      NGINDA WARRIORS FC
-                    </h4>
-                    
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-[#FDE100]/10 text-[#FDE100] font-athletic text-[11px] font-extrabold tracking-wider uppercase border border-[#262626]">
-                    ACTIVE 2026/27
-                  </span>
-                </div>
-              </div>
-
-              {/* Pass Middle: Supporter Name & Details */}
-              <div className="relative z-10 my-auto py-2">
-                <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
-                  Cardholder
-                </div>
-                <div className="font-athletic text-2xl md:text-3xl font-black uppercase text-white tracking-wider">
-                  {passName.trim() || 'LOYAL WARRIOR'}
-                </div>
-                <div className="text-xs text-slate-300 font-semibold flex items-center gap-1.5 mt-0.5">
-                  <span>Branch: {passTown.trim() || 'Murang’a'}</span>
-                  <span>•</span>
-                  <span>Category: Official Fan</span>
-                </div>
-              </div>
-
-              {/* Pass Bottom Strip */}
-              <div className="relative z-10 pt-2 border-t border-[#262626] flex items-end justify-between">
-                <div>
-                  <div className="text-[9px] text-slate-400 uppercase tracking-wider font-bold">
-                    Membership ID
-                  </div>
-                  <div className="font-athletic text-base font-bold text-[#FDE100] tracking-widest">
-                    {passNumber}
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <QrCode className="w-8 h-8 text-slate-300" />
-                  <div className="text-[8px] text-slate-400 text-right leading-tight font-mono">
-                    VERIFIED<br />KENYA
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* TAB 2: PLAYER OF THE MONTH (POTM) */}
       {activeTab === 'motm' && (

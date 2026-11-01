@@ -58,10 +58,10 @@ const SEARCH_DATABASE: SearchItem[] = [
   },
   {
     id: 's-6',
-    title: 'Supporter Hub & Digital Pass',
-    subtitle: 'Claim your personalized fan membership pass & vote POTM',
+    title: 'Official Fan Membership',
+    subtitle: 'Register as an official supporter & receive matchday alerts',
     category: 'Club',
-    href: '/#supporters-hub',
+    href: '/membership',
   },
   {
     id: 's-7',

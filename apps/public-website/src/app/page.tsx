@@ -6,7 +6,6 @@ import {
   MatchKickoffCountdown,
 } from '../components/HomepageHeroAndCountdown';
 import { WarriorsTVHub } from '../components/WarriorsTVHub';
-import { SupporterHubClient } from '../components/SupporterHubClient';
 import { TacticalPitchBoard } from '../components/TacticalPitchBoard';
 import { MotionReveal, StaggerContainer, StaggerItem } from '../components/MotionReveal';
 import {
@@ -849,29 +848,6 @@ export default function PublicHomePage() {
           </div>
         </section>
       )}
-
-      {/* 6.5 SUPPORTER HUB - Sleek Pitch Surface */}
-      <section id="supporters-hub" className="py-20 bg-[#0A0A0A] text-white border-b border-[#262626]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <MotionReveal y={24} once={false}>
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white">
-                EMPOWERED BY OUR FANS
-              </h2>
-              <p className="text-sm sm:text-base text-slate-300 mt-2">
-                Generate your official digital club membership pass, predict upcoming match scorelines, and crown the Warrior of the Month.
-              </p>
-            </div>
-          </MotionReveal>
-          <MotionReveal y={28} delay={0.15} once={false}>
-            <SupporterHubClient
-              players={players}
-              nextOpponent={nextMatch?.opponentName || null}
-              nextMatchDate={nextMatch ? formatNairobiDateTime(nextMatch.kickoffAt) : null}
-            />
-          </MotionReveal>
-        </div>
-      </section>
 
       {/* 7. FINAL CALL TO ACTION ("STAND WITH THE WARRIORS.") - Deep Black Pitch */}
       {isSectionVisible('final_cta') && (
