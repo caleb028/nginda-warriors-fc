@@ -3,7 +3,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   ClubCrest,
   ClubSettings,
@@ -272,16 +271,11 @@ export function PublicShell({
             </div>
           </div>
 
-          {/* RB LEIPZIG SIGNATURE FULL-SCREEN ANIMATED MOBILE MENU */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="xl:hidden fixed inset-0 z-50 bg-[#000000]/98 backdrop-blur-2xl flex flex-col justify-between p-5 sm:p-8 overflow-y-auto"
-              >
+          {/* RB LEIPZIG SIGNATURE FULL-SCREEN MOBILE MENU (PURE CSS MOTION) */}
+          {mobileMenuOpen && (
+            <div
+              className="xl:hidden fixed inset-0 z-50 bg-[#000000]/98 backdrop-blur-2xl flex flex-col justify-between p-5 sm:p-8 overflow-y-auto transition-all duration-300 ease-out"
+            >
                 {/* Top Bar inside Menu */}
                 <div className="flex items-center justify-between border-b border-[#262626] pb-4">
                   <button
@@ -325,11 +319,9 @@ export function PublicShell({
                         ? pathname === '/'
                         : pathname.startsWith(item.href);
                     return (
-                      <motion.div
+                      <div
                         key={item.href}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.04 * index, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        className="transition-all duration-300"
                       >
                         <Link
                           href={item.href}
@@ -350,7 +342,7 @@ export function PublicShell({
                             &rarr;
                           </span>
                         </Link>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </div>
@@ -389,9 +381,8 @@ export function PublicShell({
                     </a>
                   </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            </div>
+          )}
         </header>
 
         {/* Main Content Area */}

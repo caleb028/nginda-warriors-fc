@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ClubCrest, ClubSettings, Fixture } from '@nginda-warriors/shared';
 import { ArrowRight, ChevronLeft, ChevronRight, Clock, Shield, Sparkles, Trophy } from 'lucide-react';
 
@@ -80,15 +79,10 @@ export function HomepageHeroSlideshow({
           ═══════════════════════════════════════════════════════════════════ */}
       <div className="lg:hidden relative w-full aspect-[4/5] sm:aspect-[16/10] min-h-[540px] max-h-[720px] bg-black flex flex-col justify-end overflow-hidden">
         {/* Full-Vibrancy Image (Al-Hilal style: 100% crisp, zero washed-out veil) */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeSlide.id}
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: LUXURY_EASE }}
-            className="absolute inset-0 z-0"
-          >
+        <div
+          key={activeSlide.id}
+          className="absolute inset-0 z-0 transition-opacity duration-700 ease-out"
+        >
             {activeSlide.imageUrl ? (
               <img
                 src={activeSlide.imageUrl}
@@ -100,8 +94,7 @@ export function HomepageHeroSlideshow({
                 <ClubCrest size={180} customCrestUrl={settings.crestUrl} />
               </div>
             )}
-          </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* Al-Hilal Multi-Stage Deep Black Gradient Fade (Smooth transition into pure #000000) */}
         <div
@@ -170,15 +163,10 @@ export function HomepageHeroSlideshow({
           ═══════════════════════════════════════════════════════════════════ */}
       <div className="hidden lg:block relative min-h-[600px] w-full overflow-hidden bg-black">
         {/* Full Vibrancy Background Photograph */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeSlide.id}
-            initial={{ opacity: 0, scale: 1.03 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.9, ease: LUXURY_EASE }}
-            className="absolute inset-0 z-0"
-          >
+        <div
+          key={activeSlide.id}
+          className="absolute inset-0 z-0 transition-opacity duration-700 ease-out"
+        >
             {activeSlide.imageUrl ? (
               <img
                 src={activeSlide.imageUrl}
@@ -188,8 +176,7 @@ export function HomepageHeroSlideshow({
             ) : (
               <div className="w-full h-full pitch-grid-bg opacity-35" />
             )}
-          </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* Deep Black Horizontal & Bottom Gradients (Al-Hilal Black Backdrop Fade) */}
         <div
