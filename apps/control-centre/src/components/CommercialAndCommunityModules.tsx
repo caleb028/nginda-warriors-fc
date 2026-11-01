@@ -1202,7 +1202,11 @@ export function CommercialAndCommunityModules({
                 {!u.isOwnerSuperAdmin && (
                   <button
                     type="button"
-                    onClick={() => onMutate('delete_admin_user', { userId: u.id })}
+                    onClick={() => {
+                      if (confirm(`Remove administrator ${u.email}?`)) {
+                        onMutate('delete_admin_user', { userId: u.id });
+                      }
+                    }}
                     className="p-1.5 rounded bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"
                     title="Remove User"
                   >

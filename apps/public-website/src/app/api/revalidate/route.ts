@@ -22,6 +22,15 @@ export async function POST(req: NextRequest) {
     revalidatePath('/', 'layout');
     revalidatePath('/fixtures');
     revalidatePath('/standings');
+    revalidatePath('/team');
+    revalidatePath('/about');
+    revalidatePath('/news');
+    revalidatePath('/gallery');
+    revalidatePath('/events');
+    revalidatePath('/sponsors');
+    revalidatePath('/merchandise');
+    revalidatePath('/support');
+    revalidatePath('/transparency');
     revalidatePath(targetPath);
     return NextResponse.json({ ok: true, revalidated: targetPath });
   } catch (err: unknown) {

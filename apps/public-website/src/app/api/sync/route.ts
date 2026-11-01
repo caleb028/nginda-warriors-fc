@@ -25,6 +25,11 @@ export async function POST(req: NextRequest) {
     revalidatePath('/about');
     revalidatePath('/news');
     revalidatePath('/gallery');
+    revalidatePath('/events');
+    revalidatePath('/sponsors');
+    revalidatePath('/merchandise');
+    revalidatePath('/support');
+    revalidatePath('/transparency');
 
     const freshDb = readDatabase();
     return NextResponse.json(

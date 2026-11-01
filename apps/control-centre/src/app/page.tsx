@@ -195,8 +195,121 @@ export default function ControlCentreApp() {
   }, []);
 
   const handleMutate = async (action: string, payload: Record<string, unknown>) => {
+    const previousDb = database;
+    let optimisticDb: NgindaDatabaseSchema | null = null;
+
+    // 0ms OPTIMISTIC UI REMOVAL: deleted items vanish from the screen instantly
+    if (database) {
+      const nextDb: NgindaDatabaseSchema = JSON.parse(JSON.stringify(database));
+      let isOptimistic = false;
+
+      if (action === 'delete_player') {
+        const id = payload.id || payload.playerId;
+        nextDb.players = nextDb.players.filter((p) => p.id !== id);
+        isOptimistic = true;
+      } else if (action === 'delete_staff') {
+        nextDb.staff = nextDb.staff.filter((s) => s.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_fixture') {
+        nextDb.fixtures = nextDb.fixtures.filter((f) => f.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_competition') {
+        nextDb.competitions = nextDb.competitions.filter((c) => c.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_standing_row') {
+        nextDb.standings = nextDb.standings.filter((r) => r.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'clear_all_standings') {
+        nextDb.standings = [];
+        isOptimistic = true;
+      } else if (action === 'delete_article') {
+        nextDb.articles = nextDb.articles.filter((a) => a.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_media_asset') {
+        nextDb.mediaAssets = nextDb.mediaAssets.filter((m) => m.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_event') {
+        nextDb.events = nextDb.events.filter((e) => e.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_sponsor') {
+        nextDb.sponsors = nextDb.sponsors.filter((s) => s.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_sponsorship_package') {
+        nextDb.sponsorshipPackages = nextDb.sponsorshipPackages.filter((p) => p.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_campaign') {
+        nextDb.fundraisingCampaigns = nextDb.fundraisingCampaigns.filter((c) => c.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_expenditure') {
+        nextDb.expenditureRecords = nextDb.expenditureRecords.filter((e) => e.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_product') {
+        nextDb.products = nextDb.products.filter((p) => p.id !== payload.id);
+        isOptimistic = true;
+      } else if (action === 'delete_admin_user') {
+        const uid = payload.userId || payload.id;
+        nextDb.users = nextDb.users.filter((u) => u.id !== uid);
+        isOptimistic = true;
+      } else if (action === 'clear_fixture_result') {
+        nextDb.fixtures = nextDb.fixtures.map((f) => {
+          if (f.id === payload.fixtureId) {
+            return {
+              ...f,
+              homeScore: null,
+              awayScore: null,
+              matchStatus: 'scheduled' as const,
+              events: [],
+            };
+          }
+          return f;
+        });
+        isOptimistic = true;
+      } else if (action === 'save_player' && payload.id) {
+        const pIdx = nextDb.players.findIndex((p) => p.id === payload.id);
+        if (pIdx >= 0) {
+          nextDb.players[pIdx] = { ...nextDb.players[pIdx], ...(payload as any) };
+          isOptimistic = true;
+        }
+      } else if (action === 'save_staff' && payload.id) {
+        const sIdx = nextDb.staff.findIndex((s) => s.id === payload.id);
+        if (sIdx >= 0) {
+          nextDb.staff[sIdx] = { ...nextDb.staff[sIdx], ...(payload as any) };
+          isOptimistic = true;
+        }
+      } else if (action === 'save_club_settings' && payload.heroSlides) {
+        nextDb.clubSettings = {
+          ...nextDb.clubSettings,
+          heroSlides: payload.heroSlides as any,
+        };
+        isOptimistic = true;
+      }
+
+      if (isOptimistic) {
+        optimisticDb = nextDb;
+        // Apply instantly to local UI state (0ms delay)
+        setDatabase(nextDb);
+
+        // Immediately update localStorage and broadcast to other open tabs
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('nginda_live_database', JSON.stringify(nextDb));
+          localStorage.setItem('nginda_db_timestamp', String(Date.now()));
+          if ('BroadcastChannel' in window) {
+            try {
+              const bc = new BroadcastChannel('nginda_warriors_live_sync');
+              bc.postMessage({ type: 'DATABASE_UPDATED', database: nextDb });
+              bc.close();
+            } catch {}
+          }
+        }
+      }
+    }
+
     try {
-      setStatusNotice('Applying changes...');
+      setStatusNotice(
+        action.startsWith('delete_') || action.includes('clear')
+          ? 'Content removed.'
+          : 'Applying changes...'
+      );
       const res = await fetch(adminApiUrl('/api/admin/action'), {
         method: 'POST',
         headers: getAuthHeaders(),
@@ -205,6 +318,9 @@ export default function ControlCentreApp() {
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
+        if (previousDb) {
+          setDatabase(previousDb); // Rollback on error
+        }
         if (data.error && data.error.includes('UNAUTHORIZED')) {
           if (typeof window !== 'undefined') {
             localStorage.removeItem('nginda_control_session_token');
@@ -213,68 +329,65 @@ export default function ControlCentreApp() {
         }
         alert(data.error || 'Action failed.');
       } else {
-        setStatusNotice('Changes synchronized live with database and public website.');
-        setTimeout(() => setStatusNotice(''), 3500);
+        const confirmedDb = data.database || optimisticDb;
+        if (confirmedDb) {
+          setDatabase(confirmedDb);
+        }
 
-        if (typeof window !== 'undefined') {
-          const syncBody = data.database ? { database: data.database } : data.fixture ? { fixture: data.fixture } : null;
-          if (syncBody) {
-            const origin = window.location.origin;
-            const payloadStr = JSON.stringify(syncBody);
+        setStatusNotice(
+          action.startsWith('delete_') || action.includes('clear')
+            ? 'Content deleted and removed live.'
+            : 'Changes synchronized live with database and public website.'
+        );
+        setTimeout(() => setStatusNotice(''), 3000);
 
-            // 1. Direct fetch to public-website root sync
-            fetch(`${origin}/api/sync`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: payloadStr,
-            }).catch(() => null);
+        if (typeof window !== 'undefined' && confirmedDb) {
+          const origin = window.location.origin;
+          const payloadStr = JSON.stringify({ database: confirmedDb });
 
-            // 2. Direct fetch to public-website revalidate
-            fetch(`${origin}/api/revalidate`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ path: '/' }),
-            }).catch(() => null);
-            fetch(`${origin}/api/revalidate`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ path: '/fixtures' }),
-            }).catch(() => null);
+          // 1. Direct fetch to public-website root sync
+          fetch(`${origin}/api/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payloadStr,
+          }).catch(() => null);
 
-            // 3. Fallback relative fetch
-            fetch('/api/sync', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: payloadStr,
-            }).catch(() => null);
+          // 2. Direct fetch to public-website revalidate
+          fetch(`${origin}/api/revalidate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path: '/' }),
+          }).catch(() => null);
 
-            // 4. Update localStorage for instant multi-tab sync
-            if (data.database) {
-              localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
-              localStorage.setItem('nginda_db_timestamp', String(Date.now()));
-            }
+          // 3. Fallback relative fetch
+          fetch('/api/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payloadStr,
+          }).catch(() => null);
 
-            // 5. Broadcast to any open public website tabs
-            if ('BroadcastChannel' in window) {
-              try {
-                const bc = new BroadcastChannel('nginda_warriors_live_sync');
-                bc.postMessage({ type: 'DATABASE_UPDATED', database: data.database });
-                bc.close();
-              } catch {}
-            }
+          // 4. Update localStorage for instant multi-tab sync
+          localStorage.setItem('nginda_live_database', JSON.stringify(confirmedDb));
+          localStorage.setItem('nginda_db_timestamp', String(Date.now()));
+
+          // 5. Broadcast to any open public website tabs
+          if ('BroadcastChannel' in window) {
+            try {
+              const bc = new BroadcastChannel('nginda_warriors_live_sync');
+              bc.postMessage({ type: 'DATABASE_UPDATED', database: confirmedDb });
+              bc.close();
+            } catch {}
           }
         }
 
-        await loadState();
-        if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-          try {
-            const bc = new BroadcastChannel('nginda_warriors_live_sync');
-            bc.postMessage({ type: 'DATABASE_UPDATED' });
-            bc.close();
-          } catch {}
+        if (!data.database) {
+          await loadState();
         }
       }
     } catch {
+      if (previousDb) {
+        setDatabase(previousDb);
+      }
       alert('Network error communicating with Control Centre API.');
     }
   };

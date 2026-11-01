@@ -545,8 +545,12 @@ export function FootballModules({
                           </button>
                           <button
                             type="button"
-                            onClick={() => onMutate('delete_player', { id: p.id })}
-                            className="p-1.5 rounded bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"
+                            onClick={() => {
+                              if (confirm(`Permanently remove player profile ${p.fullName}?`)) {
+                                onMutate('delete_player', { id: p.id });
+                              }
+                            }}
+                            className="p-1.5 rounded bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition"
                             title="Delete Player"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -819,7 +823,11 @@ export function FootballModules({
 
                     <button
                       type="button"
-                      onClick={() => onMutate('delete_staff', { id: s.id })}
+                      onClick={() => {
+                        if (confirm(`Permanently remove staff profile for ${s.fullName}?`)) {
+                          onMutate('delete_staff', { id: s.id });
+                        }
+                      }}
                       className="text-red-600 hover:text-red-800 p-1"
                       title="Delete Staff Profile"
                     >

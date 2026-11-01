@@ -490,21 +490,26 @@ export function createInitialDatabaseState(): NgindaDatabaseSchema {
 
 declare global {
   var __NGINDA_DATABASE_CACHE__: NgindaDatabaseSchema | undefined;
+  var __NGINDA_FILE_MTIME__: number | undefined;
   var __NGINDA_CACHE_TIMESTAMP__: number | undefined;
 }
 
-export function readDatabase(): NgindaDatabaseSchema {
+export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
   const filePath = getSharedDatabaseFilePath();
 
-  if (globalThis.__NGINDA_DATABASE_CACHE__) {
+  if (!forceFresh && globalThis.__NGINDA_DATABASE_CACHE__) {
     try {
       if (fs.existsSync(filePath)) {
         const stat = fs.statSync(filePath);
-        if (globalThis.__NGINDA_CACHE_TIMESTAMP__ && stat.mtimeMs > globalThis.__NGINDA_CACHE_TIMESTAMP__) {
-          const raw = fs.readFileSync(filePath, 'utf8');
-          globalThis.__NGINDA_DATABASE_CACHE__ = JSON.parse(raw);
-          globalThis.__NGINDA_CACHE_TIMESTAMP__ = stat.mtimeMs;
+        if (globalThis.__NGINDA_FILE_MTIME__ === stat.mtimeMs) {
+          return globalThis.__NGINDA_DATABASE_CACHE__;
         }
+        // File on disk has changed - refresh in-memory cache
+        const raw = fs.readFileSync(filePath, 'utf8');
+        globalThis.__NGINDA_DATABASE_CACHE__ = JSON.parse(raw);
+        globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
+        globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+        return globalThis.__NGINDA_DATABASE_CACHE__;
       }
     } catch {}
     return globalThis.__NGINDA_DATABASE_CACHE__;
@@ -526,6 +531,8 @@ export function readDatabase(): NgindaDatabaseSchema {
           const data = JSON.parse(raw) as NgindaDatabaseSchema;
           try {
             fs.writeFileSync(filePath, raw, 'utf8');
+            const stat = fs.statSync(filePath);
+            globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
           } catch {}
           globalThis.__NGINDA_DATABASE_CACHE__ = data;
           globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
@@ -537,21 +544,27 @@ export function readDatabase(): NgindaDatabaseSchema {
     const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
+      const stat = fs.statSync(filePath);
+      globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
     } catch {}
     globalThis.__NGINDA_DATABASE_CACHE__ = initial;
     globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
     return initial;
   }
   try {
+    const stat = fs.statSync(filePath);
     const raw = fs.readFileSync(filePath, 'utf8');
     const data = JSON.parse(raw) as NgindaDatabaseSchema;
     globalThis.__NGINDA_DATABASE_CACHE__ = data;
+    globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
     globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
     return data;
   } catch {
     const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
+      const stat = fs.statSync(filePath);
+      globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
     } catch {}
     globalThis.__NGINDA_DATABASE_CACHE__ = initial;
     globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
@@ -567,9 +580,17 @@ export function writeDatabase(db: NgindaDatabaseSchema): void {
     const tempPath = `${filePath}.tmp`;
     fs.writeFileSync(tempPath, JSON.stringify(db, null, 2), 'utf8');
     fs.renameSync(tempPath, filePath);
+    try {
+      const stat = fs.statSync(filePath);
+      globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
+    } catch {}
   } catch (err) {
     try {
       fs.writeFileSync(filePath, JSON.stringify(db, null, 2), 'utf8');
+      try {
+        const stat = fs.statSync(filePath);
+        globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
+      } catch {}
     } catch (e) {
       console.warn('writeDatabase fallback warning:', e);
     }

@@ -64,6 +64,14 @@ async function saveDatabaseAndSync(
   }
 }
 
+function safeDb(db: ReturnType<typeof readDatabase>) {
+  const safeUsers = (db.users || []).map(({ passwordHash: _pw, ...u }: any) => u);
+  return {
+    ...db,
+    users: safeUsers,
+  };
+}
+
 export async function GET(req: NextRequest) {
   const token = extractAdminToken(req);
   const session = verifyAdminSessionToken(token);
@@ -75,7 +83,6 @@ export async function GET(req: NextRequest) {
   }
 
   const db = readDatabase();
-  const safeUsers = db.users.map(({ passwordHash: _pw, ...u }) => u);
 
   return NextResponse.json({
     ok: true,
@@ -83,10 +90,7 @@ export async function GET(req: NextRequest) {
     publicWebsiteUrl:
       process.env.PUBLIC_WEBSITE_URL ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://nginda-warriors-fc-c549.vercel.app'),
-    database: {
-      ...db,
-      users: safeUsers,
-    },
+    database: safeDb(db),
   });
 }
 
@@ -153,7 +157,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, player: playerRecord });
+      return NextResponse.json({ ok: true, player: playerRecord, database: safeDb(db) });
     }
 
     if (action === 'delete_player') {
@@ -171,7 +175,7 @@ export async function POST(req: NextRequest) {
         summary: `Removed player profile ${target?.fullName || payload.id}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     // 2. TECHNICAL STAFF & CLUB LEADERSHIP
@@ -213,7 +217,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, staff: staffRecord });
+      return NextResponse.json({ ok: true, staff: staffRecord, database: safeDb(db) });
     }
 
     if (action === 'delete_staff') {
@@ -230,7 +234,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted staff record ${payload.id}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     // 3. FIXTURES, RESULTS & 60-SECOND MOBILE SCORE UPDATER
@@ -303,7 +307,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
-      return NextResponse.json({ ok: true, fixture: fixtureRecord, database: db });
+      return NextResponse.json({ ok: true, fixture: fixtureRecord, database: safeDb(db) });
     }
 
     if (action === 'delete_fixture') {
@@ -321,7 +325,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted fixture: Nginda Warriors vs ${target?.opponentName || payload.id}`,
       });
       await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
-      return NextResponse.json({ ok: true, database: db });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'clear_fixture_result') {
@@ -347,7 +351,7 @@ export async function POST(req: NextRequest) {
         summary: `Cleared match score & result for vs ${fixture.opponentName}`,
       });
       await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
-      return NextResponse.json({ ok: true, fixture, database: db });
+      return NextResponse.json({ ok: true, fixture, database: safeDb(db) });
     }
 
     if (action === 'quick_update_score') {
@@ -397,7 +401,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db, '/fixtures', req.headers.get('host'));
-      return NextResponse.json({ ok: true, fixture, database: db });
+      return NextResponse.json({ ok: true, fixture, database: safeDb(db) });
     }
 
     if (action === 'save_match_report') {
@@ -429,7 +433,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, fixture });
+      return NextResponse.json({ ok: true, fixture, database: safeDb(db) });
     }
 
     if (action === 'add_lineup_entry') {
@@ -450,7 +454,7 @@ export async function POST(req: NextRequest) {
         isCaptain: Boolean(payload.isCaptain),
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, fixture });
+      return NextResponse.json({ ok: true, fixture, database: safeDb(db) });
     }
 
     // 4. COMPETITIONS & LEAGUE STANDINGS
@@ -484,7 +488,7 @@ export async function POST(req: NextRequest) {
         summary: `Added competition ${comp.name} (${comp.seasonName})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, competition: comp });
+      return NextResponse.json({ ok: true, competition: comp, database: safeDb(db) });
     }
 
     if (action === 'delete_competition') {
@@ -502,7 +506,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted competition ${target?.name || payload.id}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'save_standing_row') {
@@ -561,7 +565,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, row });
+      return NextResponse.json({ ok: true, row, database: safeDb(db) });
     }
 
     if (action === 'auto_calculate_standings') {
@@ -581,7 +585,7 @@ export async function POST(req: NextRequest) {
         summary: `Calculated league standings from verified fulltime results (${rows.length} clubs)`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, rows });
+      return NextResponse.json({ ok: true, rows, database: safeDb(db) });
     }
 
     if (action === 'delete_standing_row') {
@@ -599,7 +603,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted standing row for ${target?.clubName || payload.id}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'clear_all_standings') {
@@ -616,7 +620,7 @@ export async function POST(req: NextRequest) {
         summary: 'Cleared all league standings rows',
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     // 5. NEWS & CONTENT MANAGEMENT
@@ -662,7 +666,7 @@ export async function POST(req: NextRequest) {
       });
 
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, article });
+      return NextResponse.json({ ok: true, article, database: safeDb(db) });
     }
 
     if (action === 'delete_article') {
@@ -680,7 +684,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted news article "${target?.headline || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     // 6. GALLERY, MEDIA & EVENTS
@@ -710,7 +714,7 @@ export async function POST(req: NextRequest) {
         summary: `Added ${asset.mediaType} "${asset.title}" to ${asset.category}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, asset });
+      return NextResponse.json({ ok: true, asset, database: safeDb(db) });
     }
 
     if (action === 'delete_media_asset') {
@@ -728,7 +732,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted media asset "${target?.title || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'save_event') {
@@ -756,7 +760,7 @@ export async function POST(req: NextRequest) {
         summary: `Created event "${eventItem.title}" (${eventItem.publicationStatus})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, event: eventItem });
+      return NextResponse.json({ ok: true, event: eventItem, database: safeDb(db) });
     }
 
     if (action === 'delete_event') {
@@ -774,7 +778,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted event "${target?.title || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     // 7. SPONSORS, INQUIRIES & SPONSORSHIP PACKAGES
@@ -810,7 +814,7 @@ export async function POST(req: NextRequest) {
         summary: `Saved sponsor ${sponsor.businessName} (Approved: ${sponsor.isApproved}, Status: ${sponsor.publicationStatus})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, sponsor });
+      return NextResponse.json({ ok: true, sponsor, database: safeDb(db) });
     }
 
     if (action === 'delete_sponsor') {
@@ -828,7 +832,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted sponsor "${target?.businessName || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'update_sponsor_inquiry') {
@@ -854,7 +858,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated inquiry from ${inquiry.businessName} to ${inquiry.inquiryStatus}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, inquiry });
+      return NextResponse.json({ ok: true, inquiry, database: safeDb(db) });
     }
 
     if (action === 'save_sponsorship_package') {
@@ -888,7 +892,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated ${pkg.tierCode} sponsorship package (Price KES: ${pkg.priceKes ?? 'Unset'})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, package: pkg });
+      return NextResponse.json({ ok: true, package: pkg, database: safeDb(db) });
     }
 
     if (action === 'delete_sponsorship_package') {
@@ -906,7 +910,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted sponsorship package "${target?.tierCode || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     // 8. FUNDRAISING, M-PESA DONATIONS & FINANCIAL TRANSPARENCY
@@ -940,7 +944,7 @@ export async function POST(req: NextRequest) {
         summary: `Launched campaign "${campaign.title}" (Target: KES ${campaign.targetAmountKes})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, campaign });
+      return NextResponse.json({ ok: true, campaign, database: safeDb(db) });
     }
 
     if (action === 'delete_campaign') {
@@ -958,7 +962,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted fundraising campaign "${target?.title || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'reconcile_donation') {
@@ -971,7 +975,8 @@ export async function POST(req: NextRequest) {
         actorName: session.fullName,
         actorRole: session.roleCode as 'SUPER_ADMIN' | 'FINANCE_MANAGER' | 'CLUB_ADMIN',
       });
-      return NextResponse.json({ ok: true, donation: updated });
+      const freshDb = readDatabase();
+      return NextResponse.json({ ok: true, donation: updated, database: safeDb(freshDb) });
     }
 
     if (action === 'save_expenditure') {
@@ -1000,7 +1005,7 @@ export async function POST(req: NextRequest) {
         summary: `Recorded expenditure of KES ${exp.amountKes} for ${exp.category}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, expenditure: exp });
+      return NextResponse.json({ ok: true, expenditure: exp, database: safeDb(db) });
     }
 
     if (action === 'delete_expenditure') {
@@ -1018,7 +1023,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted expenditure record of KES ${target?.amountKes || ''} for ${target?.category || payload.id}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'save_transparency_report') {
@@ -1047,7 +1052,7 @@ export async function POST(req: NextRequest) {
         summary: `Published financial transparency report "${report.title}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, report });
+      return NextResponse.json({ ok: true, report, database: safeDb(db) });
     }
 
     // 9. MERCHANDISE & COMMUNITY MODULES
@@ -1081,7 +1086,7 @@ export async function POST(req: NextRequest) {
         summary: `Added merchandise product "${product.name}" (KES ${product.priceKes})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, product });
+      return NextResponse.json({ ok: true, product, database: safeDb(db) });
     }
 
     if (action === 'delete_product') {
@@ -1099,7 +1104,7 @@ export async function POST(req: NextRequest) {
         summary: `Deleted merchandise product "${target?.name || payload.id}"`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'update_recruitment_status') {
@@ -1123,7 +1128,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated trial application for ${app.fullName} to ${app.applicationStatus}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, application: app });
+      return NextResponse.json({ ok: true, application: app, database: safeDb(db) });
     }
 
     // 10. HOMEPAGE, CLUB INFO & BRAND SETTINGS EDITOR
@@ -1153,7 +1158,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated club branding, hero slides, or club information settings`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, clubSettings: db.clubSettings });
+      return NextResponse.json({ ok: true, clubSettings: db.clubSettings, database: safeDb(db) });
     }
 
     if (action === 'save_website_section') {
@@ -1177,7 +1182,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated homepage section "${sec.title}" (Visible: ${sec.isVisible})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true, section: sec });
+      return NextResponse.json({ ok: true, section: sec, database: safeDb(db) });
     }
 
     // 11. ADMINISTRATIVE USERS & ROLES (Strict Super Admin Only + Owner Protection)
@@ -1219,7 +1224,7 @@ export async function POST(req: NextRequest) {
       });
       await saveDatabaseAndSync(db);
       const { passwordHash: _pw, ...safeUser } = newUser;
-      return NextResponse.json({ ok: true, user: safeUser });
+      return NextResponse.json({ ok: true, user: safeUser, database: safeDb(db) });
     }
 
     if (action === 'delete_admin_user') {
@@ -1253,7 +1258,7 @@ export async function POST(req: NextRequest) {
         summary: `Removed administrator ${target.email}`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'mark_notifications_read') {
@@ -1271,7 +1276,7 @@ export async function POST(req: NextRequest) {
         summary: 'Marked all administrative notifications as read',
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     if (action === 'save_integration_setting') {
@@ -1297,7 +1302,7 @@ export async function POST(req: NextRequest) {
         summary: `Updated integration ${payload.providerKey} (Enabled: ${payload.isEnabled})`,
       });
       await saveDatabaseAndSync(db);
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 
     return NextResponse.json({ ok: false, error: `Unknown action: ${action}` }, { status: 400 });

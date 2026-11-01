@@ -16,6 +16,12 @@ export function LiveSyncListener() {
         channel = new BroadcastChannel('nginda_warriors_live_sync');
         channel.onmessage = (event) => {
           if (event.data?.type === 'DATABASE_UPDATED' || event.data?.type === 'SYNC_DATABASE') {
+            if (event.data?.database) {
+              try {
+                localStorage.setItem('nginda_live_database', JSON.stringify(event.data.database));
+                localStorage.setItem('nginda_db_timestamp', String(Date.now()));
+              } catch {}
+            }
             router.refresh();
           }
         };
@@ -39,7 +45,7 @@ export function LiveSyncListener() {
     window.addEventListener('visibilitychange', handleVisibility);
     window.addEventListener('focus', handleVisibility);
 
-    // 4. Background polling every 3 seconds to catch live updates from any admin device
+    // 4. Background polling every 2 seconds to catch live updates from any admin device
     const pollInterval = setInterval(async () => {
       try {
         const res = await fetch('/api/sync', {
@@ -54,7 +60,7 @@ export function LiveSyncListener() {
           }
         }
       } catch {}
-    }, 3000);
+    }, 2000);
 
     // 5. Initial mount check: if coming with localStorage newer than server snapshot
     if (initialMountRef.current && typeof window !== 'undefined') {

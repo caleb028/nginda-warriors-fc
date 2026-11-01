@@ -272,8 +272,10 @@ export function ContentAndBrandModules({
                       <button
                         type="button"
                         onClick={() => {
-                          const updated = clubSettings.heroSlides.filter((s) => s.id !== slide.id);
-                          onMutate('save_club_settings', { heroSlides: updated });
+                          if (confirm(`Remove hero slide "${slide.headline}"?`)) {
+                            const updated = clubSettings.heroSlides.filter((s) => s.id !== slide.id);
+                            onMutate('save_club_settings', { heroSlides: updated });
+                          }
                         }}
                         className="text-red-600 hover:text-red-800 p-1"
                         title="Remove Slide"
