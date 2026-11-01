@@ -22,6 +22,7 @@ import {
   Sliders,
   Trash2,
 } from 'lucide-react';
+import { processImageFile } from '../utils/imageUpload';
 
 const ARTICLE_CATEGORIES: ArticleCategoryName[] = [
   'Club announcements',
@@ -323,19 +324,61 @@ export function ContentAndBrandModules({
                   className="w-full px-3 py-1.5 rounded border border-gray-300 text-sm"
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <input
-                    type="text"
-                    value={slide.imageUrl}
-                    onChange={(e) => {
-                      const updated = clubSettings.heroSlides.map((s) =>
-                        s.id === slide.id ? { ...s, imageUrl: e.target.value } : s
-                      );
-                      onMutate('save_club_settings', { heroSlides: updated });
-                    }}
-                    placeholder="Team Photograph URL (Optional)"
-                    className="px-3 py-1.5 rounded border border-gray-300 text-xs"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="text"
+                      value={slide.imageUrl}
+                      onChange={(e) => {
+                        const updated = clubSettings.heroSlides.map((s) =>
+                          s.id === slide.id ? { ...s, imageUrl: e.target.value } : s
+                        );
+                        onMutate('save_club_settings', { heroSlides: updated });
+                      }}
+                      placeholder="Team Photograph URL (Optional)"
+                      className="flex-1 px-3 py-1.5 rounded border border-gray-300 text-xs"
+                    />
+                    <label
+                      className="cursor-pointer p-1.5 rounded bg-[#08783E] text-white shrink-0 hover:bg-[#063B25] transition"
+                      title="Upload Slide Photo from Device"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-[#F5D000]" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            try {
+                              const dataUrl = await processImageFile(file);
+                              const updated = clubSettings.heroSlides.map((s) =>
+                                s.id === slide.id ? { ...s, imageUrl: dataUrl } : s
+                              );
+                              onMutate('save_club_settings', { heroSlides: updated });
+                            } catch (err: unknown) {
+                              alert(err instanceof Error ? err.message : 'Upload failed');
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+                    {slide.imageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = clubSettings.heroSlides.map((s) =>
+                            s.id === slide.id ? { ...s, imageUrl: '' } : s
+                          );
+                          onMutate('save_club_settings', { heroSlides: updated });
+                        }}
+                        className="p-1 rounded bg-red-50 text-red-600 text-xs font-bold shrink-0 hover:bg-red-100 transition"
+                        title="Delete Slide Image"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
                   <input
                     type="text"
                     value={slide.primaryCtaLabel}
@@ -657,16 +700,59 @@ export function ContentAndBrandModules({
               />
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
-                Featured Image URL
-              </label>
-              <input
-                type="text"
-                value={featuredImageUrl}
-                onChange={(e) => setFeaturedImageUrl(e.target.value)}
-                placeholder="https://... or /uploads/photo.jpg"
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
-              />
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold uppercase text-[#063B25]">
+                  Featured Article Image
+                </label>
+                {featuredImageUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setFeaturedImageUrl('')}
+                    className="text-[11px] font-bold text-red-600 hover:underline"
+                  >
+                    ✕ Remove Image
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={featuredImageUrl}
+                  onChange={(e) => setFeaturedImageUrl(e.target.value)}
+                  placeholder="https://... or upload from device"
+                  className="flex-1 w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+                />
+                <label
+                  className="shrink-0 cursor-pointer p-2 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white transition flex items-center gap-1 text-xs font-bold shadow-sm"
+                  title="Upload from Device"
+                >
+                  <Camera className="w-4 h-4 text-[#F5D000]" />
+                  <span className="hidden sm:inline">Upload</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        try {
+                          const dataUrl = await processImageFile(file);
+                          setFeaturedImageUrl(dataUrl);
+                        } catch (err: unknown) {
+                          alert(err instanceof Error ? err.message : 'Upload failed');
+                        }
+                      }
+                    }}
+                  />
+                </label>
+                {featuredImageUrl && (
+                  <img
+                    src={featuredImageUrl}
+                    alt="Preview"
+                    className="w-9 h-9 rounded object-cover border border-slate-300 shrink-0"
+                  />
+                )}
+              </div>
             </div>
             <div>
               <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
@@ -733,16 +819,66 @@ export function ContentAndBrandModules({
                   key={art.id}
                   className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
-                  <div>
-                    <span className="text-[11px] font-bold uppercase text-[#08783E]">
-                      {art.categoryName} • Status: {art.publicationStatus} • Author: {art.authorName}
-                    </span>
-                    <h5 className="font-athletic text-2xl font-black uppercase text-[#063B25]">
-                      {art.headline}
-                    </h5>
-                    <p className="text-xs text-gray-600 line-clamp-1">{art.excerpt}</p>
+                  <div className="flex items-start gap-3">
+                    {art.featuredImageUrl ? (
+                      <img
+                        src={art.featuredImageUrl}
+                        alt={art.headline}
+                        className="w-16 h-16 rounded-xl object-cover border border-[#08783E]/40 shrink-0 shadow-xs"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] text-slate-400 font-bold shrink-0">
+                        No Pic
+                      </div>
+                    )}
+                    <div>
+                      <span className="text-[11px] font-bold uppercase text-[#08783E]">
+                        {art.categoryName} • Status: {art.publicationStatus} • Author: {art.authorName}
+                      </span>
+                      <h5 className="font-athletic text-2xl font-black uppercase text-[#063B25]">
+                        {art.headline}
+                      </h5>
+                      <p className="text-xs text-gray-600 line-clamp-1">{art.excerpt}</p>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    <label
+                      className="cursor-pointer p-2 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                      title={art.featuredImageUrl ? 'Change Featured Image' : 'Upload Featured Image from Device'}
+                    >
+                      <Camera className="w-4 h-4 text-[#08783E]" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            try {
+                              const dataUrl = await processImageFile(file);
+                              onMutate('save_article', { ...art, featuredImageUrl: dataUrl });
+                            } catch (err: unknown) {
+                              alert(err instanceof Error ? err.message : 'Upload failed');
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+
+                    {art.featuredImageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Remove image from article "${art.headline}"?`)) {
+                            onMutate('save_article', { ...art, featuredImageUrl: '' });
+                          }
+                        }}
+                        className="p-1.5 rounded bg-amber-50 text-amber-700 hover:bg-amber-100 transition text-[11px] font-bold"
+                        title="Delete Featured Image"
+                      >
+                        ✕ Pic
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => {

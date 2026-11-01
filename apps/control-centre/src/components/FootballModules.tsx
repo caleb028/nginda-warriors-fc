@@ -11,8 +11,10 @@ import {
 import {
   Award,
   Calendar,
+  Camera,
   CheckCircle2,
   Edit3,
+  Image as ImageIcon,
   Plus,
   RefreshCw,
   Trash2,
@@ -22,6 +24,7 @@ import {
   Users,
   Zap,
 } from 'lucide-react';
+import { processImageFile } from '../utils/imageUpload';
 
 export function FootballModules({
   activeModule,
@@ -60,6 +63,7 @@ export function FootballModules({
     'Technical Bench'
   );
   const [staffBio, setStaffBio] = useState('');
+  const [staffPhotoUrl, setStaffPhotoUrl] = useState('');
   const [staffPubStatus, setStaffPubStatus] = useState<PublicationStatus>('published');
 
   // --- FIXTURE STATE ---
@@ -312,31 +316,81 @@ export function FootballModules({
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
-                Player Photograph URL (Optional)
-              </label>
+          {/* Player Portrait Photo Uploader */}
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block text-xs font-bold uppercase text-[#063B25]">
+                  Player Portrait Photograph
+                </label>
+                <p className="text-[11px] text-slate-500">
+                  Upload directly from your device (phone/laptop) or enter a photo link. Displayed with proper placement on squad directory, player profile, and homepage.
+                </p>
+              </div>
+              {photoUrl && (
+                <button
+                  type="button"
+                  onClick={() => setPhotoUrl('')}
+                  className="text-xs font-bold text-red-600 hover:text-red-800 hover:underline inline-flex items-center gap-1"
+                >
+                  ✕ Delete Player Photo
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3">
               <input
                 type="text"
                 value={photoUrl}
                 onChange={(e) => setPhotoUrl(e.target.value)}
-                placeholder="https://... or /uploads/player.jpg"
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+                placeholder="Paste image link or upload file from device..."
+                className="flex-1 w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
               />
-            </div>
-            <div>
-              <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
-                Biography
+
+              <label className="shrink-0 cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white text-xs font-bold uppercase tracking-wider transition shadow-sm">
+                <Camera className="w-4 h-4 text-[#F5D000]" />
+                <span>Upload from Device</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      try {
+                        const dataUrl = await processImageFile(file);
+                        setPhotoUrl(dataUrl);
+                      } catch (err: unknown) {
+                        alert(err instanceof Error ? err.message : 'Failed to process image');
+                      }
+                    }
+                  }}
+                />
               </label>
-              <input
-                type="text"
-                value={biography}
-                onChange={(e) => setBiography(e.target.value)}
-                placeholder="Player profile bio..."
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
-              />
+
+              {photoUrl ? (
+                <div className="w-12 h-12 rounded-lg border-2 border-[#08783E] overflow-hidden bg-black shrink-0 shadow-sm flex items-center justify-center">
+                  <img src={photoUrl} alt="Player Preview" className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-lg border border-dashed border-slate-300 flex items-center justify-center text-[9px] text-slate-400 font-bold uppercase text-center shrink-0">
+                  No Photo
+                </div>
+              )}
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold uppercase text-[#063B25] mb-1">
+              Biography
+            </label>
+            <input
+              type="text"
+              value={biography}
+              onChange={(e) => setBiography(e.target.value)}
+              placeholder="Player profile bio..."
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+            />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
@@ -397,12 +451,27 @@ export function FootballModules({
                         #{p.jerseyNumber}
                       </td>
                       <td className="py-3 px-4 font-bold text-[#063B25]">
-                        {p.fullName}
-                        {p.isFeatured && (
-                          <span className="ml-2 px-2 py-0.5 rounded bg-[#F5D000] text-[#063B25] text-[10px] font-black uppercase">
-                            Featured
-                          </span>
-                        )}
+                        <div className="flex items-center gap-3">
+                          {p.photoUrl ? (
+                            <img
+                              src={p.photoUrl}
+                              alt={p.fullName}
+                              className="w-10 h-10 rounded-lg object-cover border border-[#08783E]/30 shrink-0 shadow-xs"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-[9px] text-slate-400 font-bold shrink-0">
+                              No Pic
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-bold text-[#063B25] leading-tight">{p.fullName}</p>
+                            {p.isFeatured && (
+                              <span className="inline-block mt-0.5 px-2 py-0.2 rounded bg-[#F5D000] text-[#063B25] text-[9px] font-black uppercase">
+                                Featured
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-xs text-gray-600">
                         {p.positionGroup} ({p.specificRole})
@@ -426,23 +495,63 @@ export function FootballModules({
                           {p.publicationStatus}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-right space-x-2">
-                        <button
-                          type="button"
-                          onClick={() => loadPlayerForEdit(p)}
-                          className="p-1.5 rounded bg-[#EEF7EF] text-[#08783E] hover:bg-[#08783E] hover:text-white"
-                          title="Edit Player"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => onMutate('delete_player', { id: p.id })}
-                          className="p-1.5 rounded bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"
-                          title="Delete Player"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                      <td className="py-3 px-4 text-right">
+                        <div className="inline-flex items-center gap-1.5 justify-end">
+                          <label
+                            className="cursor-pointer p-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+                            title={p.photoUrl ? 'Change Player Photo' : 'Upload Player Photo from Device'}
+                          >
+                            <Camera className="w-4 h-4 text-[#08783E]" />
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  try {
+                                    const dataUrl = await processImageFile(file);
+                                    onMutate('save_player', { ...p, photoUrl: dataUrl });
+                                  } catch (err: unknown) {
+                                    alert(err instanceof Error ? err.message : 'Upload failed');
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
+
+                          {p.photoUrl && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (confirm(`Remove and delete photograph for ${p.fullName}?`)) {
+                                  onMutate('save_player', { ...p, photoUrl: '' });
+                                }
+                              }}
+                              className="p-1.5 rounded bg-amber-50 text-amber-700 hover:bg-amber-100 transition text-[11px] font-bold"
+                              title="Delete Player Photo"
+                            >
+                              ✕ Pic
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => loadPlayerForEdit(p)}
+                            className="p-1.5 rounded bg-[#EEF7EF] text-[#08783E] hover:bg-[#08783E] hover:text-white"
+                            title="Edit Player"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onMutate('delete_player', { id: p.id })}
+                            className="p-1.5 rounded bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"
+                            title="Delete Player"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -472,10 +581,12 @@ export function FootballModules({
               roleTitle: staffRoleTitle,
               category: staffCategory,
               biography: staffBio,
+              photoUrl: staffPhotoUrl,
               publicationStatus: staffPubStatus,
             });
             setStaffName('');
             setStaffBio('');
+            setStaffPhotoUrl('');
           }}
           className="bg-white rounded-2xl p-6 border-2 border-[#08783E] space-y-4"
         >
@@ -558,6 +669,70 @@ export function FootballModules({
             />
           </div>
 
+          {/* Staff Photo Uploader */}
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block text-xs font-bold uppercase text-[#063B25]">
+                  Staff / Coach Portrait Photograph
+                </label>
+                <p className="text-[11px] text-slate-500">
+                  Upload directly from your device. Displays on the About page and Squad Technical Bench directory.
+                </p>
+              </div>
+              {staffPhotoUrl && (
+                <button
+                  type="button"
+                  onClick={() => setStaffPhotoUrl('')}
+                  className="text-xs font-bold text-red-600 hover:text-red-800 hover:underline"
+                >
+                  ✕ Delete Staff Photo
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <input
+                type="text"
+                value={staffPhotoUrl}
+                onChange={(e) => setStaffPhotoUrl(e.target.value)}
+                placeholder="Paste image link or upload from device..."
+                className="flex-1 w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+              />
+
+              <label className="shrink-0 cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#08783E] hover:bg-[#063B25] text-white text-xs font-bold uppercase tracking-wider transition shadow-sm">
+                <Camera className="w-4 h-4 text-[#F5D000]" />
+                <span>Upload from Device</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      try {
+                        const dataUrl = await processImageFile(file);
+                        setStaffPhotoUrl(dataUrl);
+                      } catch (err: unknown) {
+                        alert(err instanceof Error ? err.message : 'Upload failed');
+                      }
+                    }
+                  }}
+                />
+              </label>
+
+              {staffPhotoUrl ? (
+                <div className="w-12 h-12 rounded-lg border-2 border-[#08783E] overflow-hidden bg-black shrink-0 shadow-sm flex items-center justify-center">
+                  <img src={staffPhotoUrl} alt="Staff Preview" className="w-full h-full object-cover" />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-lg border border-dashed border-slate-300 flex items-center justify-center text-[9px] text-slate-400 font-bold uppercase text-center shrink-0">
+                  No Photo
+                </div>
+              )}
+            </div>
+          </div>
+
           <button
             type="submit"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#F5D000] text-[#063B25] font-athletic font-black text-base uppercase tracking-wider"
@@ -576,25 +751,81 @@ export function FootballModules({
               {db.staff.map((s) => (
                 <div
                   key={s.id}
-                  className="p-4 rounded-xl bg-[#EEF7EF]/50 border border-gray-200 flex items-start justify-between"
+                  className="p-4 rounded-xl bg-[#EEF7EF]/50 border border-gray-200 flex flex-col justify-between gap-3"
                 >
-                  <div>
-                    <span className="text-[10px] font-bold uppercase text-[#08783E]">
-                      {s.category} • {s.publicationStatus}
-                    </span>
-                    <p className="font-athletic text-xl font-bold uppercase text-[#063B25]">
-                      {s.fullName}
-                    </p>
-                    <p className="text-xs font-bold text-[#08783E]">{s.roleTitle}</p>
-                    <p className="text-xs text-gray-600 mt-1">{s.biography}</p>
+                  <div className="flex items-start gap-3">
+                    {s.photoUrl ? (
+                      <img
+                        src={s.photoUrl}
+                        alt={s.fullName}
+                        className="w-14 h-14 rounded-xl object-cover border border-[#08783E]/40 shrink-0 shadow-xs"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 rounded-xl bg-slate-200 border border-slate-300 flex items-center justify-center text-[10px] text-slate-500 font-bold shrink-0">
+                        No Pic
+                      </div>
+                    )}
+                    <div className="flex-1 overflow-hidden">
+                      <span className="text-[10px] font-bold uppercase text-[#08783E]">
+                        {s.category} • {s.publicationStatus}
+                      </span>
+                      <p className="font-athletic text-lg font-bold uppercase text-[#063B25] truncate">
+                        {s.fullName}
+                      </p>
+                      <p className="text-xs font-bold text-[#08783E]">{s.roleTitle}</p>
+                      <p className="text-xs text-gray-600 mt-0.5 line-clamp-2">{s.biography}</p>
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => onMutate('delete_staff', { id: s.id })}
-                    className="text-red-600 hover:text-red-800 p-1"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+
+                  <div className="flex items-center justify-between border-t border-gray-200/60 pt-2 text-xs">
+                    <label
+                      className="cursor-pointer inline-flex items-center gap-1 text-[11px] font-bold text-[#08783E] hover:underline"
+                      title={s.photoUrl ? 'Change Staff Photo' : 'Upload Staff Photo'}
+                    >
+                      <Camera className="w-3.5 h-3.5 text-[#08783E]" />
+                      <span>{s.photoUrl ? 'Change Pic' : 'Upload Pic'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            try {
+                              const dataUrl = await processImageFile(file);
+                              onMutate('save_staff', { ...s, photoUrl: dataUrl });
+                            } catch (err: unknown) {
+                              alert(err instanceof Error ? err.message : 'Upload failed');
+                            }
+                          }
+                        }}
+                      />
+                    </label>
+
+                    {s.photoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Remove photograph for ${s.fullName}?`)) {
+                            onMutate('save_staff', { ...s, photoUrl: '' });
+                          }
+                        }}
+                        className="text-amber-700 hover:text-amber-900 font-bold text-[11px]"
+                        title="Delete Photo"
+                      >
+                        ✕ Remove Pic
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => onMutate('delete_staff', { id: s.id })}
+                      className="text-red-600 hover:text-red-800 p-1"
+                      title="Delete Staff Profile"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

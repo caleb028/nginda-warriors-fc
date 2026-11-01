@@ -64,6 +64,42 @@ export async function POST(req: NextRequest) {
 
     if (action === 'login') {
       const clientIp = getSafeClientIp(req.headers);
+
+      // If no admin user exists yet, automatically initialize the first owner with these credentials
+      if (!isSystemBootstrapped()) {
+        const fallbackName =
+          body.fullName ||
+          (body.email
+            ? body.email
+                .split('@')[0]
+                .replace(/[._-]/g, ' ')
+                .replace(/\b\w/g, (c: string) => c.toUpperCase())
+            : 'Club Super Admin');
+
+        const { user, token } = bootstrapOwnerSuperAdmin({
+          fullName: fallbackName,
+          email: body.email,
+          password: body.password,
+          setupToken: body.setupToken,
+        });
+
+        const res = NextResponse.json({
+          ok: true,
+          user,
+          token,
+          message: 'Primary Super Administrator established and signed in successfully.',
+        });
+
+        res.cookies.set(ADMIN_SESSION_COOKIE_NAME, token, {
+          httpOnly: true,
+          secure: isSecure,
+          sameSite: 'lax',
+          path: '/',
+          maxAge: 60 * 60 * 12,
+        });
+        return res;
+      }
+
       const { user, token } = authenticateAdminUser({
         email: body.email,
         password: body.password,

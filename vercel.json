@@ -12,6 +12,16 @@
   },
   "redirects": [
     {
+      "source": "/login",
+      "destination": "/manage/login",
+      "permanent": false
+    },
+    {
+      "source": "/admin/login",
+      "destination": "/manage/login",
+      "permanent": false
+    },
+    {
       "source": "/admin",
       "destination": "/manage",
       "permanent": false

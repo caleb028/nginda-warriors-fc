@@ -14,6 +14,7 @@ export function AuthAndBootstrapGate({
   crestUrl?: string;
   onAuthenticated: () => void;
 }) {
+  const [mode, setMode] = useState<'login' | 'setup'>('login');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,14 +33,14 @@ export function AuthAndBootstrapGate({
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(
-          bootstrapped
+          mode === 'login'
             ? { action: 'login', email, password }
             : { action: 'bootstrap_owner', fullName, email, password, setupToken }
         ),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
-        setErrorMsg(data.error || 'Authentication failed.');
+        setErrorMsg(data.error || 'Authentication failed. Please verify credentials.');
       } else {
         if (data.token && typeof window !== 'undefined') {
           localStorage.setItem('nginda_control_session_token', data.token);
@@ -54,43 +55,73 @@ export function AuthAndBootstrapGate({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center px-4 py-12">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+    <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center px-4 py-12">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-slate-800 overflow-hidden">
         {/* Top Branded Header */}
-        <div className="bg-white text-slate-900 p-8 text-center border-b border-slate-200">
+        <div className="bg-black text-white p-8 text-center border-b border-[#262626]">
           <div className="flex justify-center mb-4">
-            <div className="p-3 rounded-2xl bg-slate-900 border border-slate-800 shadow-md flex items-center justify-center">
-              <ClubCrest size={80} customCrestUrl={crestUrl} />
+            <div className="p-3 rounded-2xl bg-[#0D0D0D] border border-[#FDE100]/40 shadow-xl flex items-center justify-center">
+              <ClubCrest size={76} customCrestUrl={crestUrl} />
             </div>
           </div>
-          <span className="inline-block px-3 py-0.5 rounded-full bg-[#08783E]/10 border border-[#08783E]/20 text-[#08783E] font-pedals font-athletic font-black text-xs uppercase tracking-widest mb-2">
-            PRIVATE ADMINISTRATIVE SYSTEM • EST. 2024
+          <span className="inline-block px-3 py-1 rounded-full bg-[#FDE100]/15 border border-[#FDE100]/30 text-[#FDE100] font-pedals font-athletic font-black text-xs uppercase tracking-widest mb-2">
+            CONTROL CENTRE • CLUB ADMINISTRATION
           </span>
-          <h1 className="font-pedals font-athletic text-2xl sm:text-3xl font-black uppercase tracking-wide text-slate-950">
-            NGINDA WARRIORS CONTROL CENTRE
+          <h1 className="font-pedals font-athletic text-2xl sm:text-3xl font-black uppercase tracking-wide text-white">
+            NGINDA WARRIORS FC
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            {bootstrapped
-              ? 'Sign in with your authorized administrator credentials'
-              : 'Initial Super Administrator Ownership Bootstrap'}
+          <p className="text-xs text-slate-400 mt-1">
+            Private Match & Club Management System (Est. 2024)
           </p>
+
+          {/* Clean Mode Switcher Tabs */}
+          <div className="mt-6 grid grid-cols-2 p-1 rounded-xl bg-[#141414] border border-[#262626]">
+            <button
+              type="button"
+              onClick={() => {
+                setMode('login');
+                setErrorMsg('');
+              }}
+              className={`py-2 px-3 rounded-lg text-xs font-athletic font-black uppercase tracking-wider transition ${
+                mode === 'login'
+                  ? 'bg-[#FDE100] text-black shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode('setup');
+                setErrorMsg('');
+              }}
+              className={`py-2 px-3 rounded-lg text-xs font-athletic font-black uppercase tracking-wider transition ${
+                mode === 'setup'
+                  ? 'bg-[#FDE100] text-black shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              First-Time Setup
+            </button>
+          </div>
         </div>
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-4">
-          {!bootstrapped && (
+          {mode === 'setup' && (
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1">
               <div className="font-extrabold uppercase flex items-center gap-1.5 text-[#08783E]">
                 <ShieldCheck className="w-4 h-4" />
-                <span>First-Time Owner Setup (No Hardcoded Credentials)</span>
+                <span>Super Administrator Setup</span>
               </div>
               <p>
-                Establish primary <strong>SUPER_ADMIN</strong> ownership for Nginda Warriors Control Centre. Once claimed, this setup screen locks permanently.
+                Claim primary <strong>SUPER_ADMIN</strong> ownership for Nginda Warriors Control Centre.
               </p>
             </div>
           )}
 
-          {!bootstrapped && (
+          {mode === 'setup' && (
             <div>
               <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
                 Owner Full Name *
@@ -100,7 +131,7 @@ export function AuthAndBootstrapGate({
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Primary Super Administrator Name"
+                placeholder="e.g. John Kamau"
                 className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
               />
             </div>
@@ -122,12 +153,12 @@ export function AuthAndBootstrapGate({
 
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
-              Password * {!bootstrapped && '(Minimum 8 Characters)'}
+              Password * {mode === 'setup' && '(Minimum 8 Characters)'}
             </label>
             <input
               type="password"
               required
-              minLength={8}
+              minLength={mode === 'setup' ? 8 : 4}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
@@ -135,16 +166,16 @@ export function AuthAndBootstrapGate({
             />
           </div>
 
-          {!bootstrapped && (
+          {mode === 'setup' && (
             <div>
               <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
-                Optional Setup Token (If Configured in Environment)
+                Setup Token (Optional)
               </label>
               <input
                 type="password"
                 value={setupToken}
                 onChange={(e) => setSetupToken(e.target.value)}
-                placeholder="Leave blank if not required by .env"
+                placeholder="Leave blank if not configured in .env"
                 className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-xs focus:border-[#08783E] focus:outline-none"
               />
             </div>
@@ -159,9 +190,9 @@ export function AuthAndBootstrapGate({
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-base uppercase tracking-wider shadow-sm transition"
+            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-base uppercase tracking-wider shadow-md transition"
           >
-            {bootstrapped ? (
+            {mode === 'login' ? (
               <>
                 <KeyRound className="w-5 h-5 text-[#F5D000]" />
                 <span>{loading ? 'Signing In...' : 'Sign In to Control Centre'}</span>

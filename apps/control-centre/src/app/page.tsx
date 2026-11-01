@@ -499,6 +499,16 @@ export default function ControlCentreApp() {
               <Globe className="w-3.5 h-3.5 text-[#08783E]" />
               <span className="hidden sm:inline">Public Site</span>
             </a>
+
+            {/* Quick Sign Out Button */}
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition"
+              title="Sign Out of Control Centre"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </header>
 
