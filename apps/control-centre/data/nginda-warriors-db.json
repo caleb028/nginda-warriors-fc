@@ -1,0 +1,508 @@
+{
+  "users": [],
+  "clubSettings": {
+    "id": "520dda57-b709-4f92-91cf-834bd68e8a04",
+    "clubName": "Nginda Warriors FC",
+    "shortName": "Nginda Warriors",
+    "establishedYear": 2024,
+    "tagline": "One Team. One Community. One Warrior Spirit.",
+    "crestUrl": "/brand/nginda-warriors-crest.png",
+    "warriorGreen": "#08783E",
+    "deepForestGreen": "#063B25",
+    "crestYellow": "#F5D000",
+    "goldenAccent": "#D5AA00",
+    "softIvory": "#FFFDF2",
+    "lightGreenBg": "#EEF7EF",
+    "neutralGrey": "#F2F4F2",
+    "charcoal": "#17231C",
+    "headingFont": "Barlow Condensed",
+    "bodyFont": "Inter",
+    "contactEmail": "",
+    "contactPhone": "",
+    "whatsappNumber": "",
+    "physicalAddress": "Nginda, Murang’a County, Kenya",
+    "county": "Murang’a County",
+    "socialLinks": {
+      "facebook": "",
+      "instagram": "",
+      "twitter": "",
+      "youtube": "",
+      "tiktok": ""
+    },
+    "seoMetadata": {
+      "defaultTitle": "Nginda Warriors FC | Official Football Club Website (Est. 2024)",
+      "titleTemplate": "%s | Nginda Warriors FC",
+      "defaultDescription": "Official digital home of Nginda Warriors FC (Est. 2024). One Team. One Community. One Warrior Spirit. Follow fixtures, results, squad profiles, news, and partnership opportunities.",
+      "keywords": [
+        "Nginda Warriors FC",
+        "Kenyan Football",
+        "Muranga Football",
+        "Grassroots Football Kenya",
+        "Football Club Sponsorship Kenya"
+      ],
+      "canonicalBaseUrl": "https://ngindawarriorsfc.co.ke"
+    },
+    "heroSlides": [
+      {
+        "id": "hero-slide-1-matchday",
+        "headline": "NGINDA WARRIORS FC",
+        "tagline": "One Team. One Community. One Warrior Spirit.",
+        "description": "Established in 2024 to unite our community through competitive football, discipline, youth empowerment, and sporting excellence.",
+        "imageUrl": "/uploads/hero-matchday-warriors.jpg",
+        "primaryCtaLabel": "Explore Our Club",
+        "primaryCtaHref": "/about",
+        "secondaryCtaLabel": "Partner With Us",
+        "secondaryCtaHref": "/sponsors",
+        "isVisible": true,
+        "displayOrder": 1
+      },
+      {
+        "id": "hero-slide-2-huddle",
+        "headline": "UNITED WARRIOR NATION",
+        "tagline": "Discipline. Tactical Passion. Community Pride.",
+        "description": "Nginda Warriors FC first-team players huddle on the pitch, dedicated to tactical excellence, sportsmanship, and fearless ambition.",
+        "imageUrl": "/uploads/team-huddle-warriors.jpg",
+        "primaryCtaLabel": "Our Story & Heritage",
+        "primaryCtaHref": "/about",
+        "secondaryCtaLabel": "Support The Warriors",
+        "secondaryCtaHref": "/support",
+        "isVisible": true,
+        "displayOrder": 2
+      },
+      {
+        "id": "hero-slide-3-players",
+        "headline": "FEARLESS FIRST TEAM SQUAD",
+        "tagline": "Speed, Agility and Relentless Determination",
+        "description": "Representing Murang’a County with pride. Our homegrown athletes bring explosive athletic energy and tactical discipline to every fixture.",
+        "imageUrl": "/uploads/warriors-match-players.png",
+        "primaryCtaLabel": "Meet The Full Squad",
+        "primaryCtaHref": "/team",
+        "secondaryCtaLabel": "Player Trials",
+        "secondaryCtaHref": "/recruitment",
+        "isVisible": true,
+        "displayOrder": 3
+      }
+    ],
+    "clubInfo": {
+      "aboutSummary": "Nginda Warriors FC is a community-rooted football club established in 2024, built on discipline, competitive ambition, and local pride.",
+      "historyNarrative": "Founded in 2024, Nginda Warriors FC was established to provide structured, competitive football opportunities for local talent while bringing together supporters, families, and businesses under the Warrior spirit. Additional historical milestones are published here as approved by club leadership.",
+      "visionStatement": "To become a model community football institution recognized for sporting excellence, youth talent development, and transparent governance.",
+      "missionStatement": "To nurture football talent, compete with honour and discipline in every fixture, and strengthen community bonds through sport.",
+      "coreValues": [
+        {
+          "title": "Discipline & Integrity",
+          "description": "High standards of conduct on the pitch, in training, and in club governance."
+        },
+        {
+          "title": "Warrior Competitive Spirit",
+          "description": "Relentless effort, teamwork, and tactical courage from kickoff to the final whistle."
+        },
+        {
+          "title": "Community Unity",
+          "description": "Proudly representing Nginda and empowering youth through positive mentorship."
+        },
+        {
+          "title": "Financial & Operational Transparency",
+          "description": "Accountable stewardship of every supporter contribution and sponsor partnership."
+        }
+      ],
+      "honoursAndMilestones": [
+        {
+          "year": "2024",
+          "title": "Official Club Foundation",
+          "description": "Nginda Warriors FC officially established under the green-and-yellow Warrior crest."
+        }
+      ],
+      "homeGroundName": "",
+      "homeGroundAddress": "Nginda",
+      "homeGroundDescription": "Official home ground details and matchday visitor guidance are managed and published by club administration.",
+      "trainingGroundName": "",
+      "trainingGroundSchedule": "",
+      "trainingGroundDescription": "Training session schedules and ground locations are updated by the technical bench through the Control Centre.",
+      "communityImpactSummary": "Nginda Warriors FC invests in grassroots football development, youth mentorship, and community cohesion through organized sport.",
+      "developmentObjectives": [
+        "Provide structured coaching and safe training environments for emerging local footballers.",
+        "Compete with distinction in regional and national football competitions.",
+        "Build sustainable commercial partnerships with local and national businesses.",
+        "Maintain transparent financial stewardship for all club development initiatives."
+      ]
+    },
+    "updatedAt": "2026-10-31T21:43:49.076Z"
+  },
+  "websiteSections": [
+    {
+      "id": "7261b8c6-f8f3-4282-b881-aaa6670c9e29",
+      "sectionKey": "match_centre",
+      "title": "MATCH CENTRE",
+      "subtitle": "Upcoming Fixture, Latest Result & Standings Snapshot",
+      "description": "Official match schedules, live scores updated by match officials, and verified results.",
+      "primaryCtaLabel": "View All Fixtures",
+      "primaryCtaHref": "/fixtures",
+      "isVisible": true,
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "f7e2d757-1a2c-4b83-b2a4-861d10c46004",
+      "sectionKey": "featured_squad",
+      "title": "FEARLESS FIRST TEAM",
+      "subtitle": "ONE CLUB. ONE WARRIOR SPIRIT.",
+      "description": "Meet the approved players and coaching staff representing Nginda Warriors FC.",
+      "primaryCtaLabel": "Full Squad Directory",
+      "primaryCtaHref": "/team",
+      "isVisible": true,
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "updatedAt": "2026-11-01T10:14:00.843Z"
+    },
+    {
+      "id": "67d9d2a8-f397-48b7-ae20-5964ebb81010",
+      "sectionKey": "latest_news",
+      "title": "CLUB NEWS & UPDATES",
+      "subtitle": "Official Announcements, Match Reports & Community Stories",
+      "description": "Stay informed with verified updates straight from Nginda Warriors FC.",
+      "primaryCtaLabel": "Read All News",
+      "primaryCtaHref": "/news",
+      "isVisible": true,
+      "displayOrder": 3,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "f8b8ee7e-9b47-4b34-9dab-8da93ff00d58",
+      "sectionKey": "community_impact",
+      "title": "COMMUNITY IMPACT",
+      "subtitle": "Building Talent & Opportunity Through Football",
+      "description": "Discover how Nginda Warriors FC empowers youth and unites our community.",
+      "primaryCtaLabel": "Support the Club",
+      "primaryCtaHref": "/support",
+      "isVisible": true,
+      "displayOrder": 4,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "fc2e3c37-70e9-4404-95ed-5517c51e9ee5",
+      "sectionKey": "sponsors_strip",
+      "title": "OFFICIAL PARTNERS & SPONSORS",
+      "subtitle": "Businesses Standing With The Warriors",
+      "description": "Partner with Nginda Warriors FC and grow alongside our vibrant football community.",
+      "primaryCtaLabel": "Partner With Us",
+      "primaryCtaHref": "/sponsors",
+      "isVisible": true,
+      "displayOrder": 5,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "84601ef2-1d51-4143-98f7-211fb1669160",
+      "sectionKey": "final_cta",
+      "title": "STAND WITH THE WARRIORS.",
+      "subtitle": "One Team. One Community. One Warrior Spirit.",
+      "description": "Support local football, empower talent, and help build the future of Nginda Warriors FC.",
+      "primaryCtaLabel": "Support the Club",
+      "primaryCtaHref": "/support",
+      "secondaryCtaLabel": "Become a Sponsor",
+      "secondaryCtaHref": "/sponsors",
+      "isVisible": true,
+      "displayOrder": 6,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    }
+  ],
+  "seasons": [
+    {
+      "id": "7d77f642-13df-44a1-a741-b88968a16739",
+      "name": "2026/2027 Season",
+      "startDate": "2026-08-01",
+      "endDate": "2027-05-31",
+      "isCurrent": true
+    }
+  ],
+  "competitions": [],
+  "players": [],
+  "staff": [
+    {
+      "id": "staff-peter-gitau-gaffer",
+      "fullName": "Peter Gitau",
+      "roleTitle": "Team Gaffer & Head Coach",
+      "category": "Technical Bench",
+      "photoUrl": "/uploads/peter-gitau-portrait.png",
+      "biography": "Head Coach and Team Gaffer of Nginda Warriors FC. Instilling fearless attacking football, tactical discipline, and sporting excellence for Nginda Warriors FC.",
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2026-11-01T10:14:00.843Z"
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "fixture-magunas-fc-1",
+      "competitionName": "Friendly",
+      "seasonName": "2026/2027 Season",
+      "opponentName": "Magunas FC",
+      "opponentCrestUrl": "",
+      "venue": "Nginda Home Ground",
+      "isHome": false,
+      "kickoffAt": "2026-11-01T12:00:00.000Z",
+      "timezone": "Africa/Nairobi",
+      "matchStatus": "scheduled",
+      "homeScore": null,
+      "awayScore": null,
+      "motmVotingOpen": false,
+      "publicationStatus": "published",
+      "events": [],
+      "lineups": [],
+      "report": null,
+      "createdAt": "2026-11-01T12:00:00.000Z",
+      "updatedAt": "2026-11-01T12:00:00.000Z"
+    }
+  ],
+  "standings": [],
+  "articles": [
+    {
+      "id": "article-gaffer-peter-gitau-vision",
+      "slug": "team-gaffer-peter-gitau-outlines-vision",
+      "headline": "Team Gaffer Peter Gitau Outlines Tactical Ambitions For Nginda Warriors FC",
+      "categoryName": "Training updates",
+      "excerpt": "Head Coach and Team Gaffer Peter Gitau emphasizes high-intensity tactical discipline, unity, and fearless attacking football as the squad steps up preparations.",
+      "body": "Nginda Warriors FC Head Coach and Team Gaffer Peter Gitau has spoken passionately about the club's trajectory, praising the players' dedication and tactical adaptability.\n\n\"Our warrior spirit begins on the training pitch,\" said Coach Gitau. \"We demand discipline, rapid transitions, and total commitment to the jersey. The community of Nginda deserves a football club that fights for every point and showcases genuine excellence on the pitch.\"\n\nUnder Coach Gitau's leadership, the Warriors continue rigorous training sessions focusing on match fitness, set-piece execution, and defensive solidity ahead of upcoming competitive league fixtures.",
+      "featuredImageUrl": "/uploads/team-huddle-red-warriors.jpg",
+      "authorName": "Club Media Desk",
+      "isFeatured": true,
+      "publicationStatus": "published",
+      "publishedAt": "2026-10-30T10:00:00.000Z",
+      "createdAt": "2026-10-30T10:00:00.000Z",
+      "updatedAt": "2026-11-01T10:14:00.842Z"
+    }
+  ],
+  "galleryAlbums": [
+    {
+      "id": "album-first-team-matchday",
+      "title": "First Team Matchday & Squad",
+      "category": "Matches",
+      "description": "Official matchday action shots, pre-game team preparations, and squad celebrations.",
+      "coverImageUrl": "/uploads/hero-matchday-warriors.jpg",
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "album-tactics-and-gaffer",
+      "title": "Tactical Direction & Coaching Sessions",
+      "category": "Training",
+      "description": "Team Gaffer Peter Gitau and the technical bench drilling tactics and squad conditioning.",
+      "coverImageUrl": "/uploads/peter-gitau-head-coach.png",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "album-club-patrons",
+      "title": "Club Leadership & Patron Outreach",
+      "category": "Club events",
+      "description": "Nginda Warriors FC executive officials, patron ceremonies, and community outreach.",
+      "coverImageUrl": "/uploads/club-official-patron.jpg",
+      "displayOrder": 3,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "mediaAssets": [
+    {
+      "id": "media-hero-matchday-1",
+      "albumId": "album-first-team-matchday",
+      "title": "Matchday Warriors First Team Lineup",
+      "caption": "Nginda Warriors FC first-team squad standing ready in official yellow and black kits before match kickoff.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/hero-matchday-warriors.jpg",
+      "displayOrder": 1,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-team-huddle-2",
+      "albumId": "album-first-team-matchday",
+      "title": "Warriors Team Huddle & Tactical Briefing",
+      "caption": "Pre-match huddle on the pitch with players united in focus and listening to tactical instructions.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/team-huddle-warriors.jpg",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-club-official-3",
+      "albumId": "album-club-patrons",
+      "title": "Club Patron & Official Presentation",
+      "caption": "Nginda Warriors FC club patron holding the official match ball at the home ground facility.",
+      "category": "Club events",
+      "mediaType": "image",
+      "url": "/uploads/club-official-patron.jpg",
+      "displayOrder": 3,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-warriors-match-players-4",
+      "albumId": "album-first-team-matchday",
+      "title": "First Team Squad Duo on Match Pitch",
+      "caption": "Warriors first team players wearing yellow jerseys on matchday.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/warriors-match-players.png",
+      "displayOrder": 4,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-gaffer-peter-gitau-5",
+      "albumId": "album-tactics-and-gaffer",
+      "title": "Team Gaffer Peter Gitau Directing Match Tactics",
+      "caption": "Nginda Warriors FC Head Coach and Team Gaffer Peter Gitau giving pitchside tactical instructions.",
+      "category": "Training",
+      "mediaType": "image",
+      "url": "/uploads/peter-gitau-portrait.png",
+      "displayOrder": 5,
+      "publicationStatus": "published",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media-team-huddle-red-6",
+      "albumId": "album-first-team-matchday",
+      "title": "Warriors Pre-Match Unity Circle",
+      "caption": "Nginda Warriors FC players locked in a united pre-match huddle on the pitch in official red match kits.",
+      "category": "Matches",
+      "mediaType": "image",
+      "url": "/uploads/team-huddle-red-warriors.jpg",
+      "displayOrder": 2,
+      "publicationStatus": "published",
+      "createdAt": "2026-11-01T10:14:00.843Z"
+    }
+  ],
+  "events": [],
+  "sponsorshipPackages": [
+    {
+      "id": "fa8a15e8-2422-471f-9d40-03fa67a46a74",
+      "tierCode": "BRONZE",
+      "name": "Bronze Community Partner",
+      "priceKes": null,
+      "billingPeriod": "Per Season",
+      "description": "Entry-level partnership for local businesses supporting grassroots football in Nginda.",
+      "benefits": [
+        "Official recognition on the Nginda Warriors FC Sponsor Wall",
+        "Social media partner appreciation mention",
+        "Certificate of Official Club Partnership"
+      ],
+      "isFeatured": false,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "50479be5-b765-4b47-af17-119e6cd15431",
+      "tierCode": "SILVER",
+      "name": "Silver Club Partner",
+      "priceKes": null,
+      "billingPeriod": "Per Season",
+      "description": "Enhanced brand visibility across digital matchday graphics and community events.",
+      "benefits": [
+        "Logo placement on the Official Website Sponsor Strip",
+        "Brand inclusion on digital matchday fixture and result graphics",
+        "Pitchside banner placement opportunity at home matches",
+        "Invitation to official club community events"
+      ],
+      "isFeatured": false,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "f59d289b-fa75-420b-91d7-48f153c71be4",
+      "tierCode": "GOLD",
+      "name": "Gold Official Partner",
+      "priceKes": null,
+      "billingPeriod": "Per Season",
+      "description": "High-impact commercial partnership supporting first-team operations and youth development.",
+      "benefits": [
+        "Prominent logo placement on training apparel or warm-up kits",
+        "Dedicated partnership announcement article on the official website",
+        "Priority branding at home fixtures and community outreach tournaments",
+        "Collaborative community CSR activation with club leadership"
+      ],
+      "isFeatured": true,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "66ea35b9-ef1a-404c-b301-c6044f66a9ad",
+      "tierCode": "MAIN_KIT",
+      "name": "Main Kit Sponsor (Principal Partner)",
+      "priceKes": null,
+      "billingPeriod": "Per Season / Multi-Season Agreement",
+      "description": "Flagship front-of-shirt partnership at the heart of the Nginda Warriors FC identity.",
+      "benefits": [
+        "Exclusive Front-of-Shirt branding on Official Home & Away Match Jerseys",
+        "Headline placement across the Official Website, Match Centre & Media Backdrops",
+        "Framed official signed team jersey & executive leadership partnership review",
+        "Full custom commercial & community impact activation programme"
+      ],
+      "isFeatured": true,
+      "publicationStatus": "published",
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    }
+  ],
+  "sponsors": [],
+  "sponsorInquiries": [],
+  "agreements": [],
+  "fundraisingCampaigns": [],
+  "donations": [],
+  "expenditureRecords": [],
+  "transparencyReports": [],
+  "fanMemberships": [],
+  "recruitmentApplications": [],
+  "products": [],
+  "orders": [],
+  "fanVotes": [],
+  "contactMessages": [],
+  "notifications": [],
+  "auditLogs": [],
+  "integrationSettings": [
+    {
+      "id": "bba3275f-a3ad-4a5d-83a9-c3a755dce779",
+      "providerKey": "safaricom_daraja",
+      "displayName": "Safaricom Daraja M-Pesa API (STK Push & Paybill/Till)",
+      "isEnabled": false,
+      "environment": "sandbox",
+      "publicConfig": {
+        "paybillNumber": "",
+        "tillNumber": "",
+        "accountPrefix": "WARRIORS"
+      },
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "c3b0065e-8c6e-4eb9-8c53-04f46c048da2",
+      "providerKey": "supabase_cloud",
+      "displayName": "Supabase PostgreSQL, Auth & Media Storage",
+      "isEnabled": false,
+      "environment": "production",
+      "publicConfig": {
+        "projectUrl": ""
+      },
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    },
+    {
+      "id": "cd55e3d5-0d7a-4d34-bec1-ac31f92c48ed",
+      "providerKey": "whatsapp_commerce",
+      "displayName": "WhatsApp Merchandise Ordering & Supporter Desk",
+      "isEnabled": true,
+      "environment": "production",
+      "publicConfig": {
+        "orderPhone": ""
+      },
+      "updatedAt": "2026-10-31T21:43:49.076Z"
+    }
+  ]
+}

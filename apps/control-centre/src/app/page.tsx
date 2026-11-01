@@ -233,6 +233,11 @@ export default function ControlCentreApp() {
             fetch(`${origin}/api/revalidate`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ path: '/' }),
+            }).catch(() => null);
+            fetch(`${origin}/api/revalidate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ path: '/fixtures' }),
             }).catch(() => null);
 

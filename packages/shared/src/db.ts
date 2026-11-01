@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { createUuid, maskPhoneNumber, slugify } from './utils';
+import seedDatabase from './seed.json';
 
 import {
   AdminNotification,
@@ -104,8 +105,7 @@ export function getSharedDatabaseFilePath(): string {
       }
       if (!copied) {
         try {
-          const initial = createInitialDatabaseState();
-          fs.writeFileSync(tmpFile, JSON.stringify(initial, null, 2), 'utf8');
+          fs.writeFileSync(tmpFile, JSON.stringify(seedDatabase, null, 2), 'utf8');
         } catch {}
       }
     }
@@ -513,21 +513,28 @@ export function readDatabase(): NgindaDatabaseSchema {
   if (!fs.existsSync(filePath)) {
     // Check bundled data if available
     const rootDir = resolveMonorepoRoot();
-    const bundledCandidate = path.join(rootDir, 'data', 'nginda-warriors-db.json');
-    if (fs.existsSync(bundledCandidate)) {
-      try {
-        const raw = fs.readFileSync(bundledCandidate, 'utf8');
-        const data = JSON.parse(raw) as NgindaDatabaseSchema;
+    const candidates = [
+      path.join(rootDir, 'data', 'nginda-warriors-db.json'),
+      path.join(process.cwd(), 'data', 'nginda-warriors-db.json'),
+      path.join(process.cwd(), '..', 'data', 'nginda-warriors-db.json'),
+      path.join(process.cwd(), '..', '..', 'data', 'nginda-warriors-db.json'),
+    ];
+    for (const cand of candidates) {
+      if (fs.existsSync(cand)) {
         try {
-          fs.writeFileSync(filePath, raw, 'utf8');
+          const raw = fs.readFileSync(cand, 'utf8');
+          const data = JSON.parse(raw) as NgindaDatabaseSchema;
+          try {
+            fs.writeFileSync(filePath, raw, 'utf8');
+          } catch {}
+          globalThis.__NGINDA_DATABASE_CACHE__ = data;
+          globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+          return data;
         } catch {}
-        globalThis.__NGINDA_DATABASE_CACHE__ = data;
-        globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
-        return data;
-      } catch {}
+      }
     }
 
-    const initial = createInitialDatabaseState();
+    const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
     } catch {}
@@ -542,7 +549,7 @@ export function readDatabase(): NgindaDatabaseSchema {
     globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
     return data;
   } catch {
-    const initial = createInitialDatabaseState();
+    const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
     } catch {}

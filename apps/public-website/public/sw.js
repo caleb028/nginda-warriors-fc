@@ -1,15 +1,11 @@
-// Nginda Warriors FC — Service Worker (Offline Support & PWA Caching)
-const CACHE_NAME = 'nginda-warriors-v2';
-const STATIC_ASSETS = [
-  '/brand/nginda-warriors-crest.png',
-  '/manifest.json',
-  '/offline.html',
-];
+// Nginda Warriors FC — Service Worker (Always-Fresh Network-First with Offline Fallback)
+const CACHE_NAME = 'nginda-warriors-v3-fresh';
+const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch(() => {});
+      return cache.addAll(['/offline.html', '/manifest.json']).catch(() => {});
     })
   );
   self.skipWaiting();
@@ -34,54 +30,38 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Skip non-GET requests and admin routes
-  if (req.method !== 'GET' || url.pathname.startsWith('/manage') || url.pathname.startsWith('/api/admin')) {
+  // 1. Skip non-GET, admin control centre, api routes, and dynamic uploads
+  if (
+    req.method !== 'GET' ||
+    url.pathname.startsWith('/manage') ||
+    url.pathname.startsWith('/api') ||
+    url.pathname.startsWith('/uploads')
+  ) {
     return;
   }
 
-  // HTML page navigations: Network-first, fallback to cache, then offline.html
+  // 2. HTML navigation: STRICT NETWORK-FIRST (Always fetch live from server)
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-          return res;
-        })
+      fetch(req, { cache: 'no-cache' })
         .catch(async () => {
           const cached = await caches.match(req);
           if (cached) return cached;
-          const offlinePage = await caches.match('/offline.html');
-          return offlinePage || new Response('Offline - Nginda Warriors FC', { headers: { 'Content-Type': 'text/html' } });
+          const offline = await caches.match(OFFLINE_URL);
+          return offline || new Response('Offline - Nginda Warriors FC', {
+            headers: { 'Content-Type': 'text/html' },
+          });
         })
     );
     return;
   }
 
-  // Static assets (images, fonts, stylesheets, scripts): Stale-while-revalidate
-  if (
-    url.pathname.startsWith('/_next/static') ||
-    url.pathname.startsWith('/brand') ||
-    url.pathname.endsWith('.svg') ||
-    url.pathname.endsWith('.png') ||
-    url.pathname.endsWith('.css')
-  ) {
-    event.respondWith(
-      caches.match(req).then((cached) => {
-        const fetchPromise = fetch(req)
-          .then((networkRes) => {
-            if (networkRes.ok) {
-              const resClone = networkRes.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-            }
-            return networkRes;
-          })
-          .catch(() => cached);
-        return cached || fetchPromise;
-      })
-    );
-    return;
-  }
+  // 3. Static assets: Network-first, only fallback to cache if network fails
+  event.respondWith(
+    fetch(req).catch(() => {
+      return caches.match(req);
+    })
+  );
 });
 
 // Push notifications support
