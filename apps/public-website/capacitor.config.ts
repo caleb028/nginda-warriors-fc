@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Nginda Warriors FC',
   webDir: 'public',
   server: {
-    url: process.env.CAPACITOR_SERVER_URL || 'https://nginda-warriors-fc-2d1z.vercel.app',
+    url: process.env.CAPACITOR_SERVER_URL || 'https://nginda-warriors-fc-c549.vercel.app',
     cleartext: false,
     androidScheme: 'https',
   },

@@ -327,6 +327,148 @@ export default function ControlCentreApp() {
           });
           isOptimistic = true;
         }
+      } else if (action === 'save_fixture') {
+        if (payload.id) {
+          const fIdx = nextDb.fixtures.findIndex((f) => f.id === payload.id);
+          if (fIdx >= 0) {
+            nextDb.fixtures[fIdx] = {
+              ...nextDb.fixtures[fIdx],
+              ...(payload as any),
+              updatedAt: new Date().toISOString(),
+            };
+            isOptimistic = true;
+          }
+        } else if (payload.opponentName) {
+          const tempId = `fixture-${Date.now()}`;
+          nextDb.fixtures.unshift({
+            id: tempId,
+            competitionName: String(payload.competitionName || 'Murang’a County League').trim(),
+            seasonName: String(payload.seasonName || '2026/2027 Season').trim(),
+            opponentName: String(payload.opponentName).trim(),
+            opponentCrestUrl: String(payload.opponentCrestUrl || ''),
+            venue: String(payload.venue || 'Nginda Stadium').trim(),
+            isHome: payload.isHome !== false,
+            kickoffAt: payload.kickoffAt || new Date(Date.now() + 86400000 * 7).toISOString(),
+            timezone: 'Africa/Nairobi',
+            matchStatus: (payload.matchStatus as any) || 'scheduled',
+            homeScore: typeof payload.homeScore === 'number' ? payload.homeScore : null,
+            awayScore: typeof payload.awayScore === 'number' ? payload.awayScore : null,
+            motmVotingOpen: Boolean(payload.motmVotingOpen),
+            publicationStatus: (payload.publicationStatus as any) || 'published',
+            events: Array.isArray(payload.events) ? payload.events : [],
+            lineups: Array.isArray(payload.lineups) ? payload.lineups : [],
+            report: payload.report || undefined,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          isOptimistic = true;
+        }
+      } else if (action === 'update_match_score') {
+        const fIdx = nextDb.fixtures.findIndex((f) => f.id === payload.fixtureId);
+        if (fIdx >= 0) {
+          nextDb.fixtures[fIdx] = {
+            ...nextDb.fixtures[fIdx],
+            homeScore: typeof payload.homeScore === 'number' ? payload.homeScore : nextDb.fixtures[fIdx].homeScore,
+            awayScore: typeof payload.awayScore === 'number' ? payload.awayScore : nextDb.fixtures[fIdx].awayScore,
+            matchStatus: payload.matchStatus || nextDb.fixtures[fIdx].matchStatus,
+            events: Array.isArray(payload.events) ? payload.events : nextDb.fixtures[fIdx].events,
+            updatedAt: new Date().toISOString(),
+          };
+          isOptimistic = true;
+        }
+      } else if (action === 'save_article') {
+        if (payload.id) {
+          const aIdx = nextDb.articles.findIndex((a) => a.id === payload.id);
+          if (aIdx >= 0) {
+            nextDb.articles[aIdx] = {
+              ...nextDb.articles[aIdx],
+              ...(payload as any),
+              updatedAt: new Date().toISOString(),
+            };
+            isOptimistic = true;
+          }
+        } else if (payload.headline) {
+          const tempId = `article-${Date.now()}`;
+          nextDb.articles.unshift({
+            id: tempId,
+            slug: slugify(String(payload.headline)),
+            headline: String(payload.headline).trim(),
+            categoryName: (payload.categoryName as any) || 'Club announcements',
+            excerpt: String(payload.excerpt || '').trim(),
+            body: String(payload.body || '').trim(),
+            featuredImageUrl: String(payload.featuredImageUrl || ''),
+            authorName: String(payload.authorName || 'Nginda Warriors FC Media').trim(),
+            publishedAt: new Date().toISOString(),
+            publicationStatus: (payload.publicationStatus as any) || 'published',
+            tags: Array.isArray(payload.tags) ? payload.tags : [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          isOptimistic = true;
+        }
+      } else if (action === 'save_sponsor') {
+        if (payload.id) {
+          const spIdx = nextDb.sponsors.findIndex((s) => s.id === payload.id);
+          if (spIdx >= 0) {
+            nextDb.sponsors[spIdx] = {
+              ...nextDb.sponsors[spIdx],
+              ...(payload as any),
+              updatedAt: new Date().toISOString(),
+            };
+            isOptimistic = true;
+          }
+        } else if (payload.businessName) {
+          const tempId = `sponsor-${Date.now()}`;
+          nextDb.sponsors.push({
+            id: tempId,
+            businessName: String(payload.businessName).trim(),
+            tierCode: (payload.tierCode as any) || 'official_partner',
+            tierName: String(payload.tierName || 'Official Partner').trim(),
+            logoUrl: String(payload.logoUrl || ''),
+            websiteUrl: String(payload.websiteUrl || ''),
+            isApproved: payload.isApproved !== false,
+            displayOrder: Number(payload.displayOrder || nextDb.sponsors.length + 1),
+            publicationStatus: (payload.publicationStatus as any) || 'published',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          isOptimistic = true;
+        }
+      } else if (action === 'save_standing_row') {
+        if (payload.id) {
+          const rIdx = nextDb.standings.findIndex((r) => r.id === payload.id);
+          if (rIdx >= 0) {
+            nextDb.standings[rIdx] = {
+              ...nextDb.standings[rIdx],
+              ...(payload as any),
+              updatedAt: new Date().toISOString(),
+            };
+            isOptimistic = true;
+          }
+        } else if (payload.clubName) {
+          const tempId = `standing-${Date.now()}`;
+          nextDb.standings.push({
+            id: tempId,
+            competitionName: String(payload.competitionName || 'Murang’a County League').trim(),
+            seasonName: String(payload.seasonName || '2026/2027 Season').trim(),
+            position: Number(payload.position || nextDb.standings.length + 1),
+            clubName: String(payload.clubName).trim(),
+            clubCrestUrl: String(payload.clubCrestUrl || ''),
+            isNgindaWarriors: Boolean(payload.isNgindaWarriors),
+            played: Number(payload.played || 0),
+            won: Number(payload.won || 0),
+            drawn: Number(payload.drawn || 0),
+            lost: Number(payload.lost || 0),
+            goalsFor: Number(payload.goalsFor || 0),
+            goalsAgainst: Number(payload.goalsAgainst || 0),
+            goalDifference: Number(payload.goalDifference || 0),
+            points: Number(payload.points || 0),
+            form: Array.isArray(payload.form) ? payload.form : [],
+            publicationStatus: (payload.publicationStatus as any) || 'published',
+            updatedAt: new Date().toISOString(),
+          });
+          isOptimistic = true;
+        }
       } else if (action === 'save_club_settings' && payload.heroSlides) {
         nextDb.clubSettings = {
           ...nextDb.clubSettings,
@@ -348,7 +490,11 @@ export default function ControlCentreApp() {
             try {
               const bc = new BroadcastChannel('nginda_warriors_live_sync');
               bc.postMessage({ type: 'DATABASE_UPDATED', database: nextDb });
-              bc.close();
+              setTimeout(() => {
+                try {
+                  bc.close();
+                } catch {}
+              }, 1500);
             } catch {}
           }
         }

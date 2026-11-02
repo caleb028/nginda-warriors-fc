@@ -34,6 +34,7 @@ async function saveDatabaseAndSync(
     syncTargets.push(`https://${process.env.VERCEL_URL}`);
   }
   syncTargets.push('https://nginda-warriors-fc-c549.vercel.app');
+  syncTargets.push('https://nginda-warriors-fc-2d1z.vercel.app');
 
   if (hostHeader) {
     const proto = hostHeader.includes('localhost') ? 'http' : 'https';

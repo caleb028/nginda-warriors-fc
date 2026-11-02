@@ -1,0 +1,318 @@
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { ClubCrest, PublicWebsiteSnapshot } from '@nginda-warriors/shared';
+import { ArrowRight, Calendar, Clock, MapPin, Trophy } from 'lucide-react';
+import { useLiveSnapshot } from '../../components/LiveSnapshotProvider';
+
+function formatEatDate(iso: string) {
+  try {
+    return new Intl.DateTimeFormat('en-KE', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Africa/Nairobi',
+    }).format(new Date(iso));
+  } catch {
+    return iso;
+  }
+}
+
+export function FixturesPageClient({
+  initialSnapshot,
+}: {
+  initialSnapshot: PublicWebsiteSnapshot;
+}) {
+  const snapshot = useLiveSnapshot(initialSnapshot);
+  const { clubSettings, liveFixtures, upcomingFixtures, completedFixtures } = snapshot;
+
+  return (
+    <div className="bg-black text-white min-h-screen">
+      {/* Page Header Banner */}
+      <section className="bg-[#0A0A0A] text-white py-12 border-b border-[#262626]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <h1 className="font-athletic text-4xl sm:text-5xl font-black uppercase text-white mt-2">
+              FIXTURES, RESULTS & MATCH CENTRE
+            </h1>
+            <p className="text-slate-300 text-base mt-1">
+              Upcoming matches, live matchday score updates, lineups, and verified match reports.
+            </p>
+          </div>
+          <div className="p-2.5 rounded-2xl bg-[#0A0A0A] border border-[#262626] shadow-md flex items-center justify-center">
+            <ClubCrest size={80} customCrestUrl={clubSettings.crestUrl} />
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+        {/* Live Matches (If Any Active) */}
+        {liveFixtures.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="font-athletic text-3xl font-black uppercase text-white flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-red-600 animate-ping inline-block" />
+              <span>Live Match Centre In Progress</span>
+            </h2>
+            {liveFixtures.map((match) => (
+              <Link
+                key={match.id}
+                href={`/fixtures/${match.id}`}
+                className="block rounded-2xl bg-[#141414] text-white p-6 border-2 border-red-500 shadow-xl hover:border-red-400 transition"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#FDE100] font-bold uppercase mb-4">
+                  <span>
+                    {match.competitionName} • {match.seasonName}
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-red-600 text-white font-athletic font-bold">
+                    LIVE • {match.matchStatus.replace(/_/g, ' ').toUpperCase()}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 items-center text-center">
+                  <div className="flex flex-col items-center">
+                    <div className="h-10 flex items-center justify-center mb-1">
+                      {match.isHome ? (
+                        <ClubCrest size={36} customCrestUrl={clubSettings.crestUrl} />
+                      ) : match.opponentCrestUrl ? (
+                        <img
+                          src={match.opponentCrestUrl}
+                          alt={match.opponentName}
+                          className="w-9 h-9 object-contain"
+                        />
+                      ) : null}
+                    </div>
+                    <p className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                      {match.isHome ? clubSettings.clubName : match.opponentName}
+                    </p>
+                  </div>
+                  <div className="font-athletic text-4xl sm:text-5xl font-black text-white">
+                    {match.homeScore ?? 0} - {match.awayScore ?? 0}
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="h-10 flex items-center justify-center mb-1">
+                      {!match.isHome ? (
+                        <ClubCrest size={36} customCrestUrl={clubSettings.crestUrl} />
+                      ) : match.opponentCrestUrl ? (
+                        <img
+                          src={match.opponentCrestUrl}
+                          alt={match.opponentName}
+                          className="w-9 h-9 object-contain"
+                        />
+                      ) : null}
+                    </div>
+                    <p className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                      {match.isHome ? match.opponentName : clubSettings.clubName}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </section>
+        )}
+
+        {/* Upcoming Matches */}
+        <section>
+          <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-6">
+            <h2 className="font-athletic text-3xl font-black uppercase text-white">
+              Upcoming Fixtures
+            </h2>
+            <span className="text-xs font-bold uppercase text-[#FDE100] bg-[#FDE100]/10 border border-[#262626] px-2.5 py-0.5 rounded-full">
+              {upcomingFixtures.length} Scheduled
+            </span>
+          </div>
+
+          {upcomingFixtures.length > 0 ? (
+            <div className="space-y-4">
+              {upcomingFixtures.map((fixture) => (
+                <div
+                  key={fixture.id}
+                  className="rounded-2xl bg-[#141414] border border-[#262626] hover:border-[#262626] p-6 shadow-xl transition flex flex-col lg:flex-row lg:items-center justify-between gap-6"
+                >
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span
+                        className={`px-2.5 py-0.5 rounded text-xs font-athletic font-black uppercase tracking-wider ${
+                          fixture.isHome
+                            ? 'bg-[#FDE100] text-black font-black'
+                            : 'bg-[#1A1A1A] text-slate-300 border border-[#262626]'
+                        }`}
+                      >
+                        {fixture.isHome ? 'HOME' : 'AWAY'}
+                      </span>
+                      <span className="text-xs font-bold text-[#FDE100] uppercase">
+                        {fixture.competitionName} • {fixture.seasonName}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4 pt-1">
+                      <div className="flex items-center gap-2.5">
+                        {fixture.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : fixture.opponentCrestUrl ? (
+                          <img
+                            src={fixture.opponentCrestUrl}
+                            alt={fixture.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {fixture.isHome ? clubSettings.clubName : fixture.opponentName}
+                        </span>
+                      </div>
+                      <span className="px-3 py-0.5 rounded bg-[#1A1A1A] text-[#FDE100] font-athletic font-black text-base border border-[#262626]">
+                        VS
+                      </span>
+                      <div className="flex items-center gap-2.5">
+                        {!fixture.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : fixture.opponentCrestUrl ? (
+                          <img
+                            src={fixture.opponentCrestUrl}
+                            alt={fixture.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {fixture.isHome ? fixture.opponentName : clubSettings.clubName}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-1">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-[#FDE100]" />
+                        {formatEatDate(fixture.kickoffAt)} (EAT)
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#FDE100]" />
+                        {fixture.venue}
+                      </span>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/fixtures/${fixture.id}`}
+                    className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-bold text-sm uppercase tracking-wider transition shadow-md"
+                  >
+                    <span>Match Centre</span>
+                    <ArrowRight className="w-4 h-4 text-[#FDE100]" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-[#141414] p-10 text-center border border-[#262626]">
+              <Calendar className="w-10 h-10 text-slate-500 mx-auto mb-2" />
+              <h3 className="font-athletic text-2xl font-bold uppercase text-white">
+                No Upcoming Fixtures Published Yet
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Fixtures created and published in the Control Centre appear here automatically.
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* Completed Results */}
+        <section>
+          <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-6">
+            <h2 className="font-athletic text-3xl font-black uppercase text-white">
+              Verified Match Results
+            </h2>
+            <span className="text-xs font-bold uppercase text-[#FDE100] bg-[#FDE100]/10 border border-[#262626] px-2.5 py-0.5 rounded-full">
+              {completedFixtures.length} Completed
+            </span>
+          </div>
+
+          {completedFixtures.length > 0 ? (
+            <div className="space-y-4">
+              {completedFixtures.map((result) => (
+                <div
+                  key={result.id}
+                  className="rounded-2xl bg-[#141414] border border-[#262626] p-6 shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 hover:border-[#262626] transition"
+                >
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#1A1A1A] text-slate-200 font-athletic font-bold uppercase border border-[#262626]">
+                        FULL TIME (FT)
+                      </span>
+                      <span className="font-bold text-slate-400">
+                        {result.competitionName} • {formatEatDate(result.kickoffAt)}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4 pt-1">
+                      <div className="flex items-center gap-2.5">
+                        {result.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : result.opponentCrestUrl ? (
+                          <img
+                            src={result.opponentCrestUrl}
+                            alt={result.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {result.isHome ? clubSettings.clubName : result.opponentName}
+                        </span>
+                      </div>
+                      <span className="px-4 py-1 rounded-lg bg-[#0D0D0D] border border-[#262626] text-[#FDE100] font-athletic font-black text-2xl">
+                        {result.homeScore ?? 0} - {result.awayScore ?? 0}
+                      </span>
+                      <div className="flex items-center gap-2.5">
+                        {!result.isHome ? (
+                          <ClubCrest size={32} customCrestUrl={clubSettings.crestUrl} />
+                        ) : result.opponentCrestUrl ? (
+                          <img
+                            src={result.opponentCrestUrl}
+                            alt={result.opponentName}
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : null}
+                        <span className="font-athletic text-2xl sm:text-3xl font-black uppercase text-white">
+                          {result.isHome ? result.opponentName : clubSettings.clubName}
+                        </span>
+                      </div>
+                    </div>
+
+                    {result.events.filter((e) => ['goal', 'penalty_goal'].includes(e.eventType))
+                      .length > 0 && (
+                      <p className="text-xs text-slate-300">
+                        <strong className="text-[#FDE100]">Goals:</strong>{' '}
+                        {result.events
+                          .filter((e) => ['goal', 'penalty_goal'].includes(e.eventType))
+                          .map((e) => `${e.playerName} (${e.minute}')`)
+                          .join(', ')}
+                      </p>
+                    )}
+                  </div>
+
+                  <Link
+                    href={`/fixtures/${result.id}`}
+                    className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-sm uppercase tracking-wider transition shadow-md"
+                  >
+                    <span>Report & Timeline</span>
+                    <ArrowRight className="w-4 h-4 text-[#FDE100]" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-[#141414] p-10 text-center border border-[#262626]">
+              <Trophy className="w-10 h-10 text-slate-500 mx-auto mb-2" />
+              <h3 className="font-athletic text-2xl font-bold uppercase text-white">
+                No Completed Match Results Yet
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Final scores and match reports appear here once matches are marked Fulltime in the Control Centre.
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}

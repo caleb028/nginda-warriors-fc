@@ -4,8 +4,10 @@ import { getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { PublicShell } from '../components/PublicShell';
 import { PreventZoom } from '../components/PreventZoom';
 import { LiveSyncListener } from '../components/LiveSyncListener';
+import { LiveSnapshotProvider } from '../components/LiveSnapshotProvider';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { clubSettings } = getPublicWebsiteSnapshot();
@@ -50,7 +52,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { clubSettings } = getPublicWebsiteSnapshot();
+  const snapshot = getPublicWebsiteSnapshot();
+  const { clubSettings } = snapshot;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -128,7 +131,9 @@ export default function RootLayout({
         />
         <PreventZoom />
         <LiveSyncListener />
-        <PublicShell settings={clubSettings}>{children}</PublicShell>
+        <LiveSnapshotProvider initialSnapshot={snapshot}>
+          <PublicShell settings={clubSettings}>{children}</PublicShell>
+        </LiveSnapshotProvider>
       </body>
     </html>
   );

@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
   ClubCrest,
   PublicWebsiteSnapshot,
-  buildPublicSnapshot,
 } from '@nginda-warriors/shared';
+import { useLiveSnapshot } from '../components/LiveSnapshotProvider';
 import {
   HomepageHeroSlideshow,
   MatchKickoffCountdown,
@@ -46,99 +45,7 @@ export function PublicHomePageClient({
 }: {
   initialSnapshot: PublicWebsiteSnapshot;
 }) {
-  const router = useRouter();
-  const [snapshot, setSnapshot] = useState<PublicWebsiteSnapshot>(initialSnapshot);
-  const lastUpdatedRef = useRef<number>(Date.now());
-
-  // 1. Mount: Check if client has a newer database state in localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('nginda_live_database');
-      const storedTs = localStorage.getItem('nginda_db_timestamp');
-      if (stored && storedTs && Number(storedTs) > lastUpdatedRef.current - 120000) {
-        const parsedDb = JSON.parse(stored);
-        const freshSnap = buildPublicSnapshot(parsedDb);
-        setSnapshot(freshSnap);
-        lastUpdatedRef.current = Number(storedTs);
-      }
-    } catch {}
-  }, []);
-
-  // 2. 0ms Real-Time Multi-Tab Broadcast Synchronization & Polling
-  useEffect(() => {
-    let bc: BroadcastChannel | null = null;
-    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-      try {
-        bc = new BroadcastChannel('nginda_warriors_live_sync');
-        bc.onmessage = (event) => {
-          if (event.data?.type === 'DATABASE_UPDATED' || event.data?.type === 'SYNC_DATABASE') {
-            if (event.data?.database) {
-              try {
-                const freshSnap = buildPublicSnapshot(event.data.database);
-                setSnapshot(freshSnap);
-                lastUpdatedRef.current = Date.now();
-                localStorage.setItem('nginda_live_database', JSON.stringify(event.data.database));
-                localStorage.setItem('nginda_db_timestamp', String(Date.now()));
-              } catch {}
-            }
-          }
-        };
-      } catch {}
-    }
-
-    // Storage Event Listener (across different tabs on the same origin)
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'nginda_live_database' && e.newValue) {
-        try {
-          const freshDb = JSON.parse(e.newValue);
-          setSnapshot(buildPublicSnapshot(freshDb));
-          lastUpdatedRef.current = Date.now();
-        } catch {}
-      }
-    };
-    window.addEventListener('storage', handleStorage);
-
-    // Live Sync Polling every 2 seconds
-    const checkLiveSync = async () => {
-      try {
-        const res = await fetch('/api/sync', {
-          cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache' },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.updatedAt && data.updatedAt > lastUpdatedRef.current) {
-            lastUpdatedRef.current = data.updatedAt;
-            if (data.snapshot) {
-              setSnapshot(data.snapshot);
-            }
-            router.refresh();
-          }
-        }
-      } catch {}
-    };
-
-    const pollTimer = setInterval(checkLiveSync, 2000);
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        checkLiveSync();
-      }
-    };
-    window.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('focus', handleVisibility);
-
-    return () => {
-      if (bc) {
-        try {
-          bc.close();
-        } catch {}
-      }
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('focus', handleVisibility);
-      clearInterval(pollTimer);
-    };
-  }, [router]);
+  const snapshot = useLiveSnapshot(initialSnapshot);
 
   const {
     clubSettings,

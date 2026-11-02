@@ -236,29 +236,7 @@
       "updatedAt": "2026-11-01T10:14:00.843Z"
     }
   ],
-  "fixtures": [
-    {
-      "id": "fixture-magunas-fc-1",
-      "competitionName": "Friendly",
-      "seasonName": "2026/2027 Season",
-      "opponentName": "Magunas FC",
-      "opponentCrestUrl": "",
-      "venue": "Nginda Home Ground",
-      "isHome": false,
-      "kickoffAt": "2026-11-01T12:00:00.000Z",
-      "timezone": "Africa/Nairobi",
-      "matchStatus": "scheduled",
-      "homeScore": null,
-      "awayScore": null,
-      "motmVotingOpen": false,
-      "publicationStatus": "published",
-      "events": [],
-      "lineups": [],
-      "report": null,
-      "createdAt": "2026-11-01T12:00:00.000Z",
-      "updatedAt": "2026-11-01T12:00:00.000Z"
-    }
-  ],
+  "fixtures": [],
   "standings": [],
   "articles": [
     {
