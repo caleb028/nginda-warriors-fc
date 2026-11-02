@@ -1,5 +1,5 @@
 // Nginda Warriors FC — Service Worker (Instant Fresh Cache Invalidation)
-const CACHE_NAME = 'nginda-warriors-v8-live-seamless';
+const CACHE_NAME = 'nginda-warriors-v9-enlarged-icon';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {

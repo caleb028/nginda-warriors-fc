@@ -82,7 +82,7 @@ export default function RootLayout({
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
-        <link rel="apple-touch-icon" href="/brand/nginda-warriors-crest.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -109,7 +109,7 @@ export default function RootLayout({
                 });
 
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=20261102_22').then(function(reg) {
+                  navigator.serviceWorker.register('/sw.js?v=20261102_23').then(function(reg) {
                     reg.update();
                   }).catch(function() {});
                 });

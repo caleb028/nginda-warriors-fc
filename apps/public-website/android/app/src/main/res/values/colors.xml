@@ -5,4 +5,5 @@
     <color name="colorAccent">#F5D000</color>
     <color name="colorGoldenAccent">#D5AA00</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="launcher_background">#000000</color>
 </resources>

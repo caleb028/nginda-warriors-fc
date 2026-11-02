@@ -91,13 +91,6 @@ const SEARCH_DATABASE: SearchItem[] = [
     category: 'Club',
     href: '/about',
   },
-  {
-    id: 's-11',
-    title: 'Admin Control Centre',
-    subtitle: 'Manage fixtures, scores, squad, news & commercial desk',
-    category: 'Club',
-    href: '/manage',
-  },
 ];
 
 export function GlobalSearchModal({

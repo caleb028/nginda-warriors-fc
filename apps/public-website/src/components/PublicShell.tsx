@@ -182,7 +182,7 @@ export function PublicShell({
                   })}
                 </nav>
 
-                {/* Desktop Action Area: Search, Admin Shortcut, Support CTA */}
+                {/* Desktop Action Area: Search, Support CTA */}
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
@@ -194,16 +194,6 @@ export function PublicShell({
                     <Search className="w-4 h-4 text-slate-400 group-hover:text-[#FDE100]" />
                     <span className="hidden md:inline">Search</span>
                   </button>
-
-                  <a
-                    href="/manage"
-                    className="p-2.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-slate-300 hover:text-[#FDE100] border border-[#262626] hover:border-[#FDE100]/40 transition flex items-center gap-1.5 text-xs font-bold font-athletic tracking-wider uppercase"
-                    title="Club Official Control Centre"
-                    aria-label="Club Official Control Centre"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-[#FDE100]" />
-                    <span className="hidden lg:inline">Admin</span>
-                  </a>
 
                   <Link
                     href="/support"
@@ -367,18 +357,10 @@ export function PublicShell({
                     </Link>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-[11px] font-athletic uppercase tracking-widest text-slate-500">
-                      Nginda Warriors FC (Est. 2024)
+                  <div className="flex items-center justify-center pt-2">
+                    <span className="text-[11px] font-athletic uppercase tracking-widest text-slate-500 text-center">
+                      Nginda Warriors FC (Est. 2024) • Murang’a County
                     </span>
-                    <a
-                      href="/manage"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-[#FDE100] border border-[#262626] hover:border-[#FDE100] font-athletic font-black text-[11px] uppercase tracking-wider transition"
-                    >
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]" />
-                      <span>Control Centre</span>
-                    </a>
                   </div>
                 </div>
             </div>
@@ -540,15 +522,6 @@ export function PublicShell({
                 <p>
                   © {new Date().getFullYear()} {settings.clubName} (Est. {settings.establishedYear}). All rights reserved.
                 </p>
-                <span>•</span>
-                <a
-                  href="/manage"
-                  className="hover:text-[#FDE100] transition flex items-center gap-1.5 text-slate-400 hover:underline font-athletic uppercase tracking-wider text-[11px]"
-                  title="Club Official Control Centre"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]" />
-                  <span>Admin Control Centre</span>
-                </a>
               </div>
               <p className="text-[#FDE100] font-athletic font-black tracking-wider uppercase">
                 One Team. One Community. One Warrior Spirit.
