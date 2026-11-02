@@ -106,7 +106,7 @@ export default function RootLayout({
                 });
 
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=20261101_18').then(function(reg) {
+                  navigator.serviceWorker.register('/sw.js?v=20261102_22').then(function(reg) {
                     reg.update();
                   }).catch(function() {});
                 });

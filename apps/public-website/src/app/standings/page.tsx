@@ -3,6 +3,7 @@ import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/ser
 import { Award, Info } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default function LeagueStandingsPage() {
   const { clubSettings, standings, competitions } = getPublicWebsiteSnapshot();

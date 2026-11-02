@@ -44,24 +44,35 @@ async function saveDatabaseAndSync(
   }
 
   const payload = JSON.stringify({ database: db, path });
+  const rootPayload = JSON.stringify({ database: db, path: '/' });
 
-  for (const baseUrl of Array.from(new Set(syncTargets))) {
-    try {
-      await fetch(new URL('/api/sync', baseUrl), {
+  const targets = Array.from(new Set(syncTargets));
+  const syncPromises = targets.flatMap((baseUrl) => {
+    const urls = [
+      new URL('/api/sync', baseUrl),
+      new URL('/api/revalidate', baseUrl),
+    ];
+    return urls.flatMap((u) => [
+      fetch(u, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload,
-      }).catch(() => null);
+        signal: AbortSignal.timeout(3500),
+      }).catch(() => null),
+      ...(path !== '/'
+        ? [
+            fetch(u, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: rootPayload,
+              signal: AbortSignal.timeout(3500),
+            }).catch(() => null),
+          ]
+        : []),
+    ]);
+  });
 
-      await fetch(new URL('/api/revalidate', baseUrl), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload,
-      }).catch(() => null);
-    } catch {
-      // Non-blocking sync call across internal service binding
-    }
-  }
+  await Promise.allSettled(syncPromises);
 }
 
 function safeDb(db: ReturnType<typeof readDatabase>) {

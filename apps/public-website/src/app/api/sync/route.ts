@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { readDatabase, writeDatabase, getDatabaseTimestamp } from '@nginda-warriors/shared/server';
+import {
+  readDatabase,
+  writeDatabase,
+  getDatabaseTimestamp,
+  getPublicWebsiteSnapshot,
+} from '@nginda-warriors/shared/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,11 +37,13 @@ export async function POST(req: NextRequest) {
     revalidatePath('/transparency');
 
     const freshDb = readDatabase();
+    const freshSnapshot = getPublicWebsiteSnapshot();
     return NextResponse.json(
       {
         ok: true,
         synced: true,
         updatedAt: getDatabaseTimestamp(),
+        snapshot: freshSnapshot,
         fixturesCount: freshDb.fixtures.length,
         playersCount: freshDb.players.length,
         articlesCount: freshDb.articles.length,
@@ -55,10 +62,12 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   const db = readDatabase();
+  const snapshot = getPublicWebsiteSnapshot();
   return NextResponse.json(
     {
       ok: true,
       updatedAt: getDatabaseTimestamp(),
+      snapshot,
       fixturesCount: db.fixtures.length,
       playersCount: db.players.length,
       articlesCount: db.articles.length,

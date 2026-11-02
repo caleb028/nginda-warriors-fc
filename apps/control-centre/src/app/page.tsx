@@ -426,7 +426,12 @@ export default function ControlCentreApp() {
             try {
               const bc = new BroadcastChannel('nginda_warriors_live_sync');
               bc.postMessage({ type: 'DATABASE_UPDATED', database: confirmedDb });
-              bc.close();
+              // Keep channel open briefly before disposal to ensure browser IPC dispatch
+              setTimeout(() => {
+                try {
+                  bc.close();
+                } catch {}
+              }, 1500);
             } catch {}
           }
         }

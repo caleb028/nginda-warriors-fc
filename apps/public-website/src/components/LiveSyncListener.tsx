@@ -54,8 +54,14 @@ export function LiveSyncListener() {
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.updatedAt && data.updatedAt !== lastTimestampRef.current) {
+          if (data.updatedAt && data.updatedAt > lastTimestampRef.current) {
             lastTimestampRef.current = data.updatedAt;
+            if (data.database) {
+              try {
+                localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
+                localStorage.setItem('nginda_db_timestamp', String(data.updatedAt));
+              } catch {}
+            }
             router.refresh();
           }
         }

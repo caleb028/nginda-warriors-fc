@@ -1,5 +1,5 @@
 // Nginda Warriors FC — Service Worker (Instant Fresh Cache Invalidation)
-const CACHE_NAME = 'nginda-warriors-v7-fresh-live';
+const CACHE_NAME = 'nginda-warriors-v8-live-seamless';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {
@@ -32,12 +32,15 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // 1. Skip non-GET, admin control centre, api routes, and dynamic uploads
+  // 1. Skip non-GET, admin control centre, api routes, dynamic uploads, and Next.js App Router RSC streams
   if (
     req.method !== 'GET' ||
     url.pathname.startsWith('/manage') ||
     url.pathname.startsWith('/api') ||
-    url.pathname.startsWith('/uploads')
+    url.pathname.startsWith('/uploads') ||
+    url.searchParams.has('_rsc') ||
+    req.headers.get('RSC') === '1' ||
+    req.headers.get('Next-Router-Prefetch') === '1'
   ) {
     return;
   }

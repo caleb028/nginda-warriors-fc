@@ -4,6 +4,7 @@ import { ClubCrest, PositionGroup, getPublicWebsiteSnapshot } from '@nginda-warr
 import { ArrowRight, Shield, UserCheck, Users } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const POSITION_GROUPS: PositionGroup[] = [
   'Goalkeepers',
