@@ -5,6 +5,7 @@ import {
   AdminSessionPayload,
   ClubCrest,
   NgindaDatabaseSchema,
+  slugify,
 } from '@nginda-warriors/shared';
 import { AuthAndBootstrapGate } from '../components/AuthAndBootstrapGate';
 import { FootballModules } from '../components/FootballModules';
@@ -264,16 +265,66 @@ export default function ControlCentreApp() {
           return f;
         });
         isOptimistic = true;
-      } else if (action === 'save_player' && payload.id) {
-        const pIdx = nextDb.players.findIndex((p) => p.id === payload.id);
-        if (pIdx >= 0) {
-          nextDb.players[pIdx] = { ...nextDb.players[pIdx], ...(payload as any) };
+      } else if (action === 'save_player') {
+        if (payload.id) {
+          const pIdx = nextDb.players.findIndex((p) => p.id === payload.id);
+          if (pIdx >= 0) {
+            nextDb.players[pIdx] = { ...nextDb.players[pIdx], ...(payload as any) };
+            isOptimistic = true;
+          }
+        } else if (payload.fullName) {
+          const tempId = `player-${Date.now()}`;
+          const slug = `${slugify(String(payload.fullName))}-${payload.jerseyNumber}`;
+          nextDb.players.push({
+            id: tempId,
+            slug,
+            fullName: String(payload.fullName).trim(),
+            jerseyNumber: Number(payload.jerseyNumber || 99),
+            positionGroup: (payload.positionGroup as any) || 'Midfielders',
+            specificRole: String(payload.specificRole || 'Player'),
+            photoUrl: String(payload.photoUrl || ''),
+            biography: String(payload.biography || 'Official squad player for Nginda Warriors FC.'),
+            preferredFoot: (payload.preferredFoot as any) || 'Right',
+            isUnderageProtected: Boolean(payload.isUnderageProtected),
+            appearances: Number(payload.appearances || 0),
+            starts: Number(payload.starts || 0),
+            goals: Number(payload.goals || 0),
+            assists: Number(payload.assists || 0),
+            yellowCards: Number(payload.yellowCards || 0),
+            redCards: Number(payload.redCards || 0),
+            cleanSheets: Number(payload.cleanSheets || 0),
+            seasonStats: [],
+            isFeatured: Boolean(payload.isFeatured),
+            squadStatus: (payload.squadStatus as any) || 'active',
+            publicationStatus: (payload.publicationStatus as any) || 'published',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
           isOptimistic = true;
         }
-      } else if (action === 'save_staff' && payload.id) {
-        const sIdx = nextDb.staff.findIndex((s) => s.id === payload.id);
-        if (sIdx >= 0) {
-          nextDb.staff[sIdx] = { ...nextDb.staff[sIdx], ...(payload as any) };
+      } else if (action === 'save_staff') {
+        if (payload.id) {
+          const sIdx = nextDb.staff.findIndex((s) => s.id === payload.id);
+          if (sIdx >= 0) {
+            nextDb.staff[sIdx] = { ...nextDb.staff[sIdx], ...(payload as any) };
+            isOptimistic = true;
+          }
+        } else if (payload.fullName) {
+          const tempId = `staff-${Date.now()}`;
+          nextDb.staff.push({
+            id: tempId,
+            fullName: String(payload.fullName).trim(),
+            roleTitle: String(payload.roleTitle || 'Coach').trim(),
+            category: (payload.category as any) || 'Technical Bench',
+            photoUrl: String(payload.photoUrl || ''),
+            biography: String(payload.biography || ''),
+            publicEmail: String(payload.publicEmail || ''),
+            publicPhone: String(payload.publicPhone || ''),
+            displayOrder: Number(payload.displayOrder || nextDb.staff.length + 1),
+            publicationStatus: (payload.publicationStatus as any) || 'published',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
           isOptimistic = true;
         }
       } else if (action === 'save_club_settings' && payload.heroSlides) {

@@ -594,7 +594,7 @@ export default function PublicHomePage() {
             </StaggerContainer>
 
             {/* Official Squad Profiles Registered in Control Centre (Appears when real players are published) */}
-            {featuredPlayers.length > 0 && (
+            {((featuredPlayers && featuredPlayers.length > 0) || (players && players.length > 0)) && (
               <div className="mt-10">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-athletic text-2xl font-black uppercase text-white">
@@ -608,7 +608,7 @@ export default function PublicHomePage() {
                   </Link>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {featuredPlayers.slice(0, 4).map((player) => (
+                  {(featuredPlayers.length > 0 ? featuredPlayers : players).slice(0, 4).map((player) => (
                     <Link
                       key={player.id}
                       href={`/team/${player.slug}`}
@@ -647,35 +647,54 @@ export default function PublicHomePage() {
             )}
 
             {/* Team Gaffer Spotlight Banner */}
-            <div className="mt-12 rounded-2xl bg-[#141414] border-2 border-[#262626] hover:border-[#FDE100] transition-all p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
-              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden bg-black shrink-0 border-2 border-[#FDE100] shadow-lg">
-                <img
-                  src="/uploads/peter-gitau-portrait.png"
-                  alt="Team Gaffer Peter Gitau"
-                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform"
-                />
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider mb-2">
-                  <span>HEAD COACH & TEAM GAFFER</span>
+            {(() => {
+              const gafferStaff = (snapshot.staff || []).find(
+                (s) =>
+                  s.fullName.toLowerCase().includes('peter gitau') ||
+                  s.roleTitle.toLowerCase().includes('gaffer') ||
+                  s.roleTitle.toLowerCase().includes('head coach')
+              );
+              const gafferPhoto = gafferStaff?.photoUrl || '/uploads/peter-gitau-portrait.png';
+              const gafferName = gafferStaff?.fullName || 'Peter Gitau';
+              const gafferRole = gafferStaff?.roleTitle
+                ? gafferStaff.roleTitle.toUpperCase()
+                : 'HEAD COACH & TEAM GAFFER';
+              const gafferBio =
+                gafferStaff?.biography ||
+                '“Our warrior spirit begins on the training pitch. We demand discipline, rapid transitions, and relentless passion for the jersey. We play fearless football for the pride of Nginda.”';
+
+              return (
+                <div className="mt-12 rounded-2xl bg-[#141414] border-2 border-[#262626] hover:border-[#FDE100] transition-all p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
+                  <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden bg-black shrink-0 border-2 border-[#FDE100] shadow-lg">
+                    <img
+                      src={gafferPhoto}
+                      alt={`Team Gaffer ${gafferName}`}
+                      className="w-full h-full object-cover object-top hover:scale-105 transition-transform"
+                    />
+                  </div>
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDE100]/10 border border-[#FDE100]/30 text-[#FDE100] font-athletic font-black text-xs uppercase tracking-wider mb-2">
+                      <span>{gafferRole}</span>
+                    </div>
+                    <h3 className="font-athletic text-3xl sm:text-4xl font-black uppercase text-white">
+                      {gafferName}
+                    </h3>
+                    <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                      {gafferBio}
+                    </p>
+                    <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-4">
+                      <Link
+                        href="/team"
+                        className="inline-flex items-center gap-2 text-xs font-athletic font-black uppercase tracking-wider text-[#FDE100] hover:text-[#FFE600] transition"
+                      >
+                        <span>View Technical Bench & Squad</span>
+                        <ArrowRight className="w-4 h-4 text-black bg-[#FDE100] rounded-full p-0.5" />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-athletic text-3xl sm:text-4xl font-black uppercase text-white">
-                  Peter Gitau
-                </h3>
-                <p className="text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
-                  “Our warrior spirit begins on the training pitch. We demand discipline, rapid transitions, and relentless passion for the jersey. We play fearless football for the pride of Nginda.”
-                </p>
-                <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-4">
-                  <Link
-                    href="/team"
-                    className="inline-flex items-center gap-2 text-xs font-athletic font-black uppercase tracking-wider text-[#FDE100] hover:text-[#FFE600] transition"
-                  >
-                    <span>View Technical Bench & Squad</span>
-                    <ArrowRight className="w-4 h-4 text-black bg-[#FDE100] rounded-full p-0.5" />
-                  </Link>
-                </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Tactical Pitch Board */}
             {players.length > 0 && (
