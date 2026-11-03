@@ -1,21 +1,9 @@
-// Nginda Warriors FC — High-Performance, Zero-Memory-Leak Service Worker
-const CACHE_NAME = 'nginda-warriors-v10-clean';
-const OFFLINE_URL = '/offline.html';
+// Nginda Warriors FC — Zero-Overhead, High-Security Service Worker
+// Fetch interception is disabled to guarantee zero thread latency, zero hanging, and 100% native C++ browser navigation.
+const CACHE_NAME = 'nginda-warriors-v11-clean';
 
-const STATIC_PRECACHE = [
-  '/offline.html',
-  '/manifest.json',
-  '/favicon.png',
-  '/brand/nginda-warriors-crest.png',
-];
-
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_PRECACHE).catch(() => {});
-    })
-  );
 });
 
 self.addEventListener('activate', (event) => {
@@ -24,64 +12,15 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log('[SW] Purging bloated cache:', key);
-            return caches.delete(key);
-          }
+          console.log('[SW] Purging bloated cache:', key);
+          return caches.delete(key);
         })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-
-  // 1. Only process GET requests from same origin; never intercept cross-origin or non-GET
-  if (req.method !== 'GET') return;
-
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;
-
-  // 2. Skip admin dashboard, API endpoints, dynamic uploads, Next.js internal RSC streams
-  if (
-    url.pathname.startsWith('/manage') ||
-    url.pathname.startsWith('/api') ||
-    url.pathname.startsWith('/uploads') ||
-    url.searchParams.has('_rsc') ||
-    req.headers.get('RSC') === '1'
-  ) {
-    return;
-  }
-
-  // 3. HTML Navigation requests: Network-first, fallback to /offline.html on network failure
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).catch(async () => {
-        const cached = await caches.match(req);
-        if (cached) return cached;
-        const offline = await caches.match(OFFLINE_URL);
-        return offline || new Response('Offline - Nginda Warriors FC', {
-          headers: { 'Content-Type': 'text/html' },
-        });
-      })
-    );
-    return;
-  }
-
-  // 4. Offline precache assets only (offline.html, manifest, icon)
-  if (STATIC_PRECACHE.includes(url.pathname)) {
-    event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req))
-    );
-    return;
-  }
-
-  // 5. All other static assets (JS chunks, CSS, fonts, images):
-  // Let the browser's native C++ HTTP engine handle them directly with zero JS heap/memory overhead!
-});
-
-// Push notifications support
+// Push notifications support (zero fetch overhead)
 self.addEventListener('push', (event) => {
   if (!event.data) return;
   try {

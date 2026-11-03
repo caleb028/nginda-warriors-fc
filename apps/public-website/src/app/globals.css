@@ -145,7 +145,6 @@
 
 html {
   scroll-behavior: smooth;
-  overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -154,7 +153,6 @@ body {
   color: #FFFFFF;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  overscroll-behavior-y: none;
 }
 
 /* Custom Scrollable Sub-Containers - Momentum Touch & Hidden Scrollbar Utility */

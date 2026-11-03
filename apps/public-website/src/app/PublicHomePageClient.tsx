@@ -13,7 +13,6 @@ import {
   RbMatchRail,
 } from '../components/HomepageHeroAndCountdown';
 import { WarriorsTVHub } from '../components/WarriorsTVHub';
-import { TacticalPitchBoard } from '../components/TacticalPitchBoard';
 import { MotionReveal, StaggerContainer, StaggerItem } from '../components/MotionReveal';
 import {
   ArrowRight,
@@ -715,17 +714,6 @@ export function PublicHomePageClient({
                 </div>
               );
             })()}
-
-            {/* Tactical Pitch Board */}
-            {players.length > 0 && (
-              <div className="mt-14">
-                <TacticalPitchBoard
-                  startingPlayers={players.slice(0, 11)}
-                  benchPlayers={players.slice(11, 18)}
-                  defaultFormation="4-3-3"
-                />
-              </div>
-            )}
           </div>
         </section>
       )}

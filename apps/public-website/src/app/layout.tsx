@@ -100,10 +100,21 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=20261104_02').catch(function() {});
-                });
+              if (typeof window !== 'undefined') {
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js?v=20261104_03').catch(function() {});
+                  });
+                }
+                if ('caches' in window) {
+                  caches.keys().then(function(keys) {
+                    keys.forEach(function(key) {
+                      if (key !== 'nginda-warriors-v11-clean') {
+                        caches.delete(key);
+                      }
+                    });
+                  }).catch(function() {});
+                }
               }
             `,
           }}

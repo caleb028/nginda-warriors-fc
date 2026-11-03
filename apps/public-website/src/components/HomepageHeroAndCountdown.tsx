@@ -118,7 +118,7 @@ export function HomepageHeroSlideshow({
           <div className="flex items-center gap-2 font-wide text-[11px] font-bold uppercase tracking-widest text-slate-300">
             <span className="text-[#FDE100]">{activeSlide.tagline || 'Match Reports'}</span>
             <span className="text-slate-500">•</span>
-            <span>{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+            <span suppressHydrationWarning>{new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
           </div>
 
           {/* Heavy Athletic Headline in Al-Hilal Font */}
@@ -549,7 +549,7 @@ export function MatchKickoffCountdown({ kickoffIso }: { kickoffIso: string }) {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 text-center" aria-label="Match kickoff countdown">
+    <div className="grid grid-cols-4 gap-2 text-center" aria-label="Match kickoff countdown" suppressHydrationWarning>
       {[
         { label: 'DAYS', value: timeLeft.days },
         { label: 'HRS', value: timeLeft.hours },
