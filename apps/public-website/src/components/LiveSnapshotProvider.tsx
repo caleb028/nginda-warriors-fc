@@ -44,12 +44,12 @@ export function LiveSnapshotProvider({
   initialSnapshot: PublicWebsiteSnapshot;
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const [snapshot, setSnapshot] = useState<PublicWebsiteSnapshot>(initialSnapshot);
   const lastUpdatedRef = useRef<number>(0);
   const isSyncingRef = useRef<boolean>(false);
+  const playerCountRef = useRef<number>(initialSnapshot.players?.length || 0);
 
-  // 1. Core Sync Function (Fetches fresh data with cache-busting query timestamp)
+  // 1. Core Sync Function (Zero re-allocations, stable reference, zero memory leaks)
   const refreshNow = useCallback(async () => {
     if (isSyncingRef.current) return;
     isSyncingRef.current = true;
@@ -65,12 +65,11 @@ export function LiveSnapshotProvider({
       if (res.ok) {
         const data = await res.json();
         if (data.changed === false) {
-          // Server data has not changed; skip redundant parsing and re-renders
+          // Server data is identical to client state; skip all allocations
           return;
         }
         const serverTs = Number(data.updatedAt) || 0;
         const incomingPlayers = data.snapshot?.players || data.database?.players || [];
-        const currentPlayers = snapshot?.players || [];
 
         // Filter out any tombstoned / permanently deleted players
         const deletedSet = new Set([
@@ -89,10 +88,12 @@ export function LiveSnapshotProvider({
         const shouldUpdate =
           serverTs > lastUpdatedRef.current ||
           lastUpdatedRef.current === 0 ||
-          mergedPlayers.length !== currentPlayers.length;
+          mergedPlayers.length !== playerCountRef.current;
 
         if (shouldUpdate) {
           lastUpdatedRef.current = serverTs || Date.now();
+          playerCountRef.current = mergedPlayers.length;
+
           if (data.snapshot) {
             setSnapshot({
               ...data.snapshot,
@@ -112,13 +113,13 @@ export function LiveSnapshotProvider({
         }
       }
     } catch {
-      // Non-blocking network sync
+      // Non-blocking background sync
     } finally {
       isSyncingRef.current = false;
     }
-  }, [snapshot]);
+  }, []);
 
-  // 2. Initial Mount Check from localStorage & immediate background refresh
+  // 2. Initial Mount Check from localStorage (runs ONCE on mount, zero re-render cycles)
   useEffect(() => {
     try {
       const stored = localStorage.getItem('nginda_live_database');
@@ -132,28 +133,23 @@ export function LiveSnapshotProvider({
 
           if (localCount >= initialCount && localCount > 0) {
             setSnapshot(freshSnap);
+            playerCountRef.current = localCount;
             if (storedTs) {
               lastUpdatedRef.current = Number(storedTs);
-            }
-            if (initialCount === 0) {
-              fetch('/api/sync', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ database: parsedDb }),
-              }).catch(() => null);
             }
           }
         }
       }
     } catch {}
 
-    // Immediate network sync on mount to ensure fresh server data
+    // Initial server verification
     refreshNow();
-  }, [initialSnapshot, refreshNow]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // 3. 0ms Real-Time Multi-Tab / Native Mobile App Event Listeners
+  // 3. Real-Time Multi-Tab / Mobile Lifecycle Event Listeners (runs ONCE on mount)
   useEffect(() => {
-    // A. BroadcastChannel for 0ms IPC updates
+    // A. BroadcastChannel for 0ms IPC updates across tabs
     let bc: BroadcastChannel | null = null;
     if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
       try {
@@ -164,6 +160,7 @@ export function LiveSnapshotProvider({
               try {
                 const freshSnap = buildPublicSnapshot(event.data.database);
                 setSnapshot(freshSnap);
+                playerCountRef.current = freshSnap.players?.length || 0;
                 lastUpdatedRef.current = Date.now();
                 localStorage.setItem('nginda_live_database', JSON.stringify(event.data.database));
                 localStorage.setItem('nginda_db_timestamp', String(Date.now()));
@@ -179,7 +176,9 @@ export function LiveSnapshotProvider({
       if (e.key === 'nginda_live_database' && e.newValue) {
         try {
           const freshDb = JSON.parse(e.newValue);
-          setSnapshot(buildPublicSnapshot(freshDb));
+          const freshSnap = buildPublicSnapshot(freshDb);
+          setSnapshot(freshSnap);
+          playerCountRef.current = freshSnap.players?.length || 0;
           lastUpdatedRef.current = Date.now();
         } catch {}
       }
@@ -199,31 +198,12 @@ export function LiveSnapshotProvider({
     window.addEventListener('focus', handleAppForeground);
     window.addEventListener('pageshow', handleAppForeground);
 
-    // D. Capacitor Native Mobile App Lifecycle (when app resumes from background or lock screen)
-    if (typeof window !== 'undefined') {
-      try {
-        import('@capacitor/app')
-          .then(({ App }) => {
-            App.addListener('appStateChange', (state) => {
-              if (state.isActive) {
-                handleAppForeground();
-              }
-            });
-            App.addListener('appRestoredResult', () => {
-              handleAppForeground();
-            });
-          })
-          .catch(() => {});
-      } catch {}
-    }
-
-    // E. Lightweight 15-second background fallback sync loop
+    // D. Lightweight 30-second background fallback sync loop
     const pollInterval = setInterval(() => {
-      // Only poll when window is visible or active to conserve mobile battery & network
       if (typeof document === 'undefined' || document.visibilityState === 'visible') {
         refreshNow();
       }
-    }, 15000);
+    }, 30000);
 
     return () => {
       if (bc) {

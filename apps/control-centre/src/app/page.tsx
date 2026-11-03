@@ -263,12 +263,6 @@ export default function ControlCentreApp() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ database: activeDb }),
                   }).catch(() => null);
-
-                  fetch('/manage/api/sync', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ database: activeDb }),
-                  }).catch(() => null);
                 }
               }
             } catch {}
