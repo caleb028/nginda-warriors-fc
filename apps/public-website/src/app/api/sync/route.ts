@@ -7,6 +7,13 @@ import {
   getPublicWebsiteSnapshot,
 } from '@nginda-warriors/shared/server';
 
+const HYPOTHETICAL_PLAYER_IDS = new Set([
+  'player-collins-kariuki-1',
+  'player-kelvin-njoroge-4',
+  'player-brian-mwangi-7',
+  'player-dennis-kamau-11',
+]);
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -25,12 +32,12 @@ export async function POST(req: NextRequest) {
       const deletedSet = new Set(mergedDeleted);
       const playerMap = new Map<string, any>();
       for (const p of currentDb.players || []) {
-        if (p && p.id && !deletedSet.has(p.id)) {
+        if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
           playerMap.set(p.id, p);
         }
       }
       for (const p of incomingPlayers) {
-        if (p && p.id && !deletedSet.has(p.id)) {
+        if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
           playerMap.set(p.id, p);
         }
       }

@@ -16,6 +16,13 @@ import {
   writeDatabase,
 } from '@nginda-warriors/shared/server';
 
+const HYPOTHETICAL_PLAYER_IDS = new Set([
+  'player-collins-kariuki-1',
+  'player-kelvin-njoroge-4',
+  'player-brian-mwangi-7',
+  'player-dennis-kamau-11',
+]);
+
 async function saveDatabaseAndSync(
   db: Parameters<typeof writeDatabase>[0],
   path: string = '/',
@@ -228,7 +235,7 @@ export async function POST(req: NextRequest) {
       }
       if (Array.isArray(payload.clientPlayers)) {
         for (const cp of payload.clientPlayers) {
-          if (cp && cp.id && !deletedSet.has(cp.id) && !cp.id.startsWith('player-')) {
+          if (cp && cp.id && !deletedSet.has(cp.id) && !HYPOTHETICAL_PLAYER_IDS.has(cp.id)) {
             if (!playerMap.has(cp.id)) {
               playerMap.set(cp.id, cp);
             }
@@ -238,7 +245,7 @@ export async function POST(req: NextRequest) {
 
       // Identify whether we are editing an existing player
       let targetId = payload.id;
-      if (!targetId || targetId.startsWith('player-')) {
+      if (!targetId || targetId.startsWith('temp-') || targetId.startsWith('player-temp-') || targetId.startsWith('player-1')) {
         const normName = String(payload.fullName || '').trim().toLowerCase();
         const normJersey = Number(payload.jerseyNumber);
         const existingMatch = Array.from(playerMap.values()).find(

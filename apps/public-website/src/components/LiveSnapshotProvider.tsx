@@ -30,6 +30,13 @@ export function useLiveSnapshot(fallback?: PublicWebsiteSnapshot): PublicWebsite
   throw new Error('useLiveSnapshot must be used within a LiveSnapshotProvider');
 }
 
+const HYPOTHETICAL_PLAYER_IDS = new Set([
+  'player-collins-kariuki-1',
+  'player-kelvin-njoroge-4',
+  'player-brian-mwangi-7',
+  'player-dennis-kamau-11',
+]);
+
 export function LiveSnapshotProvider({
   initialSnapshot,
   children,
@@ -57,21 +64,62 @@ export function LiveSnapshotProvider({
       if (res.ok) {
         const data = await res.json();
         const serverTs = Number(data.updatedAt) || 0;
-        const incomingPlayerCount = data.snapshot?.players?.length ?? -1;
-        const currentPlayerCount = snapshot?.players?.length ?? -1;
+        const incomingPlayers = data.snapshot?.players || data.database?.players || [];
+        const currentPlayers = snapshot?.players || [];
+
+        // Guard: Never let a cold server container with 0 players wipe a non-empty client roster
+        if (incomingPlayers.length === 0 && currentPlayers.length > 0) {
+          try {
+            const stored = localStorage.getItem('nginda_live_database');
+            if (stored) {
+              fetch('/api/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ database: JSON.parse(stored) }),
+              }).catch(() => null);
+            }
+          } catch {}
+          return;
+        }
+
+        // Merge incoming and current players by ID to avoid dropping any sequentially uploaded player
+        const deletedSet = new Set([
+          ...(data.database?.deletedPlayerIds || []),
+          ...(data.snapshot?.deletedPlayerIds || []),
+        ]);
+        const playerMap = new Map<string, any>();
+        for (const p of currentPlayers) {
+          if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
+            playerMap.set(p.id, p);
+          }
+        }
+        for (const p of incomingPlayers) {
+          if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
+            playerMap.set(p.id, p);
+          }
+        }
+        const mergedPlayers = Array.from(playerMap.values());
+
         const shouldUpdate =
           serverTs > lastUpdatedRef.current ||
           lastUpdatedRef.current === 0 ||
-          (incomingPlayerCount !== currentPlayerCount && incomingPlayerCount >= 0);
+          mergedPlayers.length !== currentPlayers.length;
 
         if (shouldUpdate) {
           lastUpdatedRef.current = serverTs || Date.now();
           if (data.snapshot) {
-            setSnapshot(data.snapshot);
+            setSnapshot({
+              ...data.snapshot,
+              players: mergedPlayers,
+            });
           }
           if (data.database) {
+            const mergedDb = {
+              ...data.database,
+              players: mergedPlayers,
+            };
             try {
-              localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
+              localStorage.setItem('nginda_live_database', JSON.stringify(mergedDb));
               localStorage.setItem('nginda_db_timestamp', String(lastUpdatedRef.current));
             } catch {}
           }

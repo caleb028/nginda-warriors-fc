@@ -125,6 +125,13 @@ const SIDEBAR_GROUPS: SidebarNavGroup[] = [
   },
 ];
 
+const HYPOTHETICAL_PLAYER_IDS = new Set([
+  'player-collins-kariuki-1',
+  'player-kelvin-njoroge-4',
+  'player-brian-mwangi-7',
+  'player-dennis-kamau-11',
+]);
+
 export default function ControlCentreApp() {
   const [bootstrapped, setBootstrapped] = useState<boolean | null>(null);
   const [session, setSession] = useState<AdminSessionPayload | null>(null);
@@ -236,32 +243,46 @@ export default function ControlCentreApp() {
                   serverDb.deletedPlayerIds = mergedDeleted;
                 }
 
-                const localPlayerCount = Array.isArray(localParsed?.players) ? localParsed.players.length : 0;
-                const serverPlayerCount = Array.isArray(serverDb?.players) ? serverDb.players.length : 0;
+                // Take the union of players across local storage and server by ID
+                const playerMap = new Map<string, any>();
+                for (const p of (localParsed?.players || [])) {
+                  if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
+                    playerMap.set(p.id, p);
+                  }
+                }
+                for (const p of (serverDb?.players || [])) {
+                  if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
+                    playerMap.set(p.id, p);
+                  }
+                }
+                const mergedPlayers = Array.from(playerMap.values());
+                activeDb = {
+                  ...serverDb,
+                  players: mergedPlayers,
+                  deletedPlayerIds: mergedDeleted,
+                };
 
-                // Never overwrite non-empty local roster with a cold server instance holding 0 players
-                if (localPlayerCount > serverPlayerCount && (localTs > serverTs + 1500 || serverPlayerCount === 0)) {
-                  activeDb = localParsed;
+                const serverPlayerCount = Array.isArray(serverDb?.players) ? serverDb.players.length : 0;
+                // If local roster has players that server is missing, heal server
+                if (mergedPlayers.length > serverPlayerCount) {
                   fetch(adminApiUrl('/api/admin/action'), {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     credentials: 'include',
-                    body: JSON.stringify({ action: 'sync_full_database', payload: { database: localParsed } }),
+                    body: JSON.stringify({ action: 'sync_full_database', payload: { database: activeDb } }),
                   }).catch(() => null);
 
                   fetch('/api/sync', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ database: localParsed }),
+                    body: JSON.stringify({ database: activeDb }),
                   }).catch(() => null);
 
                   fetch('/manage/api/sync', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ database: localParsed }),
+                    body: JSON.stringify({ database: activeDb }),
                   }).catch(() => null);
-                } else {
-                  activeDb = serverDb;
                 }
               }
             } catch {}
@@ -310,14 +331,36 @@ export default function ControlCentreApp() {
   const handleMutate = async (action: string, payload: Record<string, unknown>) => {
     // Automatically guarantee clientPlayers and deletedPlayerIds for save_player
     if (action === 'save_player') {
+      let storedPlayers: any[] = [];
+      if (typeof window !== 'undefined') {
+        try {
+          const raw = localStorage.getItem('nginda_live_database');
+          if (raw) {
+            const p = JSON.parse(raw);
+            if (Array.isArray(p.players)) storedPlayers = p.players;
+          }
+        } catch {}
+      }
+      const combined = [
+        ...(Array.isArray(payload.clientPlayers) ? (payload.clientPlayers as any[]) : []),
+        ...(database?.players || []),
+        ...storedPlayers,
+      ];
+      const pMap = new Map<string, any>();
+      for (const p of combined) {
+        if (p && p.id && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
+          pMap.set(p.id, p);
+        }
+      }
       payload = {
         ...payload,
-        clientPlayers: Array.isArray(payload.clientPlayers)
-          ? payload.clientPlayers
-          : (database?.players || []),
-        deletedPlayerIds: Array.isArray(payload.deletedPlayerIds)
-          ? payload.deletedPlayerIds
-          : (database?.deletedPlayerIds || []),
+        clientPlayers: Array.from(pMap.values()),
+        deletedPlayerIds: Array.from(
+          new Set([
+            ...(Array.isArray(payload.deletedPlayerIds) ? (payload.deletedPlayerIds as string[]) : []),
+            ...(database?.deletedPlayerIds || []),
+          ])
+        ),
       };
     }
 
@@ -665,13 +708,18 @@ export default function ControlCentreApp() {
           ]);
           const playerMap = new Map<string, any>();
           // Preserve all known non-deleted players
-          for (const p of (optimisticDb?.players || previousDb?.players || [])) {
-            if (p && p.id && !deletedSet.has(p.id) && !p.id.startsWith('player-')) {
+          for (const p of (optimisticDb?.players || [])) {
+            if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
+              playerMap.set(p.id, p);
+            }
+          }
+          for (const p of (previousDb?.players || [])) {
+            if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
               playerMap.set(p.id, p);
             }
           }
           for (const p of (confirmedDb.players || [])) {
-            if (p && p.id && !deletedSet.has(p.id) && !p.id.startsWith('player-')) {
+            if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
               playerMap.set(p.id, p);
             }
           }
