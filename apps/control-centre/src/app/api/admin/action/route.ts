@@ -58,7 +58,7 @@ async function saveDatabaseAndSync(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload,
-        signal: AbortSignal.timeout(3500),
+        signal: AbortSignal.timeout(2000),
       }).catch(() => null),
       ...(path !== '/'
         ? [
@@ -66,14 +66,18 @@ async function saveDatabaseAndSync(
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: rootPayload,
-              signal: AbortSignal.timeout(3500),
+              signal: AbortSignal.timeout(2000),
             }).catch(() => null),
           ]
         : []),
     ]);
   });
 
-  await Promise.allSettled(syncPromises);
+  // Fast race: wait up to 800ms for primary sync, then let background finishes detach safely
+  await Promise.race([
+    Promise.allSettled(syncPromises),
+    new Promise((resolve) => setTimeout(resolve, 800)),
+  ]);
 }
 
 function safeDb(db: ReturnType<typeof readDatabase>) {
@@ -110,8 +114,44 @@ export async function POST(req: NextRequest) {
   try {
     assertValidCsrfOrigin(req.headers);
     const token = extractAdminToken(req);
+    const host = req.headers.get('host');
     const body = await req.json();
     const { action, payload } = body;
+
+    // 0. FULL DATABASE SYNCHRONIZATION
+    if (action === 'sync_full_database') {
+      const session = assertAuthorizedAdmin(token, 'players');
+      if (payload && payload.database && typeof payload.database === 'object') {
+        const incomingDb = payload.database as Parameters<typeof writeDatabase>[0];
+        const db = readDatabase();
+        if (Array.isArray(incomingDb.players)) {
+          db.players = incomingDb.players;
+        }
+        if (Array.isArray(incomingDb.staff) && incomingDb.staff.length > 0) {
+          db.staff = incomingDb.staff;
+        }
+        if (Array.isArray(incomingDb.fixtures) && incomingDb.fixtures.length > 0) {
+          db.fixtures = incomingDb.fixtures;
+        }
+        if (Array.isArray(incomingDb.articles) && incomingDb.articles.length > 0) {
+          db.articles = incomingDb.articles;
+        }
+        if (incomingDb.clubSettings) {
+          db.clubSettings = { ...db.clubSettings, ...incomingDb.clubSettings };
+        }
+        db.clubSettings.updatedAt = new Date().toISOString();
+        recordAuditLog(db, {
+          actorUserId: session.userId,
+          actorName: session.fullName,
+          actorRole: session.roleCode,
+          action: 'SYNC_FULL_DATABASE',
+          module: 'players',
+          summary: `Synchronized squad database (${db.players.length} players)`,
+        });
+        await saveDatabaseAndSync(db, '/team', host);
+        return NextResponse.json({ ok: true, database: safeDb(db) });
+      }
+    }
 
     // 1. PLAYERS MANAGEMENT
     if (action === 'save_player') {
@@ -122,13 +162,16 @@ export async function POST(req: NextRequest) {
         ? db.players.findIndex((p) => p.id === payload.id)
         : -1;
 
+      const baseSlug = payload.fullName ? slugify(String(payload.fullName)) : 'player';
+      const jersey = payload.jerseyNumber !== undefined && payload.jerseyNumber !== null ? String(payload.jerseyNumber) : '99';
+
       const playerRecord = {
         id: existingIdx >= 0 ? db.players[existingIdx].id : createUuid(),
         slug:
           payload.slug ||
-          `${slugify(payload.fullName)}-${payload.jerseyNumber}`,
-        fullName: String(payload.fullName).trim(),
-        jerseyNumber: Number(payload.jerseyNumber),
+          (existingIdx >= 0 ? db.players[existingIdx].slug : `${baseSlug}-${jersey}`),
+        fullName: String(payload.fullName || '').trim(),
+        jerseyNumber: Number(payload.jerseyNumber || 99),
         positionGroup: payload.positionGroup || 'Midfielders',
         specificRole: payload.specificRole || 'Central Midfielder',
         photoUrl: payload.photoUrl || '',
@@ -157,6 +200,7 @@ export async function POST(req: NextRequest) {
       } else {
         db.players.push(playerRecord);
       }
+      db.clubSettings.updatedAt = now;
 
       recordAuditLog(db, {
         actorUserId: session.userId,
@@ -168,7 +212,7 @@ export async function POST(req: NextRequest) {
         summary: `${existingIdx >= 0 ? 'Updated' : 'Added'} player #${playerRecord.jerseyNumber} ${playerRecord.fullName} (${playerRecord.publicationStatus})`,
       });
 
-      await saveDatabaseAndSync(db);
+      await saveDatabaseAndSync(db, '/team', host);
       return NextResponse.json({ ok: true, player: playerRecord, database: safeDb(db) });
     }
 
@@ -177,6 +221,7 @@ export async function POST(req: NextRequest) {
       const db = readDatabase();
       const target = db.players.find((p) => p.id === payload.id);
       db.players = db.players.filter((p) => p.id !== payload.id);
+      db.clubSettings.updatedAt = new Date().toISOString();
       recordAuditLog(db, {
         actorUserId: session.userId,
         actorName: session.fullName,
@@ -186,7 +231,7 @@ export async function POST(req: NextRequest) {
         targetId: payload.id,
         summary: `Removed player profile ${target?.fullName || payload.id}`,
       });
-      await saveDatabaseAndSync(db);
+      await saveDatabaseAndSync(db, '/team', host);
       return NextResponse.json({ ok: true, database: safeDb(db) });
     }
 

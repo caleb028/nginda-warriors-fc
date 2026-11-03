@@ -497,6 +497,17 @@ declare global {
   var __NGINDA_CACHE_TIMESTAMP__: number | undefined;
 }
 
+function resolveDbTimestamp(db?: NgindaDatabaseSchema | null, fallbackMtime?: number): number {
+  if (db?.clubSettings?.updatedAt) {
+    const t = new Date(db.clubSettings.updatedAt).getTime();
+    if (!isNaN(t) && t > 0) return t;
+  }
+  if (fallbackMtime && !isNaN(fallbackMtime) && fallbackMtime > 0) {
+    return Math.round(fallbackMtime);
+  }
+  return 1730500000000;
+}
+
 export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
   const filePath = getSharedDatabaseFilePath();
 
@@ -511,7 +522,10 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
         const raw = fs.readFileSync(filePath, 'utf8');
         globalThis.__NGINDA_DATABASE_CACHE__ = JSON.parse(raw);
         globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
-        globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+        globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(
+          globalThis.__NGINDA_DATABASE_CACHE__,
+          stat.mtimeMs
+        );
         return globalThis.__NGINDA_DATABASE_CACHE__;
       }
     } catch {}
@@ -538,7 +552,7 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
             globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
           } catch {}
           globalThis.__NGINDA_DATABASE_CACHE__ = data;
-          globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+          globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(data);
           return data;
         } catch {}
       }
@@ -551,7 +565,7 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
       globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
     } catch {}
     globalThis.__NGINDA_DATABASE_CACHE__ = initial;
-    globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+    globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(initial);
     return initial;
   }
   try {
@@ -560,7 +574,7 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
     const data = JSON.parse(raw) as NgindaDatabaseSchema;
     globalThis.__NGINDA_DATABASE_CACHE__ = data;
     globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
-    globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+    globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(data, stat.mtimeMs);
     return data;
   } catch {
     const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
@@ -570,14 +584,18 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
       globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
     } catch {}
     globalThis.__NGINDA_DATABASE_CACHE__ = initial;
-    globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+    globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(initial);
     return initial;
   }
 }
 
 export function writeDatabase(db: NgindaDatabaseSchema): void {
+  const now = Date.now();
+  if (db.clubSettings) {
+    db.clubSettings.updatedAt = new Date(now).toISOString();
+  }
   globalThis.__NGINDA_DATABASE_CACHE__ = db;
-  globalThis.__NGINDA_CACHE_TIMESTAMP__ = Date.now();
+  globalThis.__NGINDA_CACHE_TIMESTAMP__ = now;
   const filePath = getSharedDatabaseFilePath();
   try {
     const tempPath = `${filePath}.tmp`;
@@ -601,7 +619,11 @@ export function writeDatabase(db: NgindaDatabaseSchema): void {
 }
 
 export function getDatabaseTimestamp(): number {
-  return globalThis.__NGINDA_CACHE_TIMESTAMP__ || Date.now();
+  if (globalThis.__NGINDA_CACHE_TIMESTAMP__) {
+    return globalThis.__NGINDA_CACHE_TIMESTAMP__;
+  }
+  const db = globalThis.__NGINDA_DATABASE_CACHE__ || readDatabase();
+  return globalThis.__NGINDA_CACHE_TIMESTAMP__ || resolveDbTimestamp(db);
 }
 
 export function recordAuditLog(

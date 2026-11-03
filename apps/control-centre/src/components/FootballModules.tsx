@@ -112,6 +112,28 @@ export function FootballModules({
   const [newCompName, setNewCompName] = useState('');
   const [newCompSeason, setNewCompSeason] = useState('2026/2027 Season');
 
+  const resetPlayerForm = () => {
+    setEditingPlayerId(null);
+    setPlayerName('');
+    setJerseyNumber(String(Math.min(99, (db.players?.length || 0) + 1)));
+    setPositionGroup('Forwards');
+    setSpecificRole('Centre Forward');
+    setPreferredFoot('Right');
+    setPhotoUrl('');
+    setBiography('');
+    setAppearances('0');
+    setStarts('0');
+    setGoals('0');
+    setAssists('0');
+    setYellowCards('0');
+    setRedCards('0');
+    setCleanSheets('0');
+    setIsFeatured(true);
+    setIsUnderageProtected(false);
+    setSquadStatus('active');
+    setPlayerPubStatus('published');
+  };
+
   const loadPlayerForEdit = (p: Player) => {
     setEditingPlayerId(p.id);
     setPlayerName(p.fullName);
@@ -162,9 +184,7 @@ export function FootballModules({
               squadStatus,
               publicationStatus: playerPubStatus,
             });
-            setEditingPlayerId(null);
-            setPlayerName('');
-            setBiography('');
+            resetPlayerForm();
           }}
           className="bg-white rounded-2xl p-6 border-2 border-[#08783E] shadow-sm space-y-4"
         >
@@ -175,8 +195,8 @@ export function FootballModules({
             {editingPlayerId && (
               <button
                 type="button"
-                onClick={() => setEditingPlayerId(null)}
-                className="text-xs font-bold text-red-600"
+                onClick={resetPlayerForm}
+                className="text-xs font-bold text-red-600 hover:underline"
               >
                 Cancel Edit
               </button>

@@ -57,17 +57,35 @@ export function LiveSnapshotProvider({
       if (res.ok) {
         const data = await res.json();
         if (data.updatedAt && data.updatedAt > lastUpdatedRef.current) {
-          lastUpdatedRef.current = data.updatedAt;
-          if (data.snapshot) {
-            setSnapshot(data.snapshot);
-          }
-          if (data.database) {
+          // Guard against cold/stale serverless instances returning 0 players when client already has active squad
+          const serverPlayersCount = data.snapshot?.players?.length || 0;
+          const currentPlayersCount = snapshot?.players?.length || 0;
+
+          if (serverPlayersCount === 0 && currentPlayersCount > 0) {
+            // Cold server instance detected: re-seed the server instance from verified local storage
             try {
-              localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
-              localStorage.setItem('nginda_db_timestamp', String(data.updatedAt));
+              const localDb = localStorage.getItem('nginda_live_database');
+              if (localDb) {
+                fetch('/api/sync', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ database: JSON.parse(localDb) }),
+                }).catch(() => null);
+              }
             } catch {}
+          } else {
+            lastUpdatedRef.current = data.updatedAt;
+            if (data.snapshot) {
+              setSnapshot(data.snapshot);
+            }
+            if (data.database) {
+              try {
+                localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
+                localStorage.setItem('nginda_db_timestamp', String(data.updatedAt));
+              } catch {}
+            }
+            router.refresh();
           }
-          router.refresh();
         }
       }
     } catch {
@@ -75,21 +93,30 @@ export function LiveSnapshotProvider({
     } finally {
       isSyncingRef.current = false;
     }
-  }, [router]);
+  }, [router, snapshot]);
 
-  // 2. Initial Mount Check from localStorage (if newer than SSR)
+  // 2. Initial Mount Check from localStorage (if newer than SSR or holds squad profiles)
   useEffect(() => {
     try {
       const stored = localStorage.getItem('nginda_live_database');
       const storedTs = localStorage.getItem('nginda_db_timestamp');
-      if (stored && storedTs && Number(storedTs) > lastUpdatedRef.current - 120000) {
+      if (stored) {
         const parsedDb = JSON.parse(stored);
-        const freshSnap = buildPublicSnapshot(parsedDb);
-        setSnapshot(freshSnap);
-        lastUpdatedRef.current = Number(storedTs);
+        if (parsedDb && typeof parsedDb === 'object') {
+          const freshSnap = buildPublicSnapshot(parsedDb);
+          const localCount = freshSnap.players?.length || 0;
+          const initialCount = initialSnapshot.players?.length || 0;
+
+          if (localCount >= initialCount || (storedTs && Number(storedTs) >= lastUpdatedRef.current - 86400000)) {
+            setSnapshot(freshSnap);
+            if (storedTs) {
+              lastUpdatedRef.current = Number(storedTs);
+            }
+          }
+        }
       }
     } catch {}
-  }, []);
+  }, [initialSnapshot]);
 
   // 3. 0ms Real-Time Multi-Tab / Native Mobile App Event Listeners
   useEffect(() => {

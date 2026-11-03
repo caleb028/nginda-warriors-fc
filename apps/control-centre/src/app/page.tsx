@@ -160,6 +160,19 @@ export default function ControlCentreApp() {
   };
 
   const loadState = async () => {
+    // 1. Immediate optimistic hydration from client localStorage (0ms wait)
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('nginda_live_database');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && typeof parsed === 'object') {
+            setDatabase(parsed);
+          }
+        }
+      } catch {}
+    }
+
     try {
       const authRes = await fetch(adminApiUrl('/api/admin/auth'), {
         headers: getAuthHeaders(),
@@ -176,9 +189,41 @@ export default function ControlCentreApp() {
         });
         const actionData = await actionRes.json();
         if (actionData.ok && actionData.database) {
-          setDatabase(actionData.database);
+          const serverDb = actionData.database;
+          let activeDb = serverDb;
+
+          // Guard against cold/stale serverless instances wiping recently added squad players
           if (typeof window !== 'undefined') {
-            localStorage.setItem('nginda_live_database', JSON.stringify(actionData.database));
+            try {
+              const localRaw = localStorage.getItem('nginda_live_database');
+              const localTs = Number(localStorage.getItem('nginda_db_timestamp') || '0');
+              const serverTs = serverDb.clubSettings?.updatedAt
+                ? new Date(serverDb.clubSettings.updatedAt).getTime()
+                : 0;
+
+              if (localRaw) {
+                const localParsed = JSON.parse(localRaw);
+                const localPlayerCount = Array.isArray(localParsed?.players) ? localParsed.players.length : 0;
+                const serverPlayerCount = Array.isArray(serverDb?.players) ? serverDb.players.length : 0;
+
+                // If local has players while server instance is empty or local was updated more recently
+                if (localPlayerCount > serverPlayerCount || (localTs > serverTs && localPlayerCount >= serverPlayerCount)) {
+                  activeDb = localParsed;
+                  // Asynchronously push the active local database to warm the server instance
+                  fetch(adminApiUrl('/api/admin/action'), {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    credentials: 'include',
+                    body: JSON.stringify({ action: 'sync_full_database', payload: { database: localParsed } }),
+                  }).catch(() => null);
+                }
+              }
+            } catch {}
+          }
+
+          setDatabase(activeDb);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('nginda_live_database', JSON.stringify(activeDb));
             localStorage.setItem('nginda_db_timestamp', String(Date.now()));
           }
         }
@@ -193,6 +238,27 @@ export default function ControlCentreApp() {
 
   useEffect(() => {
     loadState();
+
+    // Listen for multi-tab updates within Admin
+    let bc: BroadcastChannel | null = null;
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      try {
+        bc = new BroadcastChannel('nginda_warriors_live_sync');
+        bc.onmessage = (event) => {
+          if (event.data?.type === 'DATABASE_UPDATED' && event.data?.database) {
+            setDatabase(event.data.database);
+          }
+        };
+      } catch {}
+    }
+
+    return () => {
+      if (bc) {
+        try {
+          bc.close();
+        } catch {}
+      }
+    };
   }, []);
 
   const handleMutate = async (action: string, payload: Record<string, unknown>) => {
@@ -550,11 +616,14 @@ export default function ControlCentreApp() {
           }).catch(() => null);
 
           // 2. Direct fetch to public-website revalidate
-          fetch(`${origin}/api/revalidate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ path: '/' }),
-          }).catch(() => null);
+          const revalPaths = action.includes('player') ? ['/', '/team'] : ['/'];
+          revalPaths.forEach((p) => {
+            fetch(`${origin}/api/revalidate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ path: p }),
+            }).catch(() => null);
+          });
 
           // 3. Fallback relative fetch
           fetch('/api/sync', {
