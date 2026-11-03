@@ -190,11 +190,13 @@ export function LiveSnapshotProvider({
       refreshNow();
     };
 
-    window.addEventListener('visibilitychange', () => {
+    const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
         handleAppForeground();
       }
-    });
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
     window.addEventListener('focus', handleAppForeground);
     window.addEventListener('pageshow', handleAppForeground);
 
@@ -212,6 +214,7 @@ export function LiveSnapshotProvider({
         } catch {}
       }
       window.removeEventListener('storage', handleStorage);
+      document.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('focus', handleAppForeground);
       window.removeEventListener('pageshow', handleAppForeground);
       clearInterval(pollInterval);

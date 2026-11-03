@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -11,8 +11,6 @@ import {
 } from '@nginda-warriors/shared';
 import {
   Calendar,
-  ChevronDown,
-  ChevronUp,
   Globe,
   HeartHandshake,
   Home,
@@ -31,6 +29,7 @@ import {
 } from 'lucide-react';
 import { GlobalSearchModal } from './GlobalSearchModal';
 import { PwaInstallPrompt } from './PwaInstallPrompt';
+import { ScrollDynamicsHUD } from './ScrollDynamicsHUD';
 
 interface LocaleContextValue {
   locale: SupportedLocale;
@@ -60,49 +59,30 @@ export function PublicShell({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
-  const [isNavigating, setIsNavigating] = useState(false);
+  const isScrolledRef = useRef(false);
 
-  // Instant route navigation flash indicator
+  // Zero-overhead threshold-only scroll listener: ONLY triggers state change when crossing 40px
   useEffect(() => {
-    setIsNavigating(true);
-    const timer = setTimeout(() => setIsNavigating(false), 300);
-    return () => clearTimeout(timer);
-  }, [pathname]);
-
-  // High-performance 60fps passive window scroll listener for header morphing & progress tracking
-  useEffect(() => {
-    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     let ticking = false;
 
-    const updateScroll = () => {
-      const currentScrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (currentScrollY / docHeight) * 100 : 0;
-
-      setScrollProgress(progress);
-      setIsScrolled(currentScrollY > 40);
-      setShowScrollTop(currentScrollY > 260);
-
-      if (Math.abs(currentScrollY - lastScrollY) > 6) {
-        setScrollDirection(currentScrollY > lastScrollY ? 'down' : 'up');
-        lastScrollY = currentScrollY;
-      }
-      ticking = false;
-    };
-
-    const handleScroll = () => {
+    const onScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(updateScroll);
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const nextScrolled = currentScrollY > 40;
+          if (nextScrolled !== isScrolledRef.current) {
+            isScrolledRef.current = nextScrolled;
+            setIsScrolled(nextScrolled);
+          }
+          ticking = false;
+        });
         ticking = true;
       }
     };
 
-    updateScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   // Automatic DOM scroll guards (locks background scrolling when drawer or modal is open)
@@ -153,20 +133,8 @@ export function PublicShell({
         }
         className="min-h-screen flex flex-col bg-black text-white overflow-x-hidden w-full selection:bg-[#FDE100] selection:text-black"
       >
-        {/* Dynamic Route Navigation Transition Beam */}
-        {isNavigating && (
-          <div
-            aria-hidden="true"
-            className="fixed top-0 left-0 right-0 h-[3px] z-[70] bg-gradient-to-r from-transparent via-[#FDE100] to-transparent animate-routeBar shadow-[0_0_12px_#FDE100] pointer-events-none"
-          />
-        )}
-
-        {/* Global Reading Scroll Progress Bar */}
-        <div
-          aria-hidden="true"
-          className="fixed top-0 left-0 h-[2.5px] z-[60] bg-[#FDE100] shadow-[0_0_10px_#FDE100] transition-[width] duration-150 ease-out pointer-events-none"
-          style={{ width: `${scrollProgress}%` }}
-        />
+        {/* Isolated Zero-Overhead Scroll Dynamics & Navigation HUD */}
+        <ScrollDynamicsHUD />
 
         {/* Main Official Club Header - Dynamic Scroll Morphing Header (Borussia Dortmund Black & Yellow) */}
         <header
@@ -635,73 +603,6 @@ export function PublicShell({
             <span className="mt-0.5">More</span>
           </button>
         </nav>
-
-        {/* Luxury Floating Dynamic Scroll Controller HUD (Positioned safely above bottom nav on mobile) */}
-        <div
-          className={`fixed bottom-20 xl:bottom-8 right-4 sm:right-6 z-40 flex flex-col items-center gap-2 transition-all duration-300 ${
-            showScrollTop
-              ? 'opacity-100 translate-y-0 pointer-events-auto'
-              : 'opacity-0 translate-y-4 pointer-events-none'
-          }`}
-        >
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="relative group w-12 h-12 rounded-full bg-black/85 hover:bg-black backdrop-blur-md border border-[#FDE100]/40 hover:border-[#FDE100] shadow-[0_8px_24px_rgba(0,0,0,0.6)] flex items-center justify-center text-white hover:text-[#FDE100] transition-all duration-200 active:scale-90"
-            aria-label={`Scroll to top (${Math.round(scrollProgress)}% scrolled)`}
-            title={`Scroll to top (${Math.round(scrollProgress)}%)`}
-          >
-            {/* SVG Progress Circle Ring */}
-            <svg
-              className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none p-0.5"
-              viewBox="0 0 44 44"
-            >
-              <circle
-                cx="22"
-                cy="22"
-                r="19"
-                fill="none"
-                stroke="#262626"
-                strokeWidth="2.5"
-              />
-              <circle
-                cx="22"
-                cy="22"
-                r="19"
-                fill="none"
-                stroke="#FDE100"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeDasharray="119.38"
-                strokeDashoffset={Math.max(
-                  0,
-                  119.38 - (119.38 * scrollProgress) / 100
-                )}
-                className="transition-[stroke-dashoffset] duration-150 ease-out"
-              />
-            </svg>
-
-            <ChevronUp className="w-5 h-5 text-[#FDE100] transition-transform duration-200 group-hover:-translate-y-0.5" />
-          </button>
-
-          {/* Quick Scroll to Bottom Button (visible if not near bottom of the page) */}
-          {scrollProgress < 88 && (
-            <button
-              type="button"
-              onClick={() =>
-                window.scrollTo({
-                  top: document.documentElement.scrollHeight,
-                  behavior: 'smooth',
-                })
-              }
-              className="w-8 h-8 rounded-full bg-black/75 hover:bg-black backdrop-blur-md border border-[#333333] hover:border-[#FDE100]/60 text-slate-300 hover:text-[#FDE100] shadow-md flex items-center justify-center transition-all duration-200 active:scale-90 hover:scale-105"
-              aria-label="Scroll to bottom of page"
-              title="Scroll to bottom"
-            >
-              <ChevronDown className="w-4 h-4" />
-            </button>
-          )}
-        </div>
 
         {/* Global Command Palette / Search Dialog */}
         <GlobalSearchModal

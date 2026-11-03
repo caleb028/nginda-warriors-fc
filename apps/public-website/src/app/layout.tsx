@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { PublicShell } from '../components/PublicShell';
@@ -6,6 +6,14 @@ import { PreventZoom } from '../components/PreventZoom';
 import { LiveSnapshotProvider } from '../components/LiveSnapshotProvider';
 
 export const revalidate = 15;
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+  themeColor: '#FDE100',
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const { clubSettings } = getPublicWebsiteSnapshot();
@@ -95,26 +103,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                var refreshing = false;
-                navigator.serviceWorker.addEventListener('controllerchange', function() {
-                  if (!refreshing) {
-                    refreshing = true;
-                    window.location.reload();
-                  }
-                });
-
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=20261102_23').then(function(reg) {
-                    reg.update();
-                  }).catch(function() {});
-                });
-
-                document.addEventListener('visibilitychange', function() {
-                  if (document.visibilityState === 'visible') {
-                    navigator.serviceWorker.getRegistration().then(function(reg) {
-                      if (reg) reg.update();
-                    });
-                  }
+                  navigator.serviceWorker.register('/sw.js?v=20261103_01').catch(function() {});
                 });
               }
             `,

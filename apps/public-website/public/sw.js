@@ -62,10 +62,32 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Static assets & fonts: Network-first
+  // 3. Static assets, fonts, scripts & images: Cache-First / Stale-While-Revalidate
+  // Delivers instant 0ms responses from cache without waking up mobile radios or blocking render
   event.respondWith(
-    fetch(req).catch(() => {
-      return caches.match(req);
+    caches.match(req).then((cachedResponse) => {
+      if (cachedResponse) {
+        // Return instantly from local cache
+        // Silently revalidate in background without blocking
+        fetch(req)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const clone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+            }
+          })
+          .catch(() => {});
+        return cachedResponse;
+      }
+
+      // If not cached yet, fetch over network and cache for next time
+      return fetch(req).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+        }
+        return networkResponse;
+      });
     })
   );
 });
