@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   ClubCrest,
   ClubSettings,
@@ -55,11 +55,27 @@ export function PublicShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [locale, setLocale] = useState<SupportedLocale>('en');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isScrolledRef = useRef(false);
+
+  // Automatically close mobile menu and search modal whenever the route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setSearchOpen(false);
+  }, [pathname]);
+
+  // Fast, smooth mobile navigation handler (guarantees instant route transition without drops)
+  const handleNav = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    if (pathname !== href) {
+      router.push(href);
+    }
+  };
 
   // Zero-overhead threshold-only scroll listener: ONLY triggers state change when crossing 40px
   useEffect(() => {
@@ -281,112 +297,6 @@ export function PublicShell({
               </div>
             </div>
           </div>
-
-          {/* RB LEIPZIG SIGNATURE FULL-SCREEN MOBILE MENU (PURE CSS MOTION) */}
-          {mobileMenuOpen && (
-            <div
-              className="xl:hidden fixed inset-0 z-50 bg-[#000000]/98 backdrop-blur-2xl flex flex-col justify-between p-5 sm:p-8 overflow-y-auto transition-all duration-300 ease-out"
-            >
-                {/* Top Bar inside Menu */}
-                <div className="flex items-center justify-between border-b border-[#262626] pb-4">
-                  <button
-                    type="button"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 py-2 px-3 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-white border border-[#262626] transition active:scale-95"
-                    aria-label="Close menu"
-                  >
-                    <X className="w-5 h-5 text-white" />
-                    <span className="font-athletic font-black text-xs uppercase tracking-wider text-slate-200">
-                      Close
-                    </span>
-                  </button>
-
-                  <ClubCrest
-                    size={48}
-                    customCrestUrl={settings.crestUrl}
-                    alt={`${settings.clubName} Crest`}
-                    className="w-auto h-11 object-contain"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setSearchOpen(true);
-                    }}
-                    className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] transition"
-                    title="Search"
-                    aria-label="Search"
-                  >
-                    <Search className="w-4 h-4 text-slate-300" />
-                  </button>
-                </div>
-
-                {/* Main Navigation Links List with Staggered Motion */}
-                <div className="py-6 space-y-1">
-                  {primaryNav.map((item, index) => {
-                    const isActive =
-                      item.href === '/'
-                        ? pathname === '/'
-                        : pathname.startsWith(item.href);
-                    return (
-                      <div
-                        key={item.href}
-                        className="transition-all duration-300"
-                      >
-                        <Link
-                          href={item.href}
-                          prefetch={true}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className={`group flex items-center justify-between py-3 px-4 rounded-xl text-xl sm:text-2xl font-athletic font-black uppercase tracking-wider transition ${
-                            isActive
-                              ? 'bg-[#FDE100] text-black shadow-md'
-                              : 'text-white hover:bg-[#141414] hover:text-[#FDE100]'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className={`text-xs font-mono font-bold ${isActive ? 'text-black/60' : 'text-slate-500'}`}>
-                              {String(index + 1).padStart(2, '0')}
-                            </span>
-                            <span>{item.label}</span>
-                          </div>
-                          <span className={`text-sm transition-transform group-hover:translate-x-1 ${isActive ? 'text-black' : 'text-slate-500 group-hover:text-[#FDE100]'}`}>
-                            &rarr;
-                          </span>
-                        </Link>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Bottom Quick Actions (Tickets, Partner With Us & Admin) */}
-                <div className="border-t border-[#262626] pt-5 space-y-3">
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <Link
-                      href="/support"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95"
-                    >
-                      <HeartHandshake className="w-4 h-4 text-black" />
-                      <span>{t.nav.supportClub}</span>
-                    </Link>
-                    <Link
-                      href="/sponsors"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#333333] bg-[#141414] text-white hover:border-[#FDE100] font-athletic font-bold text-xs uppercase tracking-wider transition"
-                    >
-                      <span>{t.hero.partnerWithUs}</span>
-                    </Link>
-                  </div>
-
-                  <div className="flex items-center justify-center pt-2">
-                    <span className="text-[11px] font-athletic uppercase tracking-widest text-slate-500 text-center">
-                      Nginda Warriors FC (Est. 2024) • Murang’a County
-                    </span>
-                  </div>
-                </div>
-            </div>
-          )}
         </header>
 
         {/* Main Content Area */}
@@ -603,6 +513,152 @@ export function PublicShell({
             <span className="mt-0.5">More</span>
           </button>
         </nav>
+
+        {/* FULL-SCREEN ATHLETIC MOBILE NAVIGATION DRAWER (Positioned at root z-[100] to ensure 100% fluid touch hit-testing) */}
+        {mobileMenuOpen && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation Menu"
+            className="xl:hidden fixed inset-0 z-[100] bg-black/98 flex flex-col justify-between p-5 sm:p-8 overflow-y-auto overscroll-contain animate-fadeIn"
+            style={{ touchAction: 'manipulation' }}
+          >
+            {/* Top Bar inside Menu */}
+            <div className="flex items-center justify-between border-b border-[#262626] pb-4 shrink-0">
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-white border border-[#262626] transition active:scale-95"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5 text-white" />
+                <span className="font-athletic font-black text-xs uppercase tracking-wider text-slate-200">
+                  Close
+                </span>
+              </button>
+
+              <Link
+                href="/"
+                prefetch={true}
+                onClick={(e) => handleNav(e, '/')}
+                className="flex items-center justify-center focus:outline-none"
+                aria-label={settings.clubName}
+              >
+                <ClubCrest
+                  size={50}
+                  customCrestUrl={settings.crestUrl}
+                  alt={`${settings.clubName} Crest`}
+                  className="w-auto h-11 object-contain"
+                />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setSearchOpen(true);
+                }}
+                className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] transition active:scale-95"
+                title="Search"
+                aria-label="Search"
+              >
+                <Search className="w-4 h-4 text-slate-300" />
+              </button>
+            </div>
+
+            {/* Main Navigation Links List with Instant Transitions */}
+            <nav className="py-6 space-y-1.5 flex-1" aria-label="Mobile Drawer Navigation">
+              {primaryNav.map((item, index) => {
+                const isActive =
+                  item.href === '/'
+                    ? pathname === '/'
+                    : pathname.startsWith(item.href);
+                return (
+                  <div key={item.href}>
+                    <Link
+                      href={item.href}
+                      prefetch={true}
+                      onClick={(e) => handleNav(e, item.href)}
+                      className={`group flex items-center justify-between py-3 px-4 rounded-xl text-xl sm:text-2xl font-athletic font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] ${
+                        isActive
+                          ? 'bg-[#FDE100] text-black shadow-lg shadow-[#FDE100]/20'
+                          : 'text-white hover:bg-[#141414] hover:text-[#FDE100] active:bg-[#1C1C1C]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <span
+                          className={`text-xs font-mono font-bold ${
+                            isActive ? 'text-black/60' : 'text-slate-500'
+                          }`}
+                        >
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span>{item.label}</span>
+                      </div>
+                      <span
+                        className={`text-sm transition-transform duration-200 group-hover:translate-x-1 ${
+                          isActive ? 'text-black' : 'text-slate-500 group-hover:text-[#FDE100]'
+                        }`}
+                      >
+                        &rarr;
+                      </span>
+                    </Link>
+                  </div>
+                );
+              })}
+            </nav>
+
+            {/* Bottom Quick Actions (Tickets, Partner With Us & Secondary Sections) */}
+            <div className="border-t border-[#262626] pt-5 space-y-4 shrink-0">
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/support"
+                  prefetch={true}
+                  onClick={(e) => handleNav(e, '/support')}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95"
+                >
+                  <HeartHandshake className="w-4 h-4 text-black" />
+                  <span>{t.nav.supportClub}</span>
+                </Link>
+                <Link
+                  href="/sponsors"
+                  prefetch={true}
+                  onClick={(e) => handleNav(e, '/sponsors')}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl border border-[#333333] bg-[#141414] text-white hover:border-[#FDE100] font-athletic font-bold text-xs uppercase tracking-wider transition active:scale-95"
+                >
+                  <span>{t.hero.partnerWithUs}</span>
+                </Link>
+              </div>
+
+              {/* Secondary Quick Access Chips */}
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                {[
+                  { href: '/merchandise', label: 'Store' },
+                  { href: '/recruitment', label: 'Trials' },
+                  { href: '/membership', label: 'Members' },
+                  { href: '/transparency', label: 'Ledger' },
+                  { href: '/events', label: 'Events' },
+                ].map((chip) => (
+                  <Link
+                    key={chip.href}
+                    href={chip.href}
+                    prefetch={true}
+                    onClick={(e) => handleNav(e, chip.href)}
+                    className="px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#222222] border border-[#262626] text-[11px] font-athletic font-bold uppercase tracking-wider text-slate-300 hover:text-[#FDE100] transition active:scale-95"
+                  >
+                    {chip.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-center pt-2">
+                <span className="text-[10px] font-athletic uppercase tracking-widest text-slate-500 text-center">
+                  Nginda Warriors FC (Est. {settings.establishedYear || 2024}) • Murang’a County
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Global Command Palette / Search Dialog */}
         <GlobalSearchModal
