@@ -3,7 +3,7 @@ import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/ser
 import { MerchandiseCatalogClient } from '../../components/MerchandiseCatalogClient';
 import { ShoppingBag } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function MerchandiseStorePage() {
   const { clubSettings, products } = getPublicWebsiteSnapshot();

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ClubCrest, GalleryCategory, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { Camera, ExternalLink, Video } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 const GALLERY_CATEGORIES: GalleryCategory[] = [
   'Matches',

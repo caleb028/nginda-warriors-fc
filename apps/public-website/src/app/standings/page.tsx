@@ -2,8 +2,7 @@ import React from 'react';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { Award, Info } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 15;
 
 export default function LeagueStandingsPage() {
   const { clubSettings, standings, competitions } = getPublicWebsiteSnapshot();

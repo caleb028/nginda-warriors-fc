@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { ArticleCategoryName, ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { ArrowRight, Newspaper } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 15;
 
 const CATEGORIES: ArticleCategoryName[] = [
   'Club announcements',

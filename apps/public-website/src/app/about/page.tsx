@@ -2,7 +2,7 @@ import React from 'react';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { Award, CheckCircle2, Compass, Flag, MapPin, Shield, Target, Users } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function AboutClubPage() {
   const { clubSettings, staff } = getPublicWebsiteSnapshot();

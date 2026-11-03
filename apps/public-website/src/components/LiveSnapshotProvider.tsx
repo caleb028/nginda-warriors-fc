@@ -54,7 +54,8 @@ export function LiveSnapshotProvider({
     if (isSyncingRef.current) return;
     isSyncingRef.current = true;
     try {
-      const res = await fetch(`/api/sync?t=${Date.now()}`, {
+      const sinceParam = lastUpdatedRef.current > 0 ? `&since=${lastUpdatedRef.current}` : '';
+      const res = await fetch(`/api/sync?t=${Date.now()}${sinceParam}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -63,6 +64,10 @@ export function LiveSnapshotProvider({
       });
       if (res.ok) {
         const data = await res.json();
+        if (data.changed === false) {
+          // Server data has not changed; skip redundant parsing and re-renders
+          return;
+        }
         const serverTs = Number(data.updatedAt) || 0;
         const incomingPlayers = data.snapshot?.players || data.database?.players || [];
         const currentPlayers = snapshot?.players || [];
@@ -212,13 +217,13 @@ export function LiveSnapshotProvider({
       } catch {}
     }
 
-    // E. High-frequency 1.5-second polling loop
+    // E. Lightweight 15-second background fallback sync loop
     const pollInterval = setInterval(() => {
-      // Only poll when window is visible or active to conserve mobile battery
+      // Only poll when window is visible or active to conserve mobile battery & network
       if (typeof document === 'undefined' || document.visibilityState === 'visible') {
         refreshNow();
       }
-    }, 1500);
+    }, 15000);
 
     return () => {
       if (bc) {

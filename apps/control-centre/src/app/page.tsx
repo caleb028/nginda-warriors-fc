@@ -181,19 +181,21 @@ export default function ControlCentreApp() {
     }
 
     try {
-      const authRes = await fetch(adminApiUrl('/api/admin/auth'), {
+      const authPromise = fetch(adminApiUrl('/api/admin/auth'), {
         headers: getAuthHeaders(),
         credentials: 'include',
       });
+      const actionPromise = fetch(adminApiUrl('/api/admin/action'), {
+        headers: getAuthHeaders(),
+        credentials: 'include',
+      });
+
+      const [authRes, actionRes] = await Promise.all([authPromise, actionPromise]);
       const authData = await authRes.json();
       setBootstrapped(Boolean(authData.bootstrapped));
       setSession(authData.session || null);
 
-      if (authData.session) {
-        const actionRes = await fetch(adminApiUrl('/api/admin/action'), {
-          headers: getAuthHeaders(),
-          credentials: 'include',
-        });
+      if (authData.session && actionRes.ok) {
         const actionData = await actionRes.json();
         if (actionData.ok && actionData.database) {
           const serverDb = actionData.database;

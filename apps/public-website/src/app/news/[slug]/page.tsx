@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export async function generateMetadata({
   params,

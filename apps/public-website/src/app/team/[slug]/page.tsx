@@ -4,8 +4,7 @@ import { notFound } from 'next/navigation';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { ArrowLeft, ShieldAlert } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 15;
 
 export default function PlayerProfilePage({
   params,

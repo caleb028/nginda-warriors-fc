@@ -81,11 +81,8 @@ async function saveDatabaseAndSync(
     ]);
   });
 
-  // Wait up to 1200ms for primary sync targets
-  await Promise.race([
-    Promise.allSettled(syncPromises),
-    new Promise((resolve) => setTimeout(resolve, 1200)),
-  ]);
+  // Execute remote sync targets asynchronously in the background without blocking the immediate admin response
+  Promise.allSettled(syncPromises).catch(() => null);
 }
 
 function safeDb(db: ReturnType<typeof readDatabase>) {

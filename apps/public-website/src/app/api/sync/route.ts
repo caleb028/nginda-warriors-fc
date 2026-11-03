@@ -132,13 +132,31 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const currentTs = getDatabaseTimestamp();
+  const since = req.nextUrl?.searchParams?.get('since');
+  if (since && !isNaN(Number(since)) && Number(since) >= currentTs) {
+    return NextResponse.json(
+      {
+        ok: true,
+        changed: false,
+        updatedAt: currentTs,
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+        },
+      }
+    );
+  }
+
   const db = readDatabase();
   const snapshot = getPublicWebsiteSnapshot();
   return NextResponse.json(
     {
       ok: true,
-      updatedAt: getDatabaseTimestamp(),
+      changed: true,
+      updatedAt: currentTs,
       snapshot,
       database: db,
       fixturesCount: db.fixtures?.length ?? 0,

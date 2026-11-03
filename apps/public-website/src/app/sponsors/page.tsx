@@ -3,7 +3,7 @@ import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/ser
 import { SponsorInquiryForm } from '../../components/SponsorInquiryForm';
 import { CheckCircle2, Download, Shield, Sparkles, Trophy } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function SponsorsAndPartnershipPage() {
   const { clubSettings, sponsorshipPackages, approvedSponsors } =

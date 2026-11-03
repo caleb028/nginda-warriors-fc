@@ -5,8 +5,7 @@ import { PublicShell } from '../components/PublicShell';
 import { PreventZoom } from '../components/PreventZoom';
 import { LiveSnapshotProvider } from '../components/LiveSnapshotProvider';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 15;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { clubSettings } = getPublicWebsiteSnapshot();
@@ -78,9 +77,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Nginda Warriors FC" />
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

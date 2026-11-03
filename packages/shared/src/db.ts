@@ -681,7 +681,7 @@ export function createNotification(
 // ==============================================================================
 // PUBLIC READ SNAPSHOT (Strictly filters out drafts, unapproved records & PII)
 // ==============================================================================
-export function getPublicWebsiteSnapshot(forceFresh = true): PublicWebsiteSnapshot {
+export function getPublicWebsiteSnapshot(forceFresh = false): PublicWebsiteSnapshot {
   const db = readDatabase(forceFresh);
   return buildPublicSnapshot(db);
 }

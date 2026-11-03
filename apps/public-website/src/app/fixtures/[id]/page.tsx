@@ -6,7 +6,7 @@ import { MotmVoteWidget } from '../../../components/MotmVoteWidget';
 import { TacticalPitchBoard, TacticalPitchPlayer } from '../../../components/TacticalPitchBoard';
 import { ArrowLeft, Calendar, Clock, FileText, MapPin, Shield, Users } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function SingleMatchCentrePage({
   params,

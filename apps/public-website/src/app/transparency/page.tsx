@@ -2,7 +2,7 @@ import React from 'react';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { CheckCircle2, FileSpreadsheet, ShieldCheck, Wallet } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function FinancialTransparencyPage() {
   const {

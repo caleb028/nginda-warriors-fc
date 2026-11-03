@@ -4,7 +4,7 @@ import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/ser
 import { MpesaSupportForm } from '../../components/MpesaSupportForm';
 import { ArrowRight, HeartHandshake, ShieldCheck } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function SupportTheClubPage() {
   const { clubSettings, fundraisingCampaigns, mpesaPublicConfig } =

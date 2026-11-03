@@ -170,6 +170,7 @@ export function PublicShell({
                       <Link
                         key={item.href}
                         href={item.href}
+                        prefetch={true}
                         className={`px-3 py-2 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition-all ${
                           isActive
                             ? 'bg-[#FDE100]/15 text-[#FDE100] border-b-2 border-[#FDE100]'
@@ -315,6 +316,7 @@ export function PublicShell({
                       >
                         <Link
                           href={item.href}
+                          prefetch={true}
                           onClick={() => setMobileMenuOpen(false)}
                           className={`group flex items-center justify-between py-3 px-4 rounded-xl text-xl sm:text-2xl font-athletic font-black uppercase tracking-wider transition ${
                             isActive
@@ -540,6 +542,7 @@ export function PublicShell({
         >
           <Link
             href="/"
+            prefetch={true}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
               pathname === '/' ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
             }`}
@@ -549,6 +552,7 @@ export function PublicShell({
           </Link>
           <Link
             href="/fixtures"
+            prefetch={true}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
               pathname.startsWith('/fixtures') ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
             }`}
@@ -558,6 +562,7 @@ export function PublicShell({
           </Link>
           <Link
             href="/team"
+            prefetch={true}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
               pathname.startsWith('/team') ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
             }`}
@@ -567,6 +572,7 @@ export function PublicShell({
           </Link>
           <Link
             href="/news"
+            prefetch={true}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
               pathname.startsWith('/news') ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
             }`}

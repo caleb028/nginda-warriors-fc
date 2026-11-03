@@ -2,7 +2,7 @@ import React from 'react';
 import { ClubCrest, getPublicWebsiteSnapshot } from '@nginda-warriors/shared/server';
 import { Calendar, Clock, MapPin } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 15;
 
 export default function ClubEventsPage() {
   const { clubSettings, events } = getPublicWebsiteSnapshot();
