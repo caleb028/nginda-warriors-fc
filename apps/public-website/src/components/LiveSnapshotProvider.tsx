@@ -57,7 +57,14 @@ export function LiveSnapshotProvider({
       if (res.ok) {
         const data = await res.json();
         const serverTs = Number(data.updatedAt) || 0;
-        if (serverTs > lastUpdatedRef.current || lastUpdatedRef.current === 0) {
+        const incomingPlayerCount = data.snapshot?.players?.length ?? -1;
+        const currentPlayerCount = snapshot?.players?.length ?? -1;
+        const shouldUpdate =
+          serverTs > lastUpdatedRef.current ||
+          lastUpdatedRef.current === 0 ||
+          (incomingPlayerCount !== currentPlayerCount && incomingPlayerCount >= 0);
+
+        if (shouldUpdate) {
           lastUpdatedRef.current = serverTs || Date.now();
           if (data.snapshot) {
             setSnapshot(data.snapshot);
@@ -77,7 +84,7 @@ export function LiveSnapshotProvider({
     }
   }, [snapshot]);
 
-  // 2. Initial Mount Check from localStorage (if newer than SSR or holds squad profiles)
+  // 2. Initial Mount Check from localStorage & immediate background refresh
   useEffect(() => {
     try {
       const stored = localStorage.getItem('nginda_live_database');
@@ -105,7 +112,10 @@ export function LiveSnapshotProvider({
         }
       }
     } catch {}
-  }, [initialSnapshot]);
+
+    // Immediate network sync on mount to ensure fresh server data
+    refreshNow();
+  }, [initialSnapshot, refreshNow]);
 
   // 3. 0ms Real-Time Multi-Tab / Native Mobile App Event Listeners
   useEffect(() => {
