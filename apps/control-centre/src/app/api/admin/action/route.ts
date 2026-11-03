@@ -100,6 +100,25 @@ export async function GET(req: NextRequest) {
 
   const db = readDatabase();
 
+  // If local container has empty players, hydrate from public website sync
+  if (!db.players || db.players.length === 0) {
+    try {
+      const host = req.headers.get('host') || 'nginda-warriors-fc-c549.vercel.app';
+      const proto = host.includes('localhost') ? 'http' : 'https';
+      const syncUrl = `${proto}://${host}/api/sync?t=${Date.now()}`;
+      const syncRes = await fetch(syncUrl, { signal: AbortSignal.timeout(1500) });
+      if (syncRes.ok) {
+        const syncData = await syncRes.json();
+        const incoming = syncData.snapshot?.players || syncData.database?.players;
+        if (Array.isArray(incoming) && incoming.length > 0) {
+          const deletedSet = new Set(db.deletedPlayerIds || []);
+          db.players = incoming.filter((p: any) => !deletedSet.has(p.id));
+          writeDatabase(db);
+        }
+      }
+    } catch {}
+  }
+
   return NextResponse.json({
     ok: true,
     session,

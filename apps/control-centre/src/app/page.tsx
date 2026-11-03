@@ -223,8 +223,8 @@ export default function ControlCentreApp() {
                 const localPlayerCount = Array.isArray(localParsed?.players) ? localParsed.players.length : 0;
                 const serverPlayerCount = Array.isArray(serverDb?.players) ? serverDb.players.length : 0;
 
-                // Only warm up the server if local holds authentic, newer changes (not deleted records)
-                if (localTs > serverTs + 1500 && localPlayerCount > serverPlayerCount) {
+                // Never overwrite non-empty local roster with a cold server instance holding 0 players
+                if (localPlayerCount > serverPlayerCount && (localTs > serverTs + 1500 || serverPlayerCount === 0)) {
                   activeDb = localParsed;
                   fetch(adminApiUrl('/api/admin/action'), {
                     method: 'POST',
