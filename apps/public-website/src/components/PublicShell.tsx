@@ -11,6 +11,8 @@ import {
 } from '@nginda-warriors/shared';
 import {
   Calendar,
+  ChevronDown,
+  ChevronRight,
   Globe,
   HeartHandshake,
   Home,
@@ -58,23 +60,41 @@ export function PublicShell({
   const router = useRouter();
   const [locale, setLocale] = useState<SupportedLocale>('en');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
+  const desktopMoreRef = useRef<HTMLDivElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const isScrolledRef = useRef(false);
 
-  // Automatically close mobile menu and search modal whenever the route changes
+  // Automatically close mobile menu, desktop dropdown, and search modal whenever the route changes
   useEffect(() => {
     setMobileMenuOpen(false);
     setSearchOpen(false);
+    setDesktopMoreOpen(false);
   }, [pathname]);
 
-  // Fast, smooth mobile navigation handler (guarantees instant route transition without drops)
-  const handleNav = (e: React.MouseEvent, href: string) => {
-    e.preventDefault();
-    setMobileMenuOpen(false);
-    if (pathname !== href) {
-      router.push(href);
+  // Click outside listener for desktop More dropdown
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (desktopMoreRef.current && !desktopMoreRef.current.contains(e.target as Node)) {
+        setDesktopMoreOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Reliable mobile navigation click handler:
+  // Allows Next.js <Link> native routing to run without e.preventDefault() cancelling the browser action.
+  // Slight 120ms timeout ensures Chrome Android dispatches touch/click before unmounting the DOM node.
+  const handleMenuLinkClick = (href: string) => {
+    if (pathname === href) {
+      setMobileMenuOpen(false);
+      return;
     }
+    setTimeout(() => {
+      setMobileMenuOpen(false);
+    }, 120);
   };
 
   // Zero-overhead threshold-only scroll listener: ONLY triggers state change when crossing 40px
@@ -217,6 +237,52 @@ export function PublicShell({
                       </Link>
                     );
                   })}
+
+                  {/* Desktop Secondary "More" Dropdown */}
+                  <div className="relative" ref={desktopMoreRef}>
+                    <button
+                      type="button"
+                      onClick={() => setDesktopMoreOpen((prev) => !prev)}
+                      className={`relative px-3 py-2 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition-all duration-200 flex items-center gap-1 group ${
+                        secondaryNav.some((s) => pathname.startsWith(s.href))
+                          ? 'text-[#FDE100]'
+                          : 'text-slate-200 hover:text-[#FDE100] hover:bg-[#1A1A1A]/70'
+                      }`}
+                      aria-expanded={desktopMoreOpen}
+                      aria-label="More navigation items"
+                    >
+                      <span>More</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          desktopMoreOpen ? 'rotate-180 text-[#FDE100]' : 'text-slate-400 group-hover:text-[#FDE100]'
+                        }`}
+                      />
+                    </button>
+                    {desktopMoreOpen && (
+                      <div className="absolute right-0 top-full mt-2 w-56 py-2 rounded-xl bg-black/95 border border-[#262626] shadow-2xl backdrop-blur-md z-50 animate-fadeIn">
+                        {secondaryNav.map((item) => {
+                          const Icon = item.icon;
+                          const isActive = pathname.startsWith(item.href);
+                          return (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              prefetch={true}
+                              onClick={() => setDesktopMoreOpen(false)}
+                              className={`flex items-center gap-2.5 px-4 py-2.5 text-xs font-athletic font-bold uppercase tracking-wider transition ${
+                                isActive
+                                  ? 'bg-[#FDE100] text-black font-black'
+                                  : 'text-slate-200 hover:bg-[#141414] hover:text-[#FDE100]'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                              <span>{item.label}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </nav>
 
                 {/* Desktop Action Area: Search, Support CTA */}
@@ -514,21 +580,20 @@ export function PublicShell({
           </button>
         </nav>
 
-        {/* FULL-SCREEN ATHLETIC MOBILE NAVIGATION DRAWER (Positioned at root z-[100] to ensure 100% fluid touch hit-testing) */}
+        {/* FULL-SCREEN ATHLETIC MOBILE NAVIGATION DRAWER (Positioned at root z-[100] with full sections restored) */}
         {mobileMenuOpen && (
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Navigation Menu"
-            className="xl:hidden fixed inset-0 z-[100] bg-black/98 flex flex-col justify-between p-5 sm:p-8 overflow-y-auto overscroll-contain animate-fadeIn"
-            style={{ touchAction: 'manipulation' }}
+            className="xl:hidden fixed inset-0 z-[100] bg-black/98 backdrop-blur-2xl flex flex-col p-4 sm:p-6 overflow-y-auto overscroll-contain animate-fadeIn text-white"
           >
             {/* Top Bar inside Menu */}
-            <div className="flex items-center justify-between border-b border-[#262626] pb-4 shrink-0">
+            <div className="flex items-center justify-between border-b border-[#262626] pb-3 shrink-0">
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-white border border-[#262626] transition active:scale-95"
+                className="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-white border border-[#262626] transition active:scale-95 min-h-[44px]"
                 aria-label="Close menu"
               >
                 <X className="w-5 h-5 text-white" />
@@ -540,7 +605,7 @@ export function PublicShell({
               <Link
                 href="/"
                 prefetch={true}
-                onClick={(e) => handleNav(e, '/')}
+                onClick={() => handleMenuLinkClick('/')}
                 className="flex items-center justify-center focus:outline-none"
                 aria-label={settings.clubName}
               >
@@ -548,7 +613,7 @@ export function PublicShell({
                   size={50}
                   customCrestUrl={settings.crestUrl}
                   alt={`${settings.clubName} Crest`}
-                  className="w-auto h-11 object-contain"
+                  className="w-auto h-11 object-contain drop-shadow-md"
                 />
               </Link>
 
@@ -558,7 +623,7 @@ export function PublicShell({
                   setMobileMenuOpen(false);
                   setSearchOpen(true);
                 }}
-                className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] transition active:scale-95"
+                className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] text-slate-200 hover:text-[#FDE100] border border-[#262626] transition active:scale-95 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="Search"
                 aria-label="Search"
               >
@@ -566,55 +631,137 @@ export function PublicShell({
               </button>
             </div>
 
-            {/* Main Navigation Links List with Instant Transitions */}
-            <nav className="py-6 space-y-1.5 flex-1" aria-label="Mobile Drawer Navigation">
-              {primaryNav.map((item, index) => {
-                const isActive =
-                  item.href === '/'
-                    ? pathname === '/'
-                    : pathname.startsWith(item.href);
-                return (
-                  <div key={item.href}>
-                    <Link
-                      href={item.href}
-                      prefetch={true}
-                      onClick={(e) => handleNav(e, item.href)}
-                      className={`group flex items-center justify-between py-3 px-4 rounded-xl text-xl sm:text-2xl font-athletic font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] ${
-                        isActive
-                          ? 'bg-[#FDE100] text-black shadow-lg shadow-[#FDE100]/20'
-                          : 'text-white hover:bg-[#141414] hover:text-[#FDE100] active:bg-[#1C1C1C]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3.5">
-                        <span
-                          className={`text-xs font-mono font-bold ${
-                            isActive ? 'text-black/60' : 'text-slate-500'
-                          }`}
-                        >
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <span>{item.label}</span>
-                      </div>
-                      <span
-                        className={`text-sm transition-transform duration-200 group-hover:translate-x-1 ${
-                          isActive ? 'text-black' : 'text-slate-500 group-hover:text-[#FDE100]'
+            {/* Scrollable Navigation Body */}
+            <div className="flex-1 py-4 space-y-6">
+              {/* Category 1: Official Club Navigation (01 - 09) */}
+              <div>
+                <div className="flex items-center gap-2 px-2 py-1 mb-2 text-[10px] font-athletic font-black uppercase tracking-widest text-[#FDE100]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FDE100]" />
+                  <span>Main Club Sections</span>
+                </div>
+                <nav className="space-y-1" aria-label="Main Club Navigation">
+                  {primaryNav.map((item, index) => {
+                    const isActive =
+                      item.href === '/'
+                        ? pathname === '/'
+                        : pathname.startsWith(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        prefetch={true}
+                        onClick={() => handleMenuLinkClick(item.href)}
+                        className={`group flex items-center justify-between py-3 px-4 rounded-xl text-lg sm:text-xl font-athletic font-black uppercase tracking-wider transition-all duration-200 active:scale-[0.98] min-h-[48px] ${
+                          isActive
+                            ? 'bg-[#FDE100] text-black shadow-lg shadow-[#FDE100]/20'
+                            : 'text-white hover:bg-[#141414] hover:text-[#FDE100] active:bg-[#1C1C1C]'
                         }`}
                       >
-                        &rarr;
-                      </span>
-                    </Link>
-                  </div>
-                );
-              })}
-            </nav>
+                        <div className="flex items-center gap-3.5">
+                          <span
+                            className={`text-xs font-mono font-bold ${
+                              isActive ? 'text-black/60' : 'text-slate-500'
+                            }`}
+                          >
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <span>{item.label}</span>
+                        </div>
+                        <ChevronRight
+                          className={`w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 ${
+                            isActive ? 'text-black' : 'text-slate-500 group-hover:text-[#FDE100]'
+                          }`}
+                        />
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
 
-            {/* Bottom Quick Actions (Tickets, Partner With Us & Secondary Sections) */}
-            <div className="border-t border-[#262626] pt-5 space-y-4 shrink-0">
+              {/* Category 2: Fan Zone & Club Portals (10 - 15) */}
+              <div>
+                <div className="flex items-center gap-2 px-2 py-1 mb-2 text-[10px] font-athletic font-black uppercase tracking-widest text-[#FDE100]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FDE100]" />
+                  <span>Fan Zone & Portals</span>
+                </div>
+                <nav className="grid grid-cols-1 sm:grid-cols-2 gap-1.5" aria-label="Club Portals Navigation">
+                  {secondaryNav.map((item, index) => {
+                    const Icon = item.icon;
+                    const isActive = pathname.startsWith(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        prefetch={true}
+                        onClick={() => handleMenuLinkClick(item.href)}
+                        className={`group flex items-center justify-between py-3 px-4 rounded-xl text-base font-athletic font-bold uppercase tracking-wider transition-all duration-200 active:scale-[0.98] min-h-[48px] ${
+                          isActive
+                            ? 'bg-[#FDE100] text-black font-black shadow-md shadow-[#FDE100]/20'
+                            : 'bg-[#0E0E0E] text-slate-200 border border-[#222222] hover:bg-[#161616] hover:text-[#FDE100] hover:border-[#FDE100]/40'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`text-xs font-mono font-bold ${
+                              isActive ? 'text-black/60' : 'text-[#FDE100]'
+                            }`}
+                          >
+                            {String(primaryNav.length + index + 1).padStart(2, '0')}
+                          </span>
+                          <Icon className={`w-4 h-4 ${isActive ? 'text-black' : 'text-[#FDE100]'}`} />
+                          <span>{item.label}</span>
+                        </div>
+                        <ChevronRight
+                          className={`w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 ${
+                            isActive ? 'text-black' : 'text-slate-500 group-hover:text-[#FDE100]'
+                          }`}
+                        />
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              {/* Language Selector in Drawer */}
+              <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#101010] border border-[#222222] rounded-xl">
+                <span className="flex items-center gap-2 text-xs font-athletic font-bold uppercase tracking-wider text-slate-300">
+                  <Globe className="w-4 h-4 text-[#FDE100]" />
+                  <span>Language / Lugha</span>
+                </span>
+                <div className="flex items-center gap-1 bg-[#1A1A1A] p-0.5 rounded-lg border border-[#333333]">
+                  <button
+                    type="button"
+                    onClick={() => setLocale('en')}
+                    className={`px-3 py-1 rounded-md text-xs font-athletic font-bold uppercase tracking-wider transition ${
+                      locale === 'en'
+                        ? 'bg-[#FDE100] text-black font-black'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLocale('sw')}
+                    className={`px-3 py-1 rounded-md text-xs font-athletic font-bold uppercase tracking-wider transition ${
+                      locale === 'sw'
+                        ? 'bg-[#FDE100] text-black font-black'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    SW
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Quick Actions (Support, Partner, Control Centre) */}
+            <div className="border-t border-[#262626] pt-4 space-y-3 shrink-0 pb-6 sm:pb-4">
               <div className="grid grid-cols-2 gap-3">
                 <Link
                   href="/support"
                   prefetch={true}
-                  onClick={(e) => handleNav(e, '/support')}
+                  onClick={() => handleMenuLinkClick('/support')}
                   className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-[#FDE100] hover:bg-[#FFE600] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md transition active:scale-95"
                 >
                   <HeartHandshake className="w-4 h-4 text-black" />
@@ -623,38 +770,25 @@ export function PublicShell({
                 <Link
                   href="/sponsors"
                   prefetch={true}
-                  onClick={(e) => handleNav(e, '/sponsors')}
+                  onClick={() => handleMenuLinkClick('/sponsors')}
                   className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl border border-[#333333] bg-[#141414] text-white hover:border-[#FDE100] font-athletic font-bold text-xs uppercase tracking-wider transition active:scale-95"
                 >
                   <span>{t.hero.partnerWithUs}</span>
                 </Link>
               </div>
 
-              {/* Secondary Quick Access Chips */}
-              <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                {[
-                  { href: '/merchandise', label: 'Store' },
-                  { href: '/recruitment', label: 'Trials' },
-                  { href: '/membership', label: 'Members' },
-                  { href: '/transparency', label: 'Ledger' },
-                  { href: '/events', label: 'Events' },
-                ].map((chip) => (
-                  <Link
-                    key={chip.href}
-                    href={chip.href}
-                    prefetch={true}
-                    onClick={(e) => handleNav(e, chip.href)}
-                    className="px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#222222] border border-[#262626] text-[11px] font-athletic font-bold uppercase tracking-wider text-slate-300 hover:text-[#FDE100] transition active:scale-95"
-                  >
-                    {chip.label}
-                  </Link>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-center pt-2">
-                <span className="text-[10px] font-athletic uppercase tracking-widest text-slate-500 text-center">
-                  Nginda Warriors FC (Est. {settings.establishedYear || 2024}) • Murang’a County
+              <div className="flex items-center justify-between pt-1 text-xs">
+                <span className="text-[10px] font-athletic uppercase tracking-widest text-slate-500">
+                  Nginda Warriors FC • Murang’a County
                 </span>
+                <a
+                  href="/manage"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#141414] hover:bg-[#202020] text-[#FDE100] border border-[#262626] hover:border-[#FDE100] font-athletic font-bold text-[11px] uppercase tracking-wider transition active:scale-95"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#FDE100]" />
+                  <span>Control Centre</span>
+                </a>
               </div>
             </div>
           </div>
