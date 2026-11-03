@@ -5,7 +5,36 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
     if (body.database && typeof body.database === 'object') {
-      writeDatabase(body.database);
+      const currentDb = readDatabase();
+      const mergedDeleted = Array.from(
+        new Set([
+          ...(currentDb.deletedPlayerIds || []),
+          ...(body.database.deletedPlayerIds || []),
+        ])
+      );
+      const incomingPlayers = Array.isArray(body.database.players)
+        ? body.database.players
+        : [];
+      const deletedSet = new Set(mergedDeleted);
+      const playerMap = new Map<string, any>();
+      for (const p of currentDb.players || []) {
+        if (p && p.id && !deletedSet.has(p.id)) {
+          playerMap.set(p.id, p);
+        }
+      }
+      for (const p of incomingPlayers) {
+        if (p && p.id && !deletedSet.has(p.id)) {
+          playerMap.set(p.id, p);
+        }
+      }
+      const safePlayers = Array.from(playerMap.values());
+      const nextDb = {
+        ...currentDb,
+        ...body.database,
+        players: safePlayers,
+        deletedPlayerIds: mergedDeleted,
+      };
+      writeDatabase(nextDb);
     } else if (body.fixture && typeof body.fixture === 'object') {
       const db = readDatabase();
       const idx = db.fixtures.findIndex((f) => f.id === body.fixture.id);

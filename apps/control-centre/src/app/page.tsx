@@ -190,6 +190,22 @@ export default function ControlCentreApp() {
         const actionData = await actionRes.json();
         if (actionData.ok && actionData.database) {
           const serverDb = actionData.database;
+
+          // If serverDb has 0 players, query /api/sync as secondary authoritative source
+          if (!serverDb.players || serverDb.players.length === 0) {
+            try {
+              const pubRes = await fetch('/api/sync?t=' + Date.now());
+              if (pubRes.ok) {
+                const pubData = await pubRes.json();
+                const pubPlayers = pubData.snapshot?.players || pubData.database?.players;
+                if (Array.isArray(pubPlayers) && pubPlayers.length > 0) {
+                  const deletedSet = new Set(serverDb.deletedPlayerIds || []);
+                  serverDb.players = pubPlayers.filter((p: any) => !deletedSet.has(p.id));
+                }
+              }
+            } catch {}
+          }
+
           let activeDb = serverDb;
 
           // Guard against stale caches while strictly honoring permanent player deletions
@@ -234,6 +250,12 @@ export default function ControlCentreApp() {
                   }).catch(() => null);
 
                   fetch('/api/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ database: localParsed }),
+                  }).catch(() => null);
+
+                  fetch('/manage/api/sync', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ database: localParsed }),
@@ -676,8 +698,14 @@ export default function ControlCentreApp() {
           const origin = window.location.origin;
           const payloadStr = JSON.stringify({ database: confirmedDb });
 
-          // 1. Direct fetch to public-website root sync
+          // 1. Direct fetch to public-website and control-centre sync endpoints
           fetch(`${origin}/api/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payloadStr,
+          }).catch(() => null);
+
+          fetch(`${origin}/manage/api/sync`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: payloadStr,
@@ -693,8 +721,14 @@ export default function ControlCentreApp() {
             }).catch(() => null);
           });
 
-          // 3. Fallback relative fetch
+          // 3. Fallback relative fetches
           fetch('/api/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payloadStr,
+          }).catch(() => null);
+
+          fetch('/manage/api/sync', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: payloadStr,

@@ -51,6 +51,7 @@ async function saveDatabaseAndSync(
   const syncPromises = targets.flatMap((baseUrl) => {
     const urls = [
       new URL('/api/sync', baseUrl),
+      new URL('/manage/api/sync', baseUrl),
       new URL('/api/revalidate', baseUrl),
     ];
     return urls.flatMap((u) => [
@@ -58,7 +59,7 @@ async function saveDatabaseAndSync(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload,
-        signal: AbortSignal.timeout(2000),
+        signal: AbortSignal.timeout(3000),
       }).catch(() => null),
       ...(path !== '/'
         ? [
@@ -66,17 +67,17 @@ async function saveDatabaseAndSync(
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: rootPayload,
-              signal: AbortSignal.timeout(2000),
+              signal: AbortSignal.timeout(3000),
             }).catch(() => null),
           ]
         : []),
     ]);
   });
 
-  // Fast race: wait up to 800ms for primary sync, then let background finishes detach safely
+  // Wait up to 1200ms for primary sync targets
   await Promise.race([
     Promise.allSettled(syncPromises),
-    new Promise((resolve) => setTimeout(resolve, 800)),
+    new Promise((resolve) => setTimeout(resolve, 1200)),
   ]);
 }
 
@@ -105,16 +106,24 @@ export async function GET(req: NextRequest) {
     try {
       const host = req.headers.get('host') || 'nginda-warriors-fc-c549.vercel.app';
       const proto = host.includes('localhost') ? 'http' : 'https';
-      const syncUrl = `${proto}://${host}/api/sync?t=${Date.now()}`;
-      const syncRes = await fetch(syncUrl, { signal: AbortSignal.timeout(1500) });
-      if (syncRes.ok) {
-        const syncData = await syncRes.json();
-        const incoming = syncData.snapshot?.players || syncData.database?.players;
-        if (Array.isArray(incoming) && incoming.length > 0) {
-          const deletedSet = new Set(db.deletedPlayerIds || []);
-          db.players = incoming.filter((p: any) => !deletedSet.has(p.id));
-          writeDatabase(db);
-        }
+      const candidateUrls = [
+        `${proto}://${host}/api/sync?t=${Date.now()}`,
+        `https://nginda-warriors-fc-c549.vercel.app/api/sync?t=${Date.now()}`,
+      ];
+      for (const syncUrl of candidateUrls) {
+        try {
+          const syncRes = await fetch(syncUrl, { signal: AbortSignal.timeout(3000) });
+          if (syncRes.ok) {
+            const syncData = await syncRes.json();
+            const incoming = syncData.snapshot?.players || syncData.database?.players;
+            if (Array.isArray(incoming) && incoming.length > 0) {
+              const deletedSet = new Set(db.deletedPlayerIds || []);
+              db.players = incoming.filter((p: any) => !deletedSet.has(p.id));
+              writeDatabase(db);
+              break;
+            }
+          }
+        } catch {}
       }
     } catch {}
   }
@@ -177,6 +186,30 @@ export async function POST(req: NextRequest) {
       const session = assertAuthorizedAdmin(token, 'players');
       const db = readDatabase();
       const now = new Date().toISOString();
+
+      // If local server db.players is empty, hydrate from public sync before saving
+      if (!db.players || db.players.length === 0) {
+        try {
+          const proto = host && host.includes('localhost') ? 'http' : 'https';
+          const candidateUrls = [
+            ...(host ? [`${proto}://${host}/api/sync?t=${Date.now()}`] : []),
+            `https://nginda-warriors-fc-c549.vercel.app/api/sync?t=${Date.now()}`,
+          ];
+          for (const sUrl of candidateUrls) {
+            try {
+              const sRes = await fetch(sUrl, { signal: AbortSignal.timeout(3000) });
+              if (sRes.ok) {
+                const sData = await sRes.json();
+                const inc = sData.snapshot?.players || sData.database?.players;
+                if (Array.isArray(inc) && inc.length > 0) {
+                  db.players = inc;
+                  break;
+                }
+              }
+            } catch {}
+          }
+        } catch {}
+      }
 
       // Maintain tombstone tracking for deleted players
       const deletedSet = new Set(db.deletedPlayerIds || []);

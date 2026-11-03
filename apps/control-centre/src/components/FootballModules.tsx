@@ -55,6 +55,7 @@ export function FootballModules({
   const [isUnderageProtected, setIsUnderageProtected] = useState(false);
   const [squadStatus, setSquadStatus] = useState<'active' | 'inactive' | 'archived'>('active');
   const [playerPubStatus, setPlayerPubStatus] = useState<PublicationStatus>('published');
+  const [playerFilterPos, setPlayerFilterPos] = useState<string>('All');
 
   // --- STAFF STATE ---
   const [staffName, setStaffName] = useState('');
@@ -155,6 +156,23 @@ export function FootballModules({
     setSquadStatus(p.squadStatus);
     setPlayerPubStatus(p.publicationStatus);
   };
+
+  const POSITION_ORDER: Record<string, number> = {
+    Goalkeepers: 1,
+    Defenders: 2,
+    Midfielders: 3,
+    Forwards: 4,
+  };
+  const sortedPlayers = [...(db.players || [])].sort((a, b) => {
+    const orderA = POSITION_ORDER[a.positionGroup] || 99;
+    const orderB = POSITION_ORDER[b.positionGroup] || 99;
+    if (orderA !== orderB) return orderA - orderB;
+    return (Number(a.jerseyNumber) || 0) - (Number(b.jerseyNumber) || 0);
+  });
+  const displayPlayers =
+    playerFilterPos === 'All'
+      ? sortedPlayers
+      : sortedPlayers.filter((p) => p.positionGroup === playerFilterPos);
 
   // 1. PLAYERS MODULE
   if (activeModule === 'players') {
@@ -473,6 +491,52 @@ export function FootballModules({
               </button>
             )}
           </div>
+
+          {/* Position arrangement filter pills */}
+          {db.players.length > 0 && (
+            <div className="px-6 py-2.5 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center gap-2 text-xs">
+              <span className="font-bold text-[#063B25] uppercase tracking-wider text-[11px] mr-1">
+                Filter by Position:
+              </span>
+              {[
+                { label: 'All Positions', value: 'All', count: db.players.length },
+                {
+                  label: 'Goalkeepers',
+                  value: 'Goalkeepers',
+                  count: db.players.filter((p) => p.positionGroup === 'Goalkeepers').length,
+                },
+                {
+                  label: 'Defenders',
+                  value: 'Defenders',
+                  count: db.players.filter((p) => p.positionGroup === 'Defenders').length,
+                },
+                {
+                  label: 'Midfielders',
+                  value: 'Midfielders',
+                  count: db.players.filter((p) => p.positionGroup === 'Midfielders').length,
+                },
+                {
+                  label: 'Forwards',
+                  value: 'Forwards',
+                  count: db.players.filter((p) => p.positionGroup === 'Forwards').length,
+                },
+              ].map((tab) => (
+                <button
+                  key={tab.value}
+                  type="button"
+                  onClick={() => setPlayerFilterPos(tab.value)}
+                  className={`px-3 py-1 rounded-full font-athletic font-bold uppercase transition ${
+                    playerFilterPos === tab.value
+                      ? 'bg-[#08783E] text-white shadow-xs'
+                      : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  {tab.label} ({tab.count})
+                </button>
+              ))}
+            </div>
+          )}
+
           {db.players.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-sm">
@@ -488,7 +552,7 @@ export function FootballModules({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {db.players.map((p) => (
+                  {displayPlayers.map((p) => (
                     <tr key={p.id} className="hover:bg-gray-50">
                       <td className="py-3 px-4 font-athletic text-lg font-black text-[#08783E]">
                         #{p.jerseyNumber}

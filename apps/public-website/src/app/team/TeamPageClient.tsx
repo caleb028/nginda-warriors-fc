@@ -121,21 +121,45 @@ export function TeamPageClient({
         </section>
 
         {players.length > 0 ? (
-          POSITION_GROUPS.map((group) => {
-            const groupPlayers = players.filter(
-              (p) => normalizePositionGroup(p.positionGroup) === group
-            );
-            if (groupPlayers.length === 0) return null;
-            return (
-              <section key={group}>
-                <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-6">
-                  <h2 className="font-athletic text-3xl font-black uppercase text-white">
-                    {group}
-                  </h2>
-                  <span className="px-3 py-1 rounded-full bg-[#1A1A1A] text-slate-300 border border-[#262626] font-bold text-xs">
-                    {groupPlayers.length} {groupPlayers.length === 1 ? 'Player' : 'Players'}
-                  </span>
-                </div>
+          <>
+            {/* Quick Position Navigation Bar */}
+            <div className="flex flex-wrap items-center gap-2.5 pb-4 border-b border-[#262626]">
+              <span className="font-athletic text-xs uppercase text-slate-400 font-bold mr-1">
+                Jump to Position:
+              </span>
+              {POSITION_GROUPS.map((g) => {
+                const count = players.filter((p) => normalizePositionGroup(p.positionGroup) === g).length;
+                if (count === 0) return null;
+                return (
+                  <a
+                    key={g}
+                    href={`#section-${g.toLowerCase()}`}
+                    className="px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#FDE100] hover:text-black border border-[#262626] font-athletic font-bold text-xs uppercase tracking-wider transition text-white shadow-sm flex items-center gap-1.5"
+                  >
+                    <span>{g}</span>
+                    <span className="px-1.5 py-0.2 rounded-full bg-white/10 text-[10px] font-black">
+                      {count}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+
+            {POSITION_GROUPS.map((group) => {
+              const groupPlayers = players
+                .filter((p) => normalizePositionGroup(p.positionGroup) === group)
+                .sort((a, b) => (Number(a.jerseyNumber) || 0) - (Number(b.jerseyNumber) || 0));
+              if (groupPlayers.length === 0) return null;
+              return (
+                <section key={group} id={`section-${group.toLowerCase()}`} className="scroll-mt-24">
+                  <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-6">
+                    <h2 className="font-athletic text-3xl font-black uppercase text-white">
+                      {group}
+                    </h2>
+                    <span className="px-3 py-1 rounded-full bg-[#1A1A1A] text-slate-300 border border-[#262626] font-bold text-xs">
+                      {groupPlayers.length} {groupPlayers.length === 1 ? 'Player' : 'Players'}
+                    </span>
+                  </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
                   {groupPlayers.map((player) => {
@@ -228,8 +252,9 @@ export function TeamPageClient({
                 </div>
               </section>
             );
-          })
-        ) : (
+          })}
+        </>
+      ) : (
           <div className="rounded-2xl bg-[#141414] border border-[#262626] p-8 text-center space-y-2">
             <Users className="w-10 h-10 text-slate-500 mx-auto" />
             <h3 className="font-athletic text-2xl font-bold uppercase text-white">
