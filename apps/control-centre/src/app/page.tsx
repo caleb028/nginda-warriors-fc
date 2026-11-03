@@ -192,7 +192,7 @@ export default function ControlCentreApp() {
           const serverDb = actionData.database;
           let activeDb = serverDb;
 
-          // Guard against cold/stale serverless instances wiping recently added squad players
+          // Guard against stale caches while strictly honoring permanent player deletions
           if (typeof window !== 'undefined') {
             try {
               const localRaw = localStorage.getItem('nginda_live_database');
@@ -203,13 +203,29 @@ export default function ControlCentreApp() {
 
               if (localRaw) {
                 const localParsed = JSON.parse(localRaw);
+                const mergedDeleted = Array.from(
+                  new Set([
+                    ...(serverDb.deletedPlayerIds || []),
+                    ...(localParsed?.deletedPlayerIds || []),
+                  ])
+                );
+                const deletedSet = new Set(mergedDeleted);
+
+                if (Array.isArray(localParsed?.players)) {
+                  localParsed.players = localParsed.players.filter((p: any) => !deletedSet.has(p.id));
+                  localParsed.deletedPlayerIds = mergedDeleted;
+                }
+                if (Array.isArray(serverDb?.players)) {
+                  serverDb.players = serverDb.players.filter((p: any) => !deletedSet.has(p.id));
+                  serverDb.deletedPlayerIds = mergedDeleted;
+                }
+
                 const localPlayerCount = Array.isArray(localParsed?.players) ? localParsed.players.length : 0;
                 const serverPlayerCount = Array.isArray(serverDb?.players) ? serverDb.players.length : 0;
 
-                // If local has players while server instance is empty or local was updated more recently
-                if (localPlayerCount > serverPlayerCount || (localTs > serverTs && localPlayerCount >= serverPlayerCount)) {
+                // Only warm up the server if local holds authentic, newer changes (not deleted records)
+                if (localTs > serverTs + 1500 && localPlayerCount > serverPlayerCount) {
                   activeDb = localParsed;
-                  // Asynchronously push the active local database to warm the server instance
                   fetch(adminApiUrl('/api/admin/action'), {
                     method: 'POST',
                     headers: getAuthHeaders(),
@@ -222,6 +238,8 @@ export default function ControlCentreApp() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ database: localParsed }),
                   }).catch(() => null);
+                } else {
+                  activeDb = serverDb;
                 }
               }
             } catch {}
@@ -277,8 +295,14 @@ export default function ControlCentreApp() {
       let isOptimistic = false;
 
       if (action === 'delete_player') {
-        const id = payload.id || payload.playerId;
-        nextDb.players = nextDb.players.filter((p) => p.id !== id);
+        const id = String(payload.id || payload.playerId || '');
+        nextDb.players = (nextDb.players || []).filter((p) => p.id !== id);
+        nextDb.deletedPlayerIds = Array.from(new Set([...(nextDb.deletedPlayerIds || []), id]));
+        isOptimistic = true;
+      } else if (action === 'clear_all_players') {
+        const deletedIds = (nextDb.players || []).map((p) => p.id);
+        nextDb.deletedPlayerIds = Array.from(new Set([...(nextDb.deletedPlayerIds || []), ...deletedIds]));
+        nextDb.players = [];
         isOptimistic = true;
       } else if (action === 'delete_staff') {
         nextDb.staff = nextDb.staff.filter((s) => s.id !== payload.id);

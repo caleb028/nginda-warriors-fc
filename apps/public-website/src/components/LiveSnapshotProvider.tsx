@@ -57,32 +57,16 @@ export function LiveSnapshotProvider({
       if (res.ok) {
         const data = await res.json();
         const serverTs = Number(data.updatedAt) || 0;
-        if (serverTs >= lastUpdatedRef.current || lastUpdatedRef.current === 0) {
-          // Guard against cold/stale serverless instances returning fewer players when client already has active squad
-          const serverPlayersCount = data.snapshot?.players?.length || 0;
-          const currentPlayersCount = snapshot?.players?.length || 0;
-
-          if (serverPlayersCount < currentPlayersCount && currentPlayersCount > 0) {
-            // Cold server instance detected: re-seed the server instance from verified local storage
-            try {
-              const localDb = localStorage.getItem('nginda_live_database');
-              if (localDb) {
-                fetch('/api/sync', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ database: JSON.parse(localDb) }),
-                }).catch(() => null);
-              }
-            } catch {}
-          } else if (data.snapshot) {
-            lastUpdatedRef.current = serverTs || Date.now();
+        if (serverTs > lastUpdatedRef.current || lastUpdatedRef.current === 0) {
+          lastUpdatedRef.current = serverTs || Date.now();
+          if (data.snapshot) {
             setSnapshot(data.snapshot);
-            if (data.database) {
-              try {
-                localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
-                localStorage.setItem('nginda_db_timestamp', String(lastUpdatedRef.current));
-              } catch {}
-            }
+          }
+          if (data.database) {
+            try {
+              localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
+              localStorage.setItem('nginda_db_timestamp', String(lastUpdatedRef.current));
+            } catch {}
           }
         }
       }

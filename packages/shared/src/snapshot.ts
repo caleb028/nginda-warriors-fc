@@ -109,7 +109,8 @@ export function buildPublicSnapshot(db: NgindaDatabaseSchema): PublicWebsiteSnap
     integrationSettings: [],
   };
 
-  const playersList = safeDb.players || [];
+  const deletedSet = new Set(safeDb.deletedPlayerIds || []);
+  const playersList = (safeDb.players || []).filter((p) => !deletedSet.has(p.id));
   const publishedPlayers = playersList
     .filter(
       (p) =>

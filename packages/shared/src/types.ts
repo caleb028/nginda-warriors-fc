@@ -906,4 +906,5 @@ export interface NgindaDatabaseSchema {
   notifications: AdminNotification[];
   auditLogs: AuditLogEntry[];
   integrationSettings: IntegrationSetting[];
+  deletedPlayerIds?: string[];
 }

@@ -13,12 +13,23 @@ export async function POST(req: NextRequest) {
 
     if (body.database && typeof body.database === 'object') {
       const currentDb = readDatabase();
+      const mergedDeleted = Array.from(
+        new Set([
+          ...(currentDb.deletedPlayerIds || []),
+          ...(body.database.deletedPlayerIds || []),
+        ])
+      );
+      const incomingPlayers = Array.isArray(body.database.players)
+        ? body.database.players
+        : currentDb.players || [];
+      const deletedSet = new Set(mergedDeleted);
+      const safePlayers = incomingPlayers.filter((p: any) => !deletedSet.has(p.id));
+
       const nextDb = {
         ...currentDb,
         ...body.database,
-        players: Array.isArray(body.database.players)
-          ? body.database.players
-          : currentDb.players || [],
+        players: safePlayers,
+        deletedPlayerIds: mergedDeleted,
         fixtures: Array.isArray(body.database.fixtures)
           ? body.database.fixtures
           : currentDb.fixtures || [],
@@ -27,9 +38,19 @@ export async function POST(req: NextRequest) {
           : currentDb.articles || [],
       };
       writeDatabase(nextDb);
+    } else if (body.deletedPlayerId) {
+      const db = readDatabase();
+      const targetId = String(body.deletedPlayerId);
+      db.deletedPlayerIds = Array.from(new Set([...(db.deletedPlayerIds || []), targetId]));
+      db.players = (db.players || []).filter((p) => p.id !== targetId);
+      writeDatabase(db);
     } else if (body.player && typeof body.player === 'object' && body.player.id) {
       const db = readDatabase();
       db.players = Array.isArray(db.players) ? db.players : [];
+      // If player was previously deleted, un-tombstone it upon deliberate re-creation
+      if (db.deletedPlayerIds) {
+        db.deletedPlayerIds = db.deletedPlayerIds.filter((id) => id !== body.player.id);
+      }
       const idx = db.players.findIndex((p) => p.id === body.player.id);
       if (idx >= 0) {
         db.players[idx] = body.player;

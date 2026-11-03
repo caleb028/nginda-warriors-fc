@@ -219,8 +219,10 @@ export async function POST(req: NextRequest) {
     if (action === 'delete_player') {
       const session = assertAuthorizedAdmin(token, 'players');
       const db = readDatabase();
-      const target = db.players.find((p) => p.id === payload.id);
-      db.players = db.players.filter((p) => p.id !== payload.id);
+      const targetId = String(payload.id || payload.playerId || '');
+      const target = db.players.find((p) => p.id === targetId);
+      db.players = (db.players || []).filter((p) => p.id !== targetId);
+      db.deletedPlayerIds = Array.from(new Set([...(db.deletedPlayerIds || []), targetId]));
       db.clubSettings.updatedAt = new Date().toISOString();
       recordAuditLog(db, {
         actorUserId: session.userId,
@@ -228,8 +230,27 @@ export async function POST(req: NextRequest) {
         actorRole: session.roleCode,
         action: 'DELETE_PLAYER',
         module: 'players',
-        targetId: payload.id,
-        summary: `Removed player profile ${target?.fullName || payload.id}`,
+        targetId,
+        summary: `Permanently removed player profile ${target?.fullName || targetId}`,
+      });
+      await saveDatabaseAndSync(db, '/team', host);
+      return NextResponse.json({ ok: true, database: safeDb(db) });
+    }
+
+    if (action === 'clear_all_players') {
+      const session = assertAuthorizedAdmin(token, 'players');
+      const db = readDatabase();
+      const deletedIds = (db.players || []).map((p) => p.id);
+      db.deletedPlayerIds = Array.from(new Set([...(db.deletedPlayerIds || []), ...deletedIds]));
+      db.players = [];
+      db.clubSettings.updatedAt = new Date().toISOString();
+      recordAuditLog(db, {
+        actorUserId: session.userId,
+        actorName: session.fullName,
+        actorRole: session.roleCode,
+        action: 'CLEAR_ALL_PLAYERS',
+        module: 'players',
+        summary: `Permanently removed all squad players (${deletedIds.length} players purged)`,
       });
       await saveDatabaseAndSync(db, '/team', host);
       return NextResponse.json({ ok: true, database: safeDb(db) });

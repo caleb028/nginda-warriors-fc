@@ -449,6 +449,25 @@ export function FootballModules({
             <h3 className="font-athletic text-xl font-bold uppercase text-[#F5D000]">
               Squad Directory ({db.players.length} Total)
             </h3>
+            {db.players.length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    confirm(
+                      'Permanently delete and remove ALL squad players from the website? This cannot be undone.'
+                    )
+                  ) {
+                    onMutate('clear_all_players', {});
+                  }
+                }}
+                className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow"
+                title="Permanently remove all squad players"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete All Players</span>
+              </button>
+            )}
           </div>
           {db.players.length > 0 ? (
             <div className="overflow-x-auto">
