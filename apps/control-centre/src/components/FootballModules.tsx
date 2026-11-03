@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   ClubCrest,
   NgindaDatabaseSchema,
@@ -38,7 +38,7 @@ export function FootballModules({
   // --- PLAYERS STATE ---
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [playerName, setPlayerName] = useState('');
-  const [jerseyNumber, setJerseyNumber] = useState('9');
+  const [jerseyNumber, setJerseyNumber] = useState('1');
   const [positionGroup, setPositionGroup] = useState<PositionGroup>('Forwards');
   const [specificRole, setSpecificRole] = useState('Centre Forward');
   const [preferredFoot, setPreferredFoot] = useState<'Right' | 'Left' | 'Both'>('Right');
@@ -56,6 +56,14 @@ export function FootballModules({
   const [squadStatus, setSquadStatus] = useState<'active' | 'inactive' | 'archived'>('active');
   const [playerPubStatus, setPlayerPubStatus] = useState<PublicationStatus>('published');
   const [playerFilterPos, setPlayerFilterPos] = useState<string>('All');
+  const [isSavingPlayer, setIsSavingPlayer] = useState(false);
+  const [playerSavedNotice, setPlayerSavedNotice] = useState<{
+    name: string;
+    jersey: number;
+    nextJersey: number;
+  } | null>(null);
+  const playerNameInputRef = useRef<HTMLInputElement>(null);
+  const playerFormRef = useRef<HTMLFormElement>(null);
 
   // --- STAFF STATE ---
   const [staffName, setStaffName] = useState('');
@@ -113,13 +121,29 @@ export function FootballModules({
   const [newCompName, setNewCompName] = useState('');
   const [newCompSeason, setNewCompSeason] = useState('2026/2027 Season');
 
-  const resetPlayerForm = () => {
+  const calculateNextJerseyNumber = (lastSavedJersey?: number): string => {
+    const existingJerseys = new Set(
+      (db.players || []).map((p) => Number(p.jerseyNumber)).filter((n) => !isNaN(n) && n > 0)
+    );
+    if (lastSavedJersey && !isNaN(lastSavedJersey)) {
+      const candidate = lastSavedJersey + 1;
+      if (!existingJerseys.has(candidate) && candidate <= 99) {
+        return String(candidate);
+      }
+    }
+    for (let i = 1; i <= 99; i++) {
+      if (!existingJerseys.has(i)) {
+        return String(i);
+      }
+    }
+    return '1';
+  };
+
+  const resetPlayerForm = (suggestedJersey?: number) => {
     setEditingPlayerId(null);
     setPlayerName('');
-    setJerseyNumber(String(Math.min(99, (db.players?.length || 0) + 1)));
-    setPositionGroup('Forwards');
-    setSpecificRole('Centre Forward');
-    setPreferredFoot('Right');
+    const nextJersey = calculateNextJerseyNumber(suggestedJersey);
+    setJerseyNumber(nextJersey);
     setPhotoUrl('');
     setBiography('');
     setAppearances('0');
@@ -133,6 +157,40 @@ export function FootballModules({
     setIsUnderageProtected(false);
     setSquadStatus('active');
     setPlayerPubStatus('published');
+    setTimeout(() => {
+      playerNameInputRef.current?.focus();
+    }, 60);
+  };
+
+  const advanceToNextPlayer = (justSavedJersey: number, justSavedName: string) => {
+    const nextJerseyStr = calculateNextJerseyNumber(justSavedJersey);
+    setEditingPlayerId(null);
+    setPlayerName('');
+    setJerseyNumber(nextJerseyStr);
+    setPhotoUrl('');
+    setBiography('');
+    setAppearances('0');
+    setStarts('0');
+    setGoals('0');
+    setAssists('0');
+    setYellowCards('0');
+    setRedCards('0');
+    setCleanSheets('0');
+    setIsFeatured(true);
+    setIsUnderageProtected(false);
+    setSquadStatus('active');
+    setPlayerPubStatus('published');
+
+    setPlayerSavedNotice({
+      name: justSavedName,
+      jersey: justSavedJersey,
+      nextJersey: Number(nextJerseyStr),
+    });
+
+    setTimeout(() => {
+      playerNameInputRef.current?.focus();
+      playerFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 60);
   };
 
   const loadPlayerForEdit = (p: Player) => {
@@ -155,6 +213,11 @@ export function FootballModules({
     setIsUnderageProtected(p.isUnderageProtected);
     setSquadStatus(p.squadStatus);
     setPlayerPubStatus(p.publicationStatus);
+    setPlayerSavedNotice(null);
+    setTimeout(() => {
+      playerNameInputRef.current?.focus();
+      playerFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 60);
   };
 
   const POSITION_ORDER: Record<string, number> = {
@@ -179,49 +242,101 @@ export function FootballModules({
     return (
       <div className="space-y-8">
         <form
+          ref={playerFormRef}
           onSubmit={async (e) => {
             e.preventDefault();
-            await onMutate('save_player', {
-              id: editingPlayerId || undefined,
-              fullName: playerName,
-              jerseyNumber: Number(jerseyNumber),
-              positionGroup,
-              specificRole,
-              preferredFoot,
-              photoUrl,
-              biography,
-              appearances: Number(appearances),
-              starts: Number(starts),
-              goals: Number(goals),
-              assists: Number(assists),
-              yellowCards: Number(yellowCards),
-              redCards: Number(redCards),
-              cleanSheets: Number(cleanSheets),
-              isFeatured,
-              isUnderageProtected,
-              squadStatus,
-              publicationStatus: playerPubStatus,
-              clientPlayers: db.players || [],
-              deletedPlayerIds: db.deletedPlayerIds || [],
-            });
-            resetPlayerForm();
+            if (isSavingPlayer) return;
+            const savedName = playerName.trim();
+            const savedJersey = Number(jerseyNumber);
+            if (!savedName) {
+              alert('Please enter the player full name.');
+              return;
+            }
+            setIsSavingPlayer(true);
+            try {
+              await onMutate('save_player', {
+                id: editingPlayerId || undefined,
+                fullName: savedName,
+                jerseyNumber: savedJersey,
+                positionGroup,
+                specificRole,
+                preferredFoot,
+                photoUrl,
+                biography,
+                appearances: Number(appearances),
+                starts: Number(starts),
+                goals: Number(goals),
+                assists: Number(assists),
+                yellowCards: Number(yellowCards),
+                redCards: Number(redCards),
+                cleanSheets: Number(cleanSheets),
+                isFeatured,
+                isUnderageProtected,
+                squadStatus,
+                publicationStatus: playerPubStatus,
+                clientPlayers: db.players || [],
+                deletedPlayerIds: db.deletedPlayerIds || [],
+              });
+              // Automated sequential flow: reset form for next player with incremented jersey number & auto-focus
+              advanceToNextPlayer(savedJersey, savedName);
+            } catch (err: unknown) {
+              alert(err instanceof Error ? err.message : 'Failed to save player');
+            } finally {
+              setIsSavingPlayer(false);
+            }
           }}
           className="bg-white rounded-2xl p-6 border-2 border-[#08783E] shadow-sm space-y-4"
         >
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <h3 className="font-athletic text-2xl font-black uppercase text-[#063B25]">
-              {editingPlayerId ? 'Edit Squad Player Profile' : 'Add New Squad Player'}
-            </h3>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-3 gap-2">
+            <div>
+              <h3 className="font-athletic text-2xl font-black uppercase text-[#063B25] flex items-center gap-2">
+                <span>{editingPlayerId ? 'Edit Squad Player Profile' : 'Add New Squad Player'}</span>
+                {!editingPlayerId && (
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#EEF7EF] text-[#08783E] font-bold border border-[#08783E]/20">
+                    ⚡ Automated Sequential Input
+                  </span>
+                )}
+              </h3>
+              <p className="text-xs text-gray-500 mt-0.5">
+                {editingPlayerId
+                  ? 'Editing existing player details. Click Save to update profile.'
+                  : 'Enter player details below. Pressing "Save & Synchronize Player" publishes live and automatically advances to the next player.'}
+              </p>
+            </div>
             {editingPlayerId && (
               <button
                 type="button"
-                onClick={resetPlayerForm}
-                className="text-xs font-bold text-red-600 hover:underline"
+                onClick={() => resetPlayerForm()}
+                className="text-xs font-bold text-red-600 hover:underline px-3 py-1 rounded-lg bg-red-50 border border-red-200 self-start sm:self-auto"
               >
-                Cancel Edit
+                ✕ Cancel Edit
               </button>
             )}
           </div>
+
+          {/* Automatic Sequential Advancement Notice Banner */}
+          {playerSavedNotice && (
+            <div className="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-3.5 flex items-center justify-between text-emerald-950 animate-fadeIn shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div>
+                  <p className="font-bold text-xs sm:text-sm">
+                    ✅ Player #{playerSavedNotice.jersey} {playerSavedNotice.name} saved & published live!
+                  </p>
+                  <p className="text-[11px] text-emerald-700 font-medium">
+                    Ready for next player! Suggested jersey #{playerSavedNotice.nextJersey} assigned. Full Name field is auto-focused.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPlayerSavedNotice(null)}
+                className="text-xs text-emerald-700 hover:text-emerald-950 font-bold px-2.5 py-1 rounded-lg hover:bg-emerald-100/70"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div className="sm:col-span-2">
@@ -229,12 +344,13 @@ export function FootballModules({
                 Full Name *
               </label>
               <input
+                ref={playerNameInputRef}
                 type="text"
                 required
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 placeholder="e.g. Samuel Kamau"
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-[#08783E] focus:ring-2 focus:ring-[#08783E]/20 outline-none"
               />
             </div>
             <div>
@@ -455,10 +571,33 @@ export function FootballModules({
 
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#F5D000] hover:bg-[#ffe033] text-[#063B25] font-athletic font-black text-base uppercase tracking-wider shadow"
+              disabled={isSavingPlayer}
+              className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-athletic font-black text-base uppercase tracking-wider shadow transition ${
+                isSavingPlayer
+                  ? 'bg-amber-300 text-[#063B25] opacity-75 cursor-wait'
+                  : 'bg-[#F5D000] hover:bg-[#ffe033] text-[#063B25] active:scale-95'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>{editingPlayerId ? 'Update Player' : 'Save & Synchronize Player'}</span>
+              {isSavingPlayer ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-[#063B25]" />
+                  <span>Saving Live...</span>
+                </>
+              ) : (
+                <>
+                  {editingPlayerId ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-[#063B25]" />
+                      <span>Update Player Profile</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4 text-[#063B25]" />
+                      <span>Save and Synchronize Player</span>
+                    </>
+                  )}
+                </>
+              )}
             </button>
           </div>
         </form>

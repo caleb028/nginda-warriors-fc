@@ -615,15 +615,15 @@ export function PublicHomePageClient({
                     View All →
                   </Link>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
                   {(featuredPlayers.length > 0 ? featuredPlayers : players).slice(0, 4).map((player) => (
                     <Link
                       key={player.id}
                       href={`/team/${player.slug}`}
-                      className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl hover:shadow-2xl hover:shadow-[#FDE100]/5 transition-all duration-300 flex flex-col"
+                      className="group rounded-xl sm:rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-md sm:shadow-xl hover:shadow-2xl hover:shadow-[#FDE100]/5 transition-all duration-300 flex flex-col"
                     >
                       <div className="relative aspect-[3/4] w-full bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
-                        <span className="absolute top-2 right-3 font-athletic text-7xl font-black text-white/5 select-none pointer-events-none">
+                        <span className="absolute top-1 sm:top-2 right-2 sm:right-3 font-athletic text-4xl sm:text-7xl font-black text-white/5 select-none pointer-events-none">
                           #{player.jerseyNumber}
                         </span>
                         {player.photoUrl ? (
@@ -633,22 +633,29 @@ export function PublicHomePageClient({
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out"
                           />
                         ) : (
-                          <ClubCrest size={108} customCrestUrl={clubSettings.crestUrl} />
+                          <>
+                            <div className="sm:hidden">
+                              <ClubCrest size={64} customCrestUrl={clubSettings.crestUrl} />
+                            </div>
+                            <div className="hidden sm:block">
+                              <ClubCrest size={108} customCrestUrl={clubSettings.crestUrl} />
+                            </div>
+                          </>
                         )}
                         <div
-                          className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#141414] via-[#141414]/50 to-transparent pointer-events-none"
+                          className="absolute inset-x-0 bottom-0 h-20 sm:h-28 bg-gradient-to-t from-[#141414] via-[#141414]/50 to-transparent pointer-events-none"
                           aria-hidden="true"
                         />
-                        <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md">
+                        <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-[10px] sm:text-xs uppercase tracking-wider shadow-md">
                           #{player.jerseyNumber} • {player.specificRole || player.positionGroup.slice(0, -1)}
                         </div>
                       </div>
-                      <div className="p-4 flex-1 flex flex-col justify-between bg-[#141414] border-t border-[#262626]/70">
+                      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between bg-[#141414] border-t border-[#262626]/70">
                         <div>
-                          <h4 className="font-athletic text-xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors leading-tight line-clamp-1">
+                          <h4 className="font-athletic text-base sm:text-xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors leading-tight line-clamp-1">
                             {player.fullName}
                           </h4>
-                          <p className="text-xs text-slate-400 mt-1 font-medium">
+                          <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 sm:mt-1 font-medium truncate">
                             {player.positionGroup} • {player.specificRole}
                           </p>
                         </div>
