@@ -2,23 +2,20 @@
 
 import React, { useState } from 'react';
 import { ClubCrest } from '@nginda-warriors/shared';
-import { ArrowLeft, KeyRound, Lock, ShieldCheck, UserCheck } from 'lucide-react';
+import { ArrowLeft, KeyRound, Lock, ShieldCheck } from 'lucide-react';
 import { adminApiUrl } from '../utils/api';
 
 export function AuthAndBootstrapGate({
-  bootstrapped,
+  bootstrapped = true,
   crestUrl,
   onAuthenticated,
 }: {
-  bootstrapped: boolean;
+  bootstrapped?: boolean;
   crestUrl?: string;
   onAuthenticated: () => void;
 }) {
-  const [mode, setMode] = useState<'login' | 'setup'>('login');
-  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [setupToken, setSetupToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -32,15 +29,11 @@ export function AuthAndBootstrapGate({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(
-          mode === 'login'
-            ? { action: 'login', email, password }
-            : { action: 'bootstrap_owner', fullName, email, password, setupToken }
-        ),
+        body: JSON.stringify({ action: 'login', email, password }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
-        setErrorMsg(data.error || 'Authentication failed. Please verify credentials.');
+        setErrorMsg(data.error || 'Invalid administrator email or password.');
       } else {
         if (data.token && typeof window !== 'undefined') {
           localStorage.setItem('nginda_control_session_token', data.token);
@@ -73,70 +66,10 @@ export function AuthAndBootstrapGate({
           <p className="text-xs text-slate-400 mt-1">
             Private Match & Club Management System (Est. 2024)
           </p>
-
-          {/* Clean Mode Switcher Tabs */}
-          <div className="mt-6 grid grid-cols-2 p-1 rounded-xl bg-[#141414] border border-[#262626]">
-            <button
-              type="button"
-              onClick={() => {
-                setMode('login');
-                setErrorMsg('');
-              }}
-              className={`py-2 px-3 rounded-lg text-xs font-athletic font-black uppercase tracking-wider transition ${
-                mode === 'login'
-                  ? 'bg-[#FDE100] text-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              Sign In
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setMode('setup');
-                setErrorMsg('');
-              }}
-              className={`py-2 px-3 rounded-lg text-xs font-athletic font-black uppercase tracking-wider transition ${
-                mode === 'setup'
-                  ? 'bg-[#FDE100] text-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              First-Time Setup
-            </button>
-          </div>
         </div>
 
-        {/* Form Body */}
+        {/* Clean Sign In Form Body */}
         <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-4">
-          {mode === 'setup' && (
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1">
-              <div className="font-extrabold uppercase flex items-center gap-1.5 text-[#08783E]">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Super Administrator Setup</span>
-              </div>
-              <p>
-                Claim primary <strong>SUPER_ADMIN</strong> ownership for Nginda Warriors Control Centre.
-              </p>
-            </div>
-          )}
-
-          {mode === 'setup' && (
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
-                Owner Full Name *
-              </label>
-              <input
-                type="text"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. John Kamau"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
-              />
-            </div>
-          )}
-
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
               Administrator Email *
@@ -153,33 +86,18 @@ export function AuthAndBootstrapGate({
 
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
-              Password * {mode === 'setup' && '(Minimum 8 Characters)'}
+              Password *
             </label>
             <input
               type="password"
               required
-              minLength={mode === 'setup' ? 8 : 4}
+              minLength={4}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
               className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm focus:border-[#08783E] focus:outline-none"
             />
           </div>
-
-          {mode === 'setup' && (
-            <div>
-              <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
-                Setup Token (Optional)
-              </label>
-              <input
-                type="password"
-                value={setupToken}
-                onChange={(e) => setSetupToken(e.target.value)}
-                placeholder="Leave blank if not configured in .env"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-xs focus:border-[#08783E] focus:outline-none"
-              />
-            </div>
-          )}
 
           {errorMsg && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-bold">
@@ -190,23 +108,10 @@ export function AuthAndBootstrapGate({
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-base uppercase tracking-wider shadow-md transition"
+            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-base uppercase tracking-wider shadow-md transition disabled:opacity-50"
           >
-            {mode === 'login' ? (
-              <>
-                <KeyRound className="w-5 h-5 text-[#F5D000]" />
-                <span>{loading ? 'Signing In...' : 'Sign In to Control Centre'}</span>
-              </>
-            ) : (
-              <>
-                <UserCheck className="w-5 h-5 text-[#F5D000]" />
-                <span>
-                  {loading
-                    ? 'Establishing Ownership...'
-                    : 'Establish Super Admin Ownership'}
-                </span>
-              </>
-            )}
+            <KeyRound className="w-5 h-5 text-[#F5D000]" />
+            <span>{loading ? 'Signing In...' : 'Sign In to Control Centre'}</span>
           </button>
 
           <div className="pt-2 flex items-center justify-center gap-1.5 text-[11px] text-slate-500">

@@ -1,5 +1,19 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "usr-nginda-superadmin-01",
+      "email": "admin@ngindawarriorsfc.co.ke",
+      "fullName": "Club Super Admin",
+      "passwordHash": "$2a$10$hLPoRVGkjnhOvOHbZFE5IOsVreq42.YctokOW0/2ZPwsP1ZzQfKKS",
+      "roleCode": "SUPER_ADMIN",
+      "isOwnerSuperAdmin": true,
+      "isActive": true,
+      "mfaEnabled": false,
+      "lastLoginAt": "2026-11-01T18:11:01.128Z",
+      "createdAt": "2026-11-01T18:11:01.128Z",
+      "updatedAt": "2026-11-01T18:11:01.128Z"
+    }
+  ],
   "clubSettings": {
     "id": "520dda57-b709-4f92-91cf-834bd68e8a04",
     "clubName": "Nginda Warriors FC",
