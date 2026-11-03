@@ -192,3 +192,72 @@ h1, h2, h3, h4, .font-athletic, .font-pedals, .font-display, .font-heading {
   background-image: radial-gradient(rgba(253, 225, 0, 0.07) 1px, transparent 1px);
   background-size: 28px 28px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Elite Sports Navigation & Smooth Scroll Motion Effects
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Route transition animated energy beam */
+@keyframes routeBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-routeBar {
+  animation: routeBar 0.45s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Gentle Fade In & Up */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Subtle Golden Glow Pulse */
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(253, 225, 0, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px rgba(253, 225, 0, 0.25);
+  }
+}
+
+.animate-gold-pulse {
+  animation: goldPulse 2.5s infinite;
+}
+
+/* Fluid hardware-accelerated taps & transitions */
+* {
+  -webkit-tap-highlight-color: transparent;
+}

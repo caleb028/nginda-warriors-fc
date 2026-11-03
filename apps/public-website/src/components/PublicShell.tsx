@@ -11,6 +11,8 @@ import {
 } from '@nginda-warriors/shared';
 import {
   Calendar,
+  ChevronDown,
+  ChevronUp,
   Globe,
   HeartHandshake,
   Home,
@@ -58,20 +60,47 @@ export function PublicShell({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [isNavigating, setIsNavigating] = useState(false);
 
-  // High-performance passive window scroll listener for header morphing
+  // Instant route navigation flash indicator
   useEffect(() => {
+    setIsNavigating(true);
+    const timer = setTimeout(() => setIsNavigating(false), 300);
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  // High-performance 60fps passive window scroll listener for header morphing & progress tracking
+  useEffect(() => {
+    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     let ticking = false;
+
+    const updateScroll = () => {
+      const currentScrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (currentScrollY / docHeight) * 100 : 0;
+
+      setScrollProgress(progress);
+      setIsScrolled(currentScrollY > 40);
+      setShowScrollTop(currentScrollY > 260);
+
+      if (Math.abs(currentScrollY - lastScrollY) > 6) {
+        setScrollDirection(currentScrollY > lastScrollY ? 'down' : 'up');
+        lastScrollY = currentScrollY;
+      }
+      ticking = false;
+    };
+
     const handleScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 40);
-          ticking = false;
-        });
+        window.requestAnimationFrame(updateScroll);
         ticking = true;
       }
     };
-    handleScroll();
+
+    updateScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -124,6 +153,21 @@ export function PublicShell({
         }
         className="min-h-screen flex flex-col bg-black text-white overflow-x-hidden w-full selection:bg-[#FDE100] selection:text-black"
       >
+        {/* Dynamic Route Navigation Transition Beam */}
+        {isNavigating && (
+          <div
+            aria-hidden="true"
+            className="fixed top-0 left-0 right-0 h-[3px] z-[70] bg-gradient-to-r from-transparent via-[#FDE100] to-transparent animate-routeBar shadow-[0_0_12px_#FDE100] pointer-events-none"
+          />
+        )}
+
+        {/* Global Reading Scroll Progress Bar */}
+        <div
+          aria-hidden="true"
+          className="fixed top-0 left-0 h-[2.5px] z-[60] bg-[#FDE100] shadow-[0_0_10px_#FDE100] transition-[width] duration-150 ease-out pointer-events-none"
+          style={{ width: `${scrollProgress}%` }}
+        />
+
         {/* Main Official Club Header - Dynamic Scroll Morphing Header (Borussia Dortmund Black & Yellow) */}
         <header
           className={`sticky top-0 z-50 text-white transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
@@ -171,13 +215,21 @@ export function PublicShell({
                         key={item.href}
                         href={item.href}
                         prefetch={true}
-                        className={`px-3 py-2 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition-all ${
+                        className={`relative px-3 py-2 rounded-lg text-sm font-athletic font-black uppercase tracking-wider transition-all duration-200 group ${
                           isActive
-                            ? 'bg-[#FDE100]/15 text-[#FDE100] border-b-2 border-[#FDE100]'
-                            : 'text-slate-200 hover:bg-[#1A1A1A] hover:text-[#FDE100]'
+                            ? 'text-[#FDE100]'
+                            : 'text-slate-200 hover:text-[#FDE100] hover:bg-[#1A1A1A]/70'
                         }`}
                       >
-                        {item.label}
+                        <span className="relative z-10 inline-block transition-transform duration-200 group-hover:-translate-y-0.5">
+                          {item.label}
+                        </span>
+                        {isActive && (
+                          <span
+                            aria-hidden="true"
+                            className="absolute bottom-0.5 left-2 right-2 h-[2px] bg-[#FDE100] shadow-[0_0_8px_#FDE100] rounded-full animate-fadeIn"
+                          />
+                        )}
                       </Link>
                     );
                   })}
@@ -540,55 +592,116 @@ export function PublicShell({
           className="xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-md border-t border-[#262626] shadow-2xl px-2 py-1 flex items-center justify-around"
           aria-label="Mobile Bottom Navigation"
         >
-          <Link
-            href="/"
-            prefetch={true}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
-              pathname === '/' ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Home className={`w-5 h-5 ${pathname === '/' ? 'text-[#FDE100]' : 'text-slate-400'}`} />
-            <span>Home</span>
-          </Link>
-          <Link
-            href="/fixtures"
-            prefetch={true}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
-              pathname.startsWith('/fixtures') ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Calendar className={`w-5 h-5 ${pathname.startsWith('/fixtures') ? 'text-[#FDE100]' : 'text-slate-400'}`} />
-            <span>Matches</span>
-          </Link>
-          <Link
-            href="/team"
-            prefetch={true}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
-              pathname.startsWith('/team') ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Users className={`w-5 h-5 ${pathname.startsWith('/team') ? 'text-[#FDE100]' : 'text-slate-400'}`} />
-            <span>Team</span>
-          </Link>
-          <Link
-            href="/news"
-            prefetch={true}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition ${
-              pathname.startsWith('/news') ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Newspaper className={`w-5 h-5 ${pathname.startsWith('/news') ? 'text-[#FDE100]' : 'text-slate-400'}`} />
-            <span>News</span>
-          </Link>
+          {[
+            { href: '/', label: 'Home', icon: Home, exact: true },
+            { href: '/fixtures', label: 'Matches', icon: Calendar },
+            { href: '/team', label: 'Team', icon: Users },
+            { href: '/news', label: 'News', icon: Newspaper },
+          ].map((tab) => {
+            const isActive = tab.exact
+              ? pathname === '/'
+              : pathname.startsWith(tab.href);
+            const IconComponent = tab.icon;
+            return (
+              <Link
+                key={tab.href}
+                href={tab.href}
+                prefetch={true}
+                className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] transition-all duration-200 active:scale-90 ${
+                  isActive ? 'text-[#FDE100]' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {isActive && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-0 w-8 h-[2px] bg-[#FDE100] shadow-[0_0_8px_#FDE100] rounded-full animate-fadeIn"
+                  />
+                )}
+                <IconComponent
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    isActive ? 'text-[#FDE100] scale-110' : 'text-slate-400'
+                  }`}
+                />
+                <span className="mt-0.5">{tab.label}</span>
+              </Link>
+            );
+          })}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] text-slate-400 hover:text-white transition"
+            className="relative flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase tracking-wider min-h-[44px] min-w-[54px] text-slate-400 hover:text-white transition-all duration-200 active:scale-90"
           >
             <MoreHorizontal className="w-5 h-5 text-slate-400" />
-            <span>More</span>
+            <span className="mt-0.5">More</span>
           </button>
         </nav>
+
+        {/* Luxury Floating Dynamic Scroll Controller HUD (Positioned safely above bottom nav on mobile) */}
+        <div
+          className={`fixed bottom-20 xl:bottom-8 right-4 sm:right-6 z-40 flex flex-col items-center gap-2 transition-all duration-300 ${
+            showScrollTop
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+        >
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="relative group w-12 h-12 rounded-full bg-black/85 hover:bg-black backdrop-blur-md border border-[#FDE100]/40 hover:border-[#FDE100] shadow-[0_8px_24px_rgba(0,0,0,0.6)] flex items-center justify-center text-white hover:text-[#FDE100] transition-all duration-200 active:scale-90"
+            aria-label={`Scroll to top (${Math.round(scrollProgress)}% scrolled)`}
+            title={`Scroll to top (${Math.round(scrollProgress)}%)`}
+          >
+            {/* SVG Progress Circle Ring */}
+            <svg
+              className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none p-0.5"
+              viewBox="0 0 44 44"
+            >
+              <circle
+                cx="22"
+                cy="22"
+                r="19"
+                fill="none"
+                stroke="#262626"
+                strokeWidth="2.5"
+              />
+              <circle
+                cx="22"
+                cy="22"
+                r="19"
+                fill="none"
+                stroke="#FDE100"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray="119.38"
+                strokeDashoffset={Math.max(
+                  0,
+                  119.38 - (119.38 * scrollProgress) / 100
+                )}
+                className="transition-[stroke-dashoffset] duration-150 ease-out"
+              />
+            </svg>
+
+            <ChevronUp className="w-5 h-5 text-[#FDE100] transition-transform duration-200 group-hover:-translate-y-0.5" />
+          </button>
+
+          {/* Quick Scroll to Bottom Button (visible if not near bottom of the page) */}
+          {scrollProgress < 88 && (
+            <button
+              type="button"
+              onClick={() =>
+                window.scrollTo({
+                  top: document.documentElement.scrollHeight,
+                  behavior: 'smooth',
+                })
+              }
+              className="w-8 h-8 rounded-full bg-black/75 hover:bg-black backdrop-blur-md border border-[#333333] hover:border-[#FDE100]/60 text-slate-300 hover:text-[#FDE100] shadow-md flex items-center justify-center transition-all duration-200 active:scale-90 hover:scale-105"
+              aria-label="Scroll to bottom of page"
+              title="Scroll to bottom"
+            >
+              <ChevronDown className="w-4 h-4" />
+            </button>
+          )}
+        </div>
 
         {/* Global Command Palette / Search Dialog */}
         <GlobalSearchModal
