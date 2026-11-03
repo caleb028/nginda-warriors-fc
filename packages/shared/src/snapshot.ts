@@ -111,7 +111,11 @@ export function buildPublicSnapshot(db: NgindaDatabaseSchema): PublicWebsiteSnap
 
   const playersList = safeDb.players || [];
   const publishedPlayers = playersList
-    .filter((p) => p.publicationStatus === 'published' && p.squadStatus === 'active')
+    .filter(
+      (p) =>
+        (p.publicationStatus === 'published' || !p.publicationStatus) &&
+        (!p.squadStatus || p.squadStatus === 'active')
+    )
     .map((p) => ({
       ...p,
       biography: p.isUnderageProtected

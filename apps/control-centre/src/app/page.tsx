@@ -216,6 +216,12 @@ export default function ControlCentreApp() {
                     credentials: 'include',
                     body: JSON.stringify({ action: 'sync_full_database', payload: { database: localParsed } }),
                   }).catch(() => null);
+
+                  fetch('/api/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ database: localParsed }),
+                  }).catch(() => null);
                 }
               }
             } catch {}

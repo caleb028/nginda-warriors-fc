@@ -13,6 +13,16 @@ const POSITION_GROUPS: PositionGroup[] = [
   'Forwards',
 ];
 
+function normalizePositionGroup(group?: string): PositionGroup {
+  if (!group) return 'Midfielders';
+  const clean = group.trim().toLowerCase();
+  if (clean.includes('goal') || clean === 'gk') return 'Goalkeepers';
+  if (clean.includes('def') || clean === 'cb' || clean === 'lb' || clean === 'rb') return 'Defenders';
+  if (clean.includes('mid') || clean === 'cm' || clean === 'dm' || clean === 'am') return 'Midfielders';
+  if (clean.includes('forw') || clean.includes('strik') || clean.includes('wing') || clean === 'cf' || clean === 'st') return 'Forwards';
+  return 'Midfielders';
+}
+
 export function TeamPageClient({
   initialSnapshot,
 }: {
@@ -112,7 +122,9 @@ export function TeamPageClient({
 
         {players.length > 0 ? (
           POSITION_GROUPS.map((group) => {
-            const groupPlayers = players.filter((p) => p.positionGroup === group);
+            const groupPlayers = players.filter(
+              (p) => normalizePositionGroup(p.positionGroup) === group
+            );
             if (groupPlayers.length === 0) return null;
             return (
               <section key={group}>
@@ -126,79 +138,80 @@ export function TeamPageClient({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {groupPlayers.map((player) => (
-                    <Link
-                      key={player.id}
-                      href={`/team/${player.slug}`}
-                      className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#262626] shadow-xl transition flex flex-col"
-                    >
-                      <div className="relative h-64 bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
-                        <span className="absolute top-2 right-4 font-athletic text-6xl font-black text-[#15201A] select-none">
-                          #{player.jerseyNumber}
-                        </span>
-                        {player.photoUrl ? (
-                          <img
-                            src={player.photoUrl}
-                            alt={player.fullName}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        ) : (
-                          <ClubCrest size={92} customCrestUrl={clubSettings.crestUrl} />
-                        )}
-                        <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
-                          #{player.jerseyNumber} • {player.specificRole}
-                        </div>
-                      </div>
-
-                      <div className="p-5 flex-1 flex flex-col justify-between">
-                        <div>
-                          <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
-                            {player.fullName}
-                          </h3>
-                          <p className="text-xs text-slate-400 font-semibold mt-0.5">
-                            Preferred Foot: {player.preferredFoot}
-                          </p>
+                  {groupPlayers.map((player) => {
+                    const isGK = normalizePositionGroup(player.positionGroup) === 'Goalkeepers';
+                    return (
+                      <Link
+                        key={player.id}
+                        href={`/team/${player.slug}`}
+                        className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition flex flex-col"
+                      >
+                        <div className="relative h-64 bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
+                          <span className="absolute top-2 right-4 font-athletic text-6xl font-black text-[#15201A] select-none">
+                            #{player.jerseyNumber}
+                          </span>
+                          {player.photoUrl ? (
+                            <img
+                              src={player.photoUrl}
+                              alt={player.fullName}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <ClubCrest size={92} customCrestUrl={clubSettings.crestUrl} />
+                          )}
+                          <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
+                            #{player.jerseyNumber} • {player.specificRole}
+                          </div>
                         </div>
 
-                        <div className="mt-4 pt-3 border-t border-[#262626] grid grid-cols-4 text-center text-xs">
+                        <div className="p-5 flex-1 flex flex-col justify-between">
                           <div>
-                            <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                              {player.appearances}
-                            </span>
-                            <span className="text-[10px] uppercase text-slate-400 font-bold">
-                              Apps
-                            </span>
+                            <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
+                              {player.fullName}
+                            </h3>
+                            <p className="text-xs text-slate-400 font-semibold mt-0.5">
+                              Preferred Foot: {player.preferredFoot}
+                            </p>
                           </div>
-                          <div>
-                            <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                              {player.goals}
-                            </span>
-                            <span className="text-[10px] uppercase text-slate-400 font-bold">
-                              Goals
-                            </span>
-                          </div>
-                          <div>
-                            <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                              {player.assists}
-                            </span>
-                            <span className="text-[10px] uppercase text-slate-400 font-bold">
-                              Ast
-                            </span>
-                          </div>
-                          <div>
-                            <span className="block font-athletic text-lg font-black text-[#FDE100]">
-                              {player.positionGroup === 'Goalkeepers'
-                                ? player.cleanSheets
-                                : player.starts}
-                            </span>
-                            <span className="text-[10px] uppercase text-slate-400 font-bold">
-                              {player.positionGroup === 'Goalkeepers' ? 'CS' : 'Starts'}
-                            </span>
+
+                          <div className="mt-4 pt-3 border-t border-[#262626] grid grid-cols-4 text-center text-xs">
+                            <div>
+                              <span className="block font-athletic text-lg font-black text-[#FDE100]">
+                                {player.appearances ?? 0}
+                              </span>
+                              <span className="text-[10px] uppercase text-slate-400 font-bold">
+                                Apps
+                              </span>
+                            </div>
+                            <div>
+                              <span className="block font-athletic text-lg font-black text-[#FDE100]">
+                                {player.goals ?? 0}
+                              </span>
+                              <span className="text-[10px] uppercase text-slate-400 font-bold">
+                                Goals
+                              </span>
+                            </div>
+                            <div>
+                              <span className="block font-athletic text-lg font-black text-[#FDE100]">
+                                {player.assists ?? 0}
+                              </span>
+                              <span className="text-[10px] uppercase text-slate-400 font-bold">
+                                Ast
+                              </span>
+                            </div>
+                            <div>
+                              <span className="block font-athletic text-lg font-black text-[#FDE100]">
+                                {isGK ? (player.cleanSheets ?? 0) : (player.starts ?? 0)}
+                              </span>
+                              <span className="text-[10px] uppercase text-slate-400 font-bold">
+                                {isGK ? 'CS' : 'Starts'}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    );
+                  })}
                 </div>
               </section>
             );

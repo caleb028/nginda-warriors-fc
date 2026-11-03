@@ -39,7 +39,7 @@ export function LiveSnapshotProvider({
 }) {
   const router = useRouter();
   const [snapshot, setSnapshot] = useState<PublicWebsiteSnapshot>(initialSnapshot);
-  const lastUpdatedRef = useRef<number>(Date.now());
+  const lastUpdatedRef = useRef<number>(0);
   const isSyncingRef = useRef<boolean>(false);
 
   // 1. Core Sync Function (Fetches fresh data with cache-busting query timestamp)
@@ -56,12 +56,13 @@ export function LiveSnapshotProvider({
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.updatedAt && data.updatedAt > lastUpdatedRef.current) {
-          // Guard against cold/stale serverless instances returning 0 players when client already has active squad
+        const serverTs = Number(data.updatedAt) || 0;
+        if (serverTs >= lastUpdatedRef.current || lastUpdatedRef.current === 0) {
+          // Guard against cold/stale serverless instances returning fewer players when client already has active squad
           const serverPlayersCount = data.snapshot?.players?.length || 0;
           const currentPlayersCount = snapshot?.players?.length || 0;
 
-          if (serverPlayersCount === 0 && currentPlayersCount > 0) {
+          if (serverPlayersCount < currentPlayersCount && currentPlayersCount > 0) {
             // Cold server instance detected: re-seed the server instance from verified local storage
             try {
               const localDb = localStorage.getItem('nginda_live_database');
@@ -73,18 +74,15 @@ export function LiveSnapshotProvider({
                 }).catch(() => null);
               }
             } catch {}
-          } else {
-            lastUpdatedRef.current = data.updatedAt;
-            if (data.snapshot) {
-              setSnapshot(data.snapshot);
-            }
+          } else if (data.snapshot) {
+            lastUpdatedRef.current = serverTs || Date.now();
+            setSnapshot(data.snapshot);
             if (data.database) {
               try {
                 localStorage.setItem('nginda_live_database', JSON.stringify(data.database));
-                localStorage.setItem('nginda_db_timestamp', String(data.updatedAt));
+                localStorage.setItem('nginda_db_timestamp', String(lastUpdatedRef.current));
               } catch {}
             }
-            router.refresh();
           }
         }
       }
@@ -93,7 +91,7 @@ export function LiveSnapshotProvider({
     } finally {
       isSyncingRef.current = false;
     }
-  }, [router, snapshot]);
+  }, [snapshot]);
 
   // 2. Initial Mount Check from localStorage (if newer than SSR or holds squad profiles)
   useEffect(() => {
@@ -107,10 +105,17 @@ export function LiveSnapshotProvider({
           const localCount = freshSnap.players?.length || 0;
           const initialCount = initialSnapshot.players?.length || 0;
 
-          if (localCount >= initialCount || (storedTs && Number(storedTs) >= lastUpdatedRef.current - 86400000)) {
+          if (localCount >= initialCount && localCount > 0) {
             setSnapshot(freshSnap);
             if (storedTs) {
               lastUpdatedRef.current = Number(storedTs);
+            }
+            if (initialCount === 0) {
+              fetch('/api/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ database: parsedDb }),
+              }).catch(() => null);
             }
           }
         }

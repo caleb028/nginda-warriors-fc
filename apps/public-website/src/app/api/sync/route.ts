@@ -10,10 +10,40 @@ import {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
+
     if (body.database && typeof body.database === 'object') {
-      writeDatabase(body.database);
-    } else if (body.fixture && typeof body.fixture === 'object') {
+      const currentDb = readDatabase();
+      const nextDb = {
+        ...currentDb,
+        ...body.database,
+        players: Array.isArray(body.database.players)
+          ? body.database.players
+          : currentDb.players || [],
+        fixtures: Array.isArray(body.database.fixtures)
+          ? body.database.fixtures
+          : currentDb.fixtures || [],
+        articles: Array.isArray(body.database.articles)
+          ? body.database.articles
+          : currentDb.articles || [],
+      };
+      writeDatabase(nextDb);
+    } else if (body.player && typeof body.player === 'object' && body.player.id) {
       const db = readDatabase();
+      db.players = Array.isArray(db.players) ? db.players : [];
+      const idx = db.players.findIndex((p) => p.id === body.player.id);
+      if (idx >= 0) {
+        db.players[idx] = body.player;
+      } else {
+        db.players.push(body.player);
+      }
+      writeDatabase(db);
+    } else if (Array.isArray(body.players)) {
+      const db = readDatabase();
+      db.players = body.players;
+      writeDatabase(db);
+    } else if (body.fixture && typeof body.fixture === 'object' && body.fixture.id) {
+      const db = readDatabase();
+      db.fixtures = Array.isArray(db.fixtures) ? db.fixtures : [];
       const idx = db.fixtures.findIndex((f) => f.id === body.fixture.id);
       if (idx >= 0) {
         db.fixtures[idx] = body.fixture;
@@ -23,18 +53,20 @@ export async function POST(req: NextRequest) {
       writeDatabase(db);
     }
 
-    revalidatePath('/', 'layout');
-    revalidatePath('/fixtures');
-    revalidatePath('/standings');
-    revalidatePath('/team');
-    revalidatePath('/about');
-    revalidatePath('/news');
-    revalidatePath('/gallery');
-    revalidatePath('/events');
-    revalidatePath('/sponsors');
-    revalidatePath('/merchandise');
-    revalidatePath('/support');
-    revalidatePath('/transparency');
+    try {
+      revalidatePath('/', 'layout');
+      revalidatePath('/fixtures');
+      revalidatePath('/standings');
+      revalidatePath('/team');
+      revalidatePath('/about');
+      revalidatePath('/news');
+      revalidatePath('/gallery');
+      revalidatePath('/events');
+      revalidatePath('/sponsors');
+      revalidatePath('/merchandise');
+      revalidatePath('/support');
+      revalidatePath('/transparency');
+    } catch {}
 
     const freshDb = readDatabase();
     const freshSnapshot = getPublicWebsiteSnapshot();
@@ -44,9 +76,10 @@ export async function POST(req: NextRequest) {
         synced: true,
         updatedAt: getDatabaseTimestamp(),
         snapshot: freshSnapshot,
-        fixturesCount: freshDb.fixtures.length,
-        playersCount: freshDb.players.length,
-        articlesCount: freshDb.articles.length,
+        database: freshDb,
+        fixturesCount: freshDb.fixtures?.length ?? 0,
+        playersCount: freshDb.players?.length ?? 0,
+        articlesCount: freshDb.articles?.length ?? 0,
       },
       {
         headers: {
@@ -68,9 +101,10 @@ export async function GET() {
       ok: true,
       updatedAt: getDatabaseTimestamp(),
       snapshot,
-      fixturesCount: db.fixtures.length,
-      playersCount: db.players.length,
-      articlesCount: db.articles.length,
+      database: db,
+      fixturesCount: db.fixtures?.length ?? 0,
+      playersCount: db.players?.length ?? 0,
+      articlesCount: db.articles?.length ?? 0,
       status: 'ready',
     },
     {
