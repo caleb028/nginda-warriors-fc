@@ -158,58 +158,95 @@ export async function POST(req: NextRequest) {
       const session = assertAuthorizedAdmin(token, 'players');
       const db = readDatabase();
       const now = new Date().toISOString();
-      const existingIdx = payload.id
-        ? db.players.findIndex((p) => p.id === payload.id)
-        : -1;
 
+      // Maintain tombstone tracking for deleted players
+      const deletedSet = new Set(db.deletedPlayerIds || []);
+      if (Array.isArray(payload.deletedPlayerIds)) {
+        for (const id of payload.deletedPlayerIds) {
+          deletedSet.add(id);
+        }
+      }
+
+      // Merge server players and client players to survive serverless container transitions
+      const playerMap = new Map<string, any>();
+      for (const p of db.players || []) {
+        if (p && p.id && !deletedSet.has(p.id)) {
+          playerMap.set(p.id, p);
+        }
+      }
+      if (Array.isArray(payload.clientPlayers)) {
+        for (const cp of payload.clientPlayers) {
+          if (cp && cp.id && !deletedSet.has(cp.id) && !cp.id.startsWith('player-')) {
+            if (!playerMap.has(cp.id)) {
+              playerMap.set(cp.id, cp);
+            }
+          }
+        }
+      }
+
+      // Identify whether we are editing an existing player
+      let targetId = payload.id;
+      if (!targetId || targetId.startsWith('player-')) {
+        const normName = String(payload.fullName || '').trim().toLowerCase();
+        const normJersey = Number(payload.jerseyNumber);
+        const existingMatch = Array.from(playerMap.values()).find(
+          (p) =>
+            p.fullName.trim().toLowerCase() === normName &&
+            Number(p.jerseyNumber) === normJersey
+        );
+        targetId = existingMatch ? existingMatch.id : createUuid();
+      }
+
+      const existingPlayer = playerMap.get(targetId);
       const baseSlug = payload.fullName ? slugify(String(payload.fullName)) : 'player';
       const jersey = payload.jerseyNumber !== undefined && payload.jerseyNumber !== null ? String(payload.jerseyNumber) : '99';
 
       const playerRecord = {
-        id: existingIdx >= 0 ? db.players[existingIdx].id : createUuid(),
+        id: targetId,
         slug:
           payload.slug ||
-          (existingIdx >= 0 ? db.players[existingIdx].slug : `${baseSlug}-${jersey}`),
+          (existingPlayer ? existingPlayer.slug : `${baseSlug}-${jersey}`),
         fullName: String(payload.fullName || '').trim(),
         jerseyNumber: Number(payload.jerseyNumber || 99),
-        positionGroup: payload.positionGroup || 'Midfielders',
-        specificRole: payload.specificRole || 'Central Midfielder',
-        photoUrl: payload.photoUrl || '',
+        positionGroup: payload.positionGroup || (existingPlayer?.positionGroup || 'Midfielders'),
+        specificRole: payload.specificRole || (existingPlayer?.specificRole || 'Central Midfielder'),
+        photoUrl: payload.photoUrl !== undefined ? payload.photoUrl : (existingPlayer?.photoUrl || ''),
         biography:
           payload.biography ||
-          `Official squad player for Nginda Warriors FC.`,
-        preferredFoot: payload.preferredFoot || 'Right',
-        isUnderageProtected: Boolean(payload.isUnderageProtected),
-        appearances: Number(payload.appearances || 0),
-        starts: Number(payload.starts || 0),
-        goals: Number(payload.goals || 0),
-        assists: Number(payload.assists || 0),
-        yellowCards: Number(payload.yellowCards || 0),
-        redCards: Number(payload.redCards || 0),
-        cleanSheets: Number(payload.cleanSheets || 0),
-        seasonStats: Array.isArray(payload.seasonStats) ? payload.seasonStats : [],
-        isFeatured: Boolean(payload.isFeatured),
-        squadStatus: payload.squadStatus || 'active',
-        publicationStatus: payload.publicationStatus || 'published',
-        createdAt: existingIdx >= 0 ? db.players[existingIdx].createdAt : now,
+          (existingPlayer ? existingPlayer.biography : `Official squad player for Nginda Warriors FC.`),
+        preferredFoot: payload.preferredFoot || (existingPlayer?.preferredFoot || 'Right'),
+        isUnderageProtected: payload.isUnderageProtected !== undefined ? Boolean(payload.isUnderageProtected) : Boolean(existingPlayer?.isUnderageProtected),
+        appearances: Number(payload.appearances ?? existingPlayer?.appearances ?? 0),
+        starts: Number(payload.starts ?? existingPlayer?.starts ?? 0),
+        goals: Number(payload.goals ?? existingPlayer?.goals ?? 0),
+        assists: Number(payload.assists ?? existingPlayer?.assists ?? 0),
+        yellowCards: Number(payload.yellowCards ?? existingPlayer?.yellowCards ?? 0),
+        redCards: Number(payload.redCards ?? existingPlayer?.redCards ?? 0),
+        cleanSheets: Number(payload.cleanSheets ?? existingPlayer?.cleanSheets ?? 0),
+        seasonStats: Array.isArray(payload.seasonStats) ? payload.seasonStats : (existingPlayer?.seasonStats || []),
+        isFeatured: payload.isFeatured !== undefined ? Boolean(payload.isFeatured) : Boolean(existingPlayer?.isFeatured ?? true),
+        squadStatus: payload.squadStatus || existingPlayer?.squadStatus || 'active',
+        publicationStatus: payload.publicationStatus || existingPlayer?.publicationStatus || 'published',
+        createdAt: existingPlayer ? existingPlayer.createdAt : now,
         updatedAt: now,
       };
 
-      if (existingIdx >= 0) {
-        db.players[existingIdx] = playerRecord;
-      } else {
-        db.players.push(playerRecord);
-      }
+      // Ensure that if this targetId was in deletedSet, un-tombstone it
+      deletedSet.delete(targetId);
+      db.deletedPlayerIds = Array.from(deletedSet);
+
+      playerMap.set(targetId, playerRecord);
+      db.players = Array.from(playerMap.values());
       db.clubSettings.updatedAt = now;
 
       recordAuditLog(db, {
         actorUserId: session.userId,
         actorName: session.fullName,
         actorRole: session.roleCode,
-        action: existingIdx >= 0 ? 'UPDATE_PLAYER' : 'CREATE_PLAYER',
+        action: existingPlayer ? 'UPDATE_PLAYER' : 'CREATE_PLAYER',
         module: 'players',
         targetId: playerRecord.id,
-        summary: `${existingIdx >= 0 ? 'Updated' : 'Added'} player #${playerRecord.jerseyNumber} ${playerRecord.fullName} (${playerRecord.publicationStatus})`,
+        summary: `${existingPlayer ? 'Updated' : 'Added'} player #${playerRecord.jerseyNumber} ${playerRecord.fullName} (${playerRecord.publicationStatus})`,
       });
 
       await saveDatabaseAndSync(db, '/team', host);
@@ -240,7 +277,8 @@ export async function POST(req: NextRequest) {
     if (action === 'clear_all_players') {
       const session = assertAuthorizedAdmin(token, 'players');
       const db = readDatabase();
-      const deletedIds = (db.players || []).map((p) => p.id);
+      const clientIds = Array.isArray(payload.allPlayerIds) ? payload.allPlayerIds : [];
+      const deletedIds = Array.from(new Set([...(db.players || []).map((p) => p.id), ...clientIds]));
       db.deletedPlayerIds = Array.from(new Set([...(db.deletedPlayerIds || []), ...deletedIds]));
       db.players = [];
       db.clubSettings.updatedAt = new Date().toISOString();

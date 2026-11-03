@@ -137,45 +137,58 @@ export function TeamPageClient({
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-7">
                   {groupPlayers.map((player) => {
                     const isGK = normalizePositionGroup(player.positionGroup) === 'Goalkeepers';
                     return (
                       <Link
                         key={player.id}
                         href={`/team/${player.slug}`}
-                        className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl transition flex flex-col"
+                        className="group rounded-2xl overflow-hidden bg-[#141414] border border-[#262626] hover:border-[#FDE100] shadow-xl hover:shadow-2xl hover:shadow-[#FDE100]/5 transition-all duration-300 flex flex-col"
                       >
-                        <div className="relative h-64 bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
-                          <span className="absolute top-2 right-4 font-athletic text-6xl font-black text-[#15201A] select-none">
+                        <div className="relative aspect-[3/4] w-full bg-[#0D0D0D] flex items-center justify-center overflow-hidden">
+                          <span className="absolute top-2 right-3 font-athletic text-7xl font-black text-white/5 select-none pointer-events-none">
                             #{player.jerseyNumber}
                           </span>
                           {player.photoUrl ? (
                             <img
                               src={player.photoUrl}
                               alt={player.fullName}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
                           ) : (
-                            <ClubCrest size={92} customCrestUrl={clubSettings.crestUrl} />
+                            <ClubCrest size={108} customCrestUrl={clubSettings.crestUrl} />
                           )}
-                          <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-sm">
-                            #{player.jerseyNumber} • {player.specificRole}
+                          <div
+                            className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#141414] via-[#141414]/50 to-transparent pointer-events-none"
+                            aria-hidden="true"
+                          />
+                          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2 z-10 pointer-events-none">
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#FDE100] text-black font-athletic font-black text-xs uppercase tracking-wider shadow-md">
+                              <span>#{player.jerseyNumber}</span>
+                              <span className="opacity-40">•</span>
+                              <span className="truncate max-w-[130px]">{player.specificRole}</span>
+                            </div>
+                            {player.isFeatured && (
+                              <span className="px-2 py-0.5 rounded bg-emerald-600/90 text-white font-athletic text-[10px] font-bold uppercase tracking-wider shadow">
+                                Featured
+                              </span>
+                            )}
                           </div>
                         </div>
 
-                        <div className="p-5 flex-1 flex flex-col justify-between">
+                        <div className="p-5 flex-1 flex flex-col justify-between bg-[#141414] border-t border-[#262626]/70">
                           <div>
-                            <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors">
+                            <h3 className="font-athletic text-2xl font-black uppercase text-white group-hover:text-[#FDE100] transition-colors leading-tight line-clamp-1">
                               {player.fullName}
                             </h3>
-                            <p className="text-xs text-slate-400 font-semibold mt-0.5">
-                              Preferred Foot: {player.preferredFoot}
+                            <p className="text-xs text-slate-400 font-semibold mt-1">
+                              {player.positionGroup} • {player.preferredFoot || 'Right'} Foot
                             </p>
                           </div>
 
-                          <div className="mt-4 pt-3 border-t border-[#262626] grid grid-cols-4 text-center text-xs">
-                            <div>
+                          <div className="mt-4 pt-3 border-t border-[#262626] grid grid-cols-4 text-center text-xs divide-x divide-[#262626]/50">
+                            <div className="px-1">
                               <span className="block font-athletic text-lg font-black text-[#FDE100]">
                                 {player.appearances ?? 0}
                               </span>
@@ -183,7 +196,7 @@ export function TeamPageClient({
                                 Apps
                               </span>
                             </div>
-                            <div>
+                            <div className="px-1">
                               <span className="block font-athletic text-lg font-black text-[#FDE100]">
                                 {player.goals ?? 0}
                               </span>
@@ -191,7 +204,7 @@ export function TeamPageClient({
                                 Goals
                               </span>
                             </div>
-                            <div>
+                            <div className="px-1">
                               <span className="block font-athletic text-lg font-black text-[#FDE100]">
                                 {player.assists ?? 0}
                               </span>
@@ -199,7 +212,7 @@ export function TeamPageClient({
                                 Ast
                               </span>
                             </div>
-                            <div>
+                            <div className="px-1">
                               <span className="block font-athletic text-lg font-black text-[#FDE100]">
                                 {isGK ? (player.cleanSheets ?? 0) : (player.starts ?? 0)}
                               </span>

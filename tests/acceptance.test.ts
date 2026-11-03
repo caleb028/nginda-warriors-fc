@@ -131,6 +131,81 @@ test('Criteria 5: Add and Publish a Player', () => {
   assert.equal(found?.jerseyNumber, 4);
 });
 
+test('Sequential and Multiple Player Uploads Without Deletion', () => {
+  const db = readDatabase();
+  const p1 = {
+    id: createUuid(),
+    slug: 'dennis-ochieng-10',
+    fullName: 'Dennis Ochieng',
+    jerseyNumber: 10,
+    positionGroup: 'Midfielders' as const,
+    specificRole: 'Attacking Midfielder',
+    preferredFoot: 'Right' as const,
+    photoUrl: '/uploads/players/dennis.jpg',
+    biography: 'Creative playmaker for Nginda Warriors.',
+    appearances: 12,
+    starts: 12,
+    goals: 5,
+    assists: 7,
+    yellowCards: 2,
+    redCards: 0,
+    cleanSheets: 0,
+    seasonStats: [],
+    isFeatured: true,
+    isUnderageProtected: false,
+    squadStatus: 'active' as const,
+    publicationStatus: 'published' as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  const p2 = {
+    id: createUuid(),
+    slug: 'kelvin-mwangi-7',
+    fullName: 'Kelvin Mwangi',
+    jerseyNumber: 7,
+    positionGroup: 'Forwards' as const,
+    specificRole: 'Right Winger',
+    preferredFoot: 'Right' as const,
+    photoUrl: '/uploads/players/kelvin.jpg',
+    biography: 'Explosive winger with pace and finishing.',
+    appearances: 10,
+    starts: 9,
+    goals: 6,
+    assists: 4,
+    yellowCards: 1,
+    redCards: 0,
+    cleanSheets: 0,
+    seasonStats: [],
+    isFeatured: true,
+    isUnderageProtected: false,
+    squadStatus: 'active' as const,
+    publicationStatus: 'published' as const,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // Upload Player 1
+  db.players = [p1];
+  writeDatabase(db);
+  let snap = getPublicWebsiteSnapshot();
+  assert.equal(snap.players.length, 1);
+  assert.equal(snap.players[0].fullName, 'Dennis Ochieng');
+
+  // Upload Player 2 sequentially (simulating client passing existing roster [p1])
+  const clientPlayers = [p1];
+  const playerMap = new Map();
+  for (const cp of clientPlayers) playerMap.set(cp.id, cp);
+  playerMap.set(p2.id, p2);
+  db.players = Array.from(playerMap.values());
+  writeDatabase(db);
+
+  snap = getPublicWebsiteSnapshot();
+  assert.equal(snap.players.length, 2, 'Both players must exist in public website snapshot');
+  assert.ok(snap.players.some((p) => p.fullName === 'Dennis Ochieng'), 'Player 1 must NOT be deleted');
+  assert.ok(snap.players.some((p) => p.fullName === 'Kelvin Mwangi'), 'Player 2 must be added');
+});
+
 test('Criteria 6: Create a Fixture', () => {
   const db = readDatabase();
   const fixture = {

@@ -286,6 +286,19 @@ export default function ControlCentreApp() {
   }, []);
 
   const handleMutate = async (action: string, payload: Record<string, unknown>) => {
+    // Automatically guarantee clientPlayers and deletedPlayerIds for save_player
+    if (action === 'save_player') {
+      payload = {
+        ...payload,
+        clientPlayers: Array.isArray(payload.clientPlayers)
+          ? payload.clientPlayers
+          : (database?.players || []),
+        deletedPlayerIds: Array.isArray(payload.deletedPlayerIds)
+          ? payload.deletedPlayerIds
+          : (database?.deletedPlayerIds || []),
+      };
+    }
+
     const previousDb = database;
     let optimisticDb: NgindaDatabaseSchema | null = null;
 
@@ -622,7 +635,32 @@ export default function ControlCentreApp() {
         }
         alert(data.error || 'Action failed.');
       } else {
-        const confirmedDb = data.database || optimisticDb;
+        let confirmedDb = data.database || optimisticDb;
+        if (action === 'save_player' && confirmedDb) {
+          const deletedSet = new Set([
+            ...(previousDb?.deletedPlayerIds || []),
+            ...(confirmedDb.deletedPlayerIds || []),
+          ]);
+          const playerMap = new Map<string, any>();
+          // Preserve all known non-deleted players
+          for (const p of (optimisticDb?.players || previousDb?.players || [])) {
+            if (p && p.id && !deletedSet.has(p.id) && !p.id.startsWith('player-')) {
+              playerMap.set(p.id, p);
+            }
+          }
+          for (const p of (confirmedDb.players || [])) {
+            if (p && p.id && !deletedSet.has(p.id) && !p.id.startsWith('player-')) {
+              playerMap.set(p.id, p);
+            }
+          }
+          if (data.player && data.player.id) {
+            playerMap.set(data.player.id, data.player);
+          }
+          confirmedDb = {
+            ...confirmedDb,
+            players: Array.from(playerMap.values()),
+          };
+        }
         if (confirmedDb) {
           setDatabase(confirmedDb);
         }

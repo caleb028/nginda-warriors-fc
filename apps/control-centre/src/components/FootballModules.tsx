@@ -183,6 +183,8 @@ export function FootballModules({
               isUnderageProtected,
               squadStatus,
               publicationStatus: playerPubStatus,
+              clientPlayers: db.players || [],
+              deletedPlayerIds: db.deletedPlayerIds || [],
             });
             resetPlayerForm();
           }}
@@ -458,7 +460,9 @@ export function FootballModules({
                       'Permanently delete and remove ALL squad players from the website? This cannot be undone.'
                     )
                   ) {
-                    onMutate('clear_all_players', {});
+                    onMutate('clear_all_players', {
+                      allPlayerIds: db.players.map((p) => p.id),
+                    });
                   }
                 }}
                 className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow"
@@ -550,7 +554,11 @@ export function FootballModules({
                                 if (file) {
                                   try {
                                     const dataUrl = await processImageFile(file);
-                                    onMutate('save_player', { ...p, photoUrl: dataUrl });
+                                    onMutate('save_player', {
+                                      ...p,
+                                      photoUrl: dataUrl,
+                                      clientPlayers: db.players || [],
+                                    });
                                   } catch (err: unknown) {
                                     alert(err instanceof Error ? err.message : 'Upload failed');
                                   }
@@ -564,7 +572,11 @@ export function FootballModules({
                               type="button"
                               onClick={() => {
                                 if (confirm(`Remove and delete photograph for ${p.fullName}?`)) {
-                                  onMutate('save_player', { ...p, photoUrl: '' });
+                                  onMutate('save_player', {
+                                    ...p,
+                                    photoUrl: '',
+                                    clientPlayers: db.players || [],
+                                  });
                                 }
                               }}
                               className="p-1.5 rounded bg-amber-50 text-amber-700 hover:bg-amber-100 transition text-[11px] font-bold"

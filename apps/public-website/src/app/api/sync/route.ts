@@ -21,9 +21,20 @@ export async function POST(req: NextRequest) {
       );
       const incomingPlayers = Array.isArray(body.database.players)
         ? body.database.players
-        : currentDb.players || [];
+        : [];
       const deletedSet = new Set(mergedDeleted);
-      const safePlayers = incomingPlayers.filter((p: any) => !deletedSet.has(p.id));
+      const playerMap = new Map<string, any>();
+      for (const p of currentDb.players || []) {
+        if (p && p.id && !deletedSet.has(p.id)) {
+          playerMap.set(p.id, p);
+        }
+      }
+      for (const p of incomingPlayers) {
+        if (p && p.id && !deletedSet.has(p.id)) {
+          playerMap.set(p.id, p);
+        }
+      }
+      const safePlayers = Array.from(playerMap.values());
 
       const nextDb = {
         ...currentDb,
