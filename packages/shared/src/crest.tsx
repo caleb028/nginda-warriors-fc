@@ -5,6 +5,7 @@ export interface ClubCrestProps {
   className?: string;
   customCrestUrl?: string | null;
   alt?: string;
+  loading?: 'lazy' | 'eager';
 }
 
 /**
@@ -24,6 +25,7 @@ export function ClubCrest({
   className = '',
   customCrestUrl,
   alt = 'Nginda Warriors FC Official Crest (Est. 2024)',
+  loading = 'lazy',
 }: ClubCrestProps) {
   const crestSrc =
     customCrestUrl &&
@@ -40,7 +42,8 @@ export function ClubCrest({
       height={size}
       style={{ maxHeight: size, width: 'auto', objectFit: 'contain' }}
       className={`select-none shrink-0 inline-block ${className}`}
-      loading="eager"
+      loading={loading}
+      decoding="async"
     />
   );
 }

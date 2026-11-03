@@ -644,11 +644,7 @@ export default function ControlCentreApp() {
             try {
               const bc = new BroadcastChannel('nginda_warriors_live_sync');
               bc.postMessage({ type: 'DATABASE_UPDATED', database: nextDb });
-              setTimeout(() => {
-                try {
-                  bc.close();
-                } catch {}
-              }, 1500);
+              bc.close();
             } catch {}
           }
         }
@@ -771,12 +767,7 @@ export default function ControlCentreApp() {
             try {
               const bc = new BroadcastChannel('nginda_warriors_live_sync');
               bc.postMessage({ type: 'DATABASE_UPDATED', database: confirmedDb });
-              // Keep channel open briefly before disposal to ensure browser IPC dispatch
-              setTimeout(() => {
-                try {
-                  bc.close();
-                } catch {}
-              }, 1500);
+              bc.close();
             } catch {}
           }
         }

@@ -48,14 +48,20 @@ export function LiveSnapshotProvider({
   const lastUpdatedRef = useRef<number>(0);
   const isSyncingRef = useRef<boolean>(false);
   const playerCountRef = useRef<number>(initialSnapshot.players?.length || 0);
+  const lastSyncAttemptRef = useRef<number>(0);
 
-  // 1. Core Sync Function (Zero re-allocations, stable reference, zero memory leaks)
-  const refreshNow = useCallback(async () => {
+  // 1. Core Sync Function (Zero re-allocations, throttled, stable reference, zero memory leaks)
+  const refreshNow = useCallback(async (force = false) => {
     if (isSyncingRef.current) return;
+    const now = Date.now();
+    if (!force && lastUpdatedRef.current > 0 && now - lastSyncAttemptRef.current < 45000) {
+      return; // Skip rapid redundant polling to save mobile RAM and CPU
+    }
+    lastSyncAttemptRef.current = now;
     isSyncingRef.current = true;
     try {
       const sinceParam = lastUpdatedRef.current > 0 ? `&since=${lastUpdatedRef.current}` : '';
-      const res = await fetch(`/api/sync?t=${Date.now()}${sinceParam}`, {
+      const res = await fetch(`/api/sync?t=${now}${sinceParam}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -91,7 +97,7 @@ export function LiveSnapshotProvider({
           mergedPlayers.length !== playerCountRef.current;
 
         if (shouldUpdate) {
-          lastUpdatedRef.current = serverTs || Date.now();
+          lastUpdatedRef.current = serverTs || now;
           playerCountRef.current = mergedPlayers.length;
 
           if (data.snapshot) {
@@ -162,8 +168,7 @@ export function LiveSnapshotProvider({
                 setSnapshot(freshSnap);
                 playerCountRef.current = freshSnap.players?.length || 0;
                 lastUpdatedRef.current = Date.now();
-                localStorage.setItem('nginda_live_database', JSON.stringify(event.data.database));
-                localStorage.setItem('nginda_db_timestamp', String(Date.now()));
+                // Do NOT call localStorage.setItem here: avoids cross-tab ping-pong storage loops
               } catch {}
             }
           }
@@ -171,7 +176,7 @@ export function LiveSnapshotProvider({
       } catch {}
     }
 
-    // B. Storage Event Listener (fires across tabs on same origin)
+    // B. Storage Event Listener (fires across tabs on same origin when admin updates localStorage)
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'nginda_live_database' && e.newValue) {
         try {
@@ -185,27 +190,20 @@ export function LiveSnapshotProvider({
     };
     window.addEventListener('storage', handleStorage);
 
-    // C. Mobile Browser & PWA Lifecycle Listeners (pageshow, visibilitychange, focus)
-    const handleAppForeground = () => {
-      refreshNow();
-    };
-
+    // C. Single visibilitychange listener to refresh when returning to tab
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
-        handleAppForeground();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('focus', handleAppForeground);
-    window.addEventListener('pageshow', handleAppForeground);
-
-    // D. Lightweight 30-second background fallback sync loop
-    const pollInterval = setInterval(() => {
-      if (typeof document === 'undefined' || document.visibilityState === 'visible') {
         refreshNow();
       }
-    }, 30000);
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // D. Lightweight 60-second background fallback sync loop
+    const pollInterval = setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        refreshNow();
+      }
+    }, 60000);
 
     return () => {
       if (bc) {
@@ -215,8 +213,6 @@ export function LiveSnapshotProvider({
       }
       window.removeEventListener('storage', handleStorage);
       document.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('focus', handleAppForeground);
-      window.removeEventListener('pageshow', handleAppForeground);
       clearInterval(pollInterval);
     };
   }, [refreshNow]);

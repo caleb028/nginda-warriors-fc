@@ -1,25 +1,31 @@
-// Nginda Warriors FC — Service Worker (Instant Fresh Cache Invalidation)
-const CACHE_NAME = 'nginda-warriors-v9-enlarged-icon';
+// Nginda Warriors FC — High-Performance, Zero-Memory-Leak Service Worker
+const CACHE_NAME = 'nginda-warriors-v10-clean';
 const OFFLINE_URL = '/offline.html';
 
+const STATIC_PRECACHE = [
+  '/offline.html',
+  '/manifest.json',
+  '/favicon.png',
+  '/brand/nginda-warriors-crest.png',
+];
+
 self.addEventListener('install', (event) => {
-  // Activate immediately without waiting for existing tabs/PWA sessions to close
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(['/offline.html', '/manifest.json']).catch(() => {});
+      return cache.addAll(STATIC_PRECACHE).catch(() => {});
     })
   );
 });
 
 self.addEventListener('activate', (event) => {
-  // Aggressively purge every single old cache
+  // Purge every old, bloated cache from previous sessions immediately
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
           if (key !== CACHE_NAME) {
-            console.log('[SW] Purging outdated cache:', key);
+            console.log('[SW] Purging bloated cache:', key);
             return caches.delete(key);
           }
         })
@@ -30,66 +36,49 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  const url = new URL(req.url);
 
-  // 1. Skip non-GET, admin control centre, api routes, dynamic uploads, and Next.js App Router RSC streams
+  // 1. Only process GET requests from same origin; never intercept cross-origin or non-GET
+  if (req.method !== 'GET') return;
+
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+
+  // 2. Skip admin dashboard, API endpoints, dynamic uploads, Next.js internal RSC streams
   if (
-    req.method !== 'GET' ||
     url.pathname.startsWith('/manage') ||
     url.pathname.startsWith('/api') ||
     url.pathname.startsWith('/uploads') ||
     url.searchParams.has('_rsc') ||
-    req.headers.get('RSC') === '1' ||
-    req.headers.get('Next-Router-Prefetch') === '1'
+    req.headers.get('RSC') === '1'
   ) {
     return;
   }
 
-  // 2. HTML navigation: STRICT NETWORK-FIRST WITH NO-STORE
-  // Guarantees mobile users receive fresh HTML on every app open
+  // 3. HTML Navigation requests: Network-first, fallback to /offline.html on network failure
   if (req.mode === 'navigate') {
     event.respondWith(
-      fetch(req, { cache: 'no-store' })
-        .catch(async () => {
-          const cached = await caches.match(req);
-          if (cached) return cached;
-          const offline = await caches.match(OFFLINE_URL);
-          return offline || new Response('Offline - Nginda Warriors FC', {
-            headers: { 'Content-Type': 'text/html' },
-          });
-        })
+      fetch(req).catch(async () => {
+        const cached = await caches.match(req);
+        if (cached) return cached;
+        const offline = await caches.match(OFFLINE_URL);
+        return offline || new Response('Offline - Nginda Warriors FC', {
+          headers: { 'Content-Type': 'text/html' },
+        });
+      })
     );
     return;
   }
 
-  // 3. Static assets, fonts, scripts & images: Cache-First / Stale-While-Revalidate
-  // Delivers instant 0ms responses from cache without waking up mobile radios or blocking render
-  event.respondWith(
-    caches.match(req).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return instantly from local cache
-        // Silently revalidate in background without blocking
-        fetch(req)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              const clone = networkResponse.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
-            }
-          })
-          .catch(() => {});
-        return cachedResponse;
-      }
+  // 4. Offline precache assets only (offline.html, manifest, icon)
+  if (STATIC_PRECACHE.includes(url.pathname)) {
+    event.respondWith(
+      caches.match(req).then((cached) => cached || fetch(req))
+    );
+    return;
+  }
 
-      // If not cached yet, fetch over network and cache for next time
-      return fetch(req).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const clone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
-        }
-        return networkResponse;
-      });
-    })
-  );
+  // 5. All other static assets (JS chunks, CSS, fonts, images):
+  // Let the browser's native C++ HTTP engine handle them directly with zero JS heap/memory overhead!
 });
 
 // Push notifications support
