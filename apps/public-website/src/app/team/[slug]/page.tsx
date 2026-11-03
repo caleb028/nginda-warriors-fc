@@ -12,7 +12,7 @@ export default function PlayerProfilePage({
 }: {
   params: { slug: string };
 }) {
-  const { clubSettings, players } = getPublicWebsiteSnapshot();
+  const { clubSettings, players } = getPublicWebsiteSnapshot(true);
   const player = players.find((p) => p.slug === params.slug);
 
   if (!player) {

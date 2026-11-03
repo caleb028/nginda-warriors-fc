@@ -6,6 +6,6 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default function TeamSquadPage() {
-  const snapshot = getPublicWebsiteSnapshot();
+  const snapshot = getPublicWebsiteSnapshot(true);
   return <TeamPageClient initialSnapshot={snapshot} />;
 }
