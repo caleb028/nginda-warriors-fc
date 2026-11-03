@@ -67,32 +67,13 @@ export function LiveSnapshotProvider({
         const incomingPlayers = data.snapshot?.players || data.database?.players || [];
         const currentPlayers = snapshot?.players || [];
 
-        // Guard: Never let a cold server container with 0 players wipe a non-empty client roster
-        if (incomingPlayers.length === 0 && currentPlayers.length > 0) {
-          try {
-            const stored = localStorage.getItem('nginda_live_database');
-            if (stored) {
-              fetch('/api/sync', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ database: JSON.parse(stored) }),
-              }).catch(() => null);
-            }
-          } catch {}
-          return;
-        }
-
-        // Merge incoming and current players by ID to avoid dropping any sequentially uploaded player
+        // Filter out any tombstoned / permanently deleted players
         const deletedSet = new Set([
           ...(data.database?.deletedPlayerIds || []),
           ...(data.snapshot?.deletedPlayerIds || []),
+          ...Array.from(HYPOTHETICAL_PLAYER_IDS),
         ]);
         const playerMap = new Map<string, any>();
-        for (const p of currentPlayers) {
-          if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-            playerMap.set(p.id, p);
-          }
-        }
         for (const p of incomingPlayers) {
           if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
             playerMap.set(p.id, p);

@@ -108,33 +108,6 @@ export async function GET(req: NextRequest) {
 
   const db = readDatabase();
 
-  // If local container has empty players, hydrate from public website sync
-  if (!db.players || db.players.length === 0) {
-    try {
-      const host = req.headers.get('host') || 'nginda-warriors-fc-c549.vercel.app';
-      const proto = host.includes('localhost') ? 'http' : 'https';
-      const candidateUrls = [
-        `${proto}://${host}/api/sync?t=${Date.now()}`,
-        `https://nginda-warriors-fc-c549.vercel.app/api/sync?t=${Date.now()}`,
-      ];
-      for (const syncUrl of candidateUrls) {
-        try {
-          const syncRes = await fetch(syncUrl, { signal: AbortSignal.timeout(3000) });
-          if (syncRes.ok) {
-            const syncData = await syncRes.json();
-            const incoming = syncData.snapshot?.players || syncData.database?.players;
-            if (Array.isArray(incoming) && incoming.length > 0) {
-              const deletedSet = new Set(db.deletedPlayerIds || []);
-              db.players = incoming.filter((p: any) => !deletedSet.has(p.id));
-              writeDatabase(db);
-              break;
-            }
-          }
-        } catch {}
-      }
-    } catch {}
-  }
-
   return NextResponse.json({
     ok: true,
     session,
@@ -193,30 +166,6 @@ export async function POST(req: NextRequest) {
       const session = assertAuthorizedAdmin(token, 'players');
       const db = readDatabase();
       const now = new Date().toISOString();
-
-      // If local server db.players is empty, hydrate from public sync before saving
-      if (!db.players || db.players.length === 0) {
-        try {
-          const proto = host && host.includes('localhost') ? 'http' : 'https';
-          const candidateUrls = [
-            ...(host ? [`${proto}://${host}/api/sync?t=${Date.now()}`] : []),
-            `https://nginda-warriors-fc-c549.vercel.app/api/sync?t=${Date.now()}`,
-          ];
-          for (const sUrl of candidateUrls) {
-            try {
-              const sRes = await fetch(sUrl, { signal: AbortSignal.timeout(3000) });
-              if (sRes.ok) {
-                const sData = await sRes.json();
-                const inc = sData.snapshot?.players || sData.database?.players;
-                if (Array.isArray(inc) && inc.length > 0) {
-                  db.players = inc;
-                  break;
-                }
-              }
-            } catch {}
-          }
-        } catch {}
-      }
 
       // Maintain tombstone tracking for deleted players
       const deletedSet = new Set(db.deletedPlayerIds || []);

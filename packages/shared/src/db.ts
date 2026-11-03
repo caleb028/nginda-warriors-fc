@@ -508,16 +508,6 @@ function resolveDbTimestamp(db?: NgindaDatabaseSchema | null, fallbackMtime?: nu
   return 1730500000000;
 }
 
-function ensureBaselinePlayers(data: NgindaDatabaseSchema): NgindaDatabaseSchema {
-  if (!data.players || data.players.length === 0) {
-    if (Array.isArray(seedDatabase.players) && seedDatabase.players.length > 0) {
-      const deletedSet = new Set(data.deletedPlayerIds || []);
-      data.players = seedDatabase.players.filter((p) => !deletedSet.has(p.id));
-    }
-  }
-  return data;
-}
-
 export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
   const filePath = getSharedDatabaseFilePath();
 
@@ -526,11 +516,11 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
       if (fs.existsSync(filePath)) {
         const stat = fs.statSync(filePath);
         if (globalThis.__NGINDA_FILE_MTIME__ === stat.mtimeMs) {
-          return ensureBaselinePlayers(globalThis.__NGINDA_DATABASE_CACHE__);
+          return globalThis.__NGINDA_DATABASE_CACHE__;
         }
         // File on disk has changed - refresh in-memory cache
         const raw = fs.readFileSync(filePath, 'utf8');
-        globalThis.__NGINDA_DATABASE_CACHE__ = ensureBaselinePlayers(JSON.parse(raw));
+        globalThis.__NGINDA_DATABASE_CACHE__ = JSON.parse(raw);
         globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
         globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(
           globalThis.__NGINDA_DATABASE_CACHE__,
@@ -539,7 +529,7 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
         return globalThis.__NGINDA_DATABASE_CACHE__;
       }
     } catch {}
-    return ensureBaselinePlayers(globalThis.__NGINDA_DATABASE_CACHE__);
+    return globalThis.__NGINDA_DATABASE_CACHE__;
   }
 
   if (!fs.existsSync(filePath)) {
@@ -555,7 +545,7 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
       if (fs.existsSync(cand)) {
         try {
           const raw = fs.readFileSync(cand, 'utf8');
-          const data = ensureBaselinePlayers(JSON.parse(raw) as NgindaDatabaseSchema);
+          const data = JSON.parse(raw) as NgindaDatabaseSchema;
           try {
             fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
             const stat = fs.statSync(filePath);
@@ -568,7 +558,7 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
       }
     }
 
-    const initial = ensureBaselinePlayers(JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema);
+    const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
       const stat = fs.statSync(filePath);
@@ -581,13 +571,13 @@ export function readDatabase(forceFresh = false): NgindaDatabaseSchema {
   try {
     const stat = fs.statSync(filePath);
     const raw = fs.readFileSync(filePath, 'utf8');
-    const data = ensureBaselinePlayers(JSON.parse(raw) as NgindaDatabaseSchema);
+    const data = JSON.parse(raw) as NgindaDatabaseSchema;
     globalThis.__NGINDA_DATABASE_CACHE__ = data;
     globalThis.__NGINDA_FILE_MTIME__ = stat.mtimeMs;
     globalThis.__NGINDA_CACHE_TIMESTAMP__ = resolveDbTimestamp(data, stat.mtimeMs);
     return data;
   } catch {
-    const initial = ensureBaselinePlayers(JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema);
+    const initial = JSON.parse(JSON.stringify(seedDatabase)) as NgindaDatabaseSchema;
     try {
       fs.writeFileSync(filePath, JSON.stringify(initial, null, 2), 'utf8');
       const stat = fs.statSync(filePath);
