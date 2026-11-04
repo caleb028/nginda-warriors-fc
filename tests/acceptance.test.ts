@@ -742,3 +742,99 @@ test('Criteria 28: Endpoint Security - Sync & Revalidate Authentication & Sensit
   assert.ok(json.snapshot, 'Snapshot must be present');
   assert.equal(json.database, undefined, 'Raw database must NOT be exposed in GET /api/sync');
 });
+
+test('Criteria 30: Save Player Deduplication Guarantee & Identity Resolution', async () => {
+  const { POST: postAdminAction } = await import(
+    '../apps/control-centre/src/app/api/admin/action/route'
+  );
+  const { NextRequest } = await import('next/server');
+  const { deduplicatePlayers, signAdminSession } = await import(
+    '@nginda-warriors/shared/server'
+  );
+
+  // 1. Direct deduplicatePlayers unit verification
+  const testPlayers = [
+    { id: 'player-1730000001', fullName: 'Moses Kamau', jerseyNumber: 9, updatedAt: '2026-11-04T10:00:00Z' },
+    { id: 'uuid-moses-canonical', fullName: 'Moses Kamau', jerseyNumber: 9, updatedAt: '2026-11-04T10:05:00Z' },
+    { id: 'uuid-brian-canonical', fullName: 'Brian Otieno', jerseyNumber: 4, updatedAt: '2026-11-04T10:00:00Z' },
+    { id: 'uuid-brian-canonical', fullName: 'Brian Otieno', jerseyNumber: 4, updatedAt: '2026-11-04T10:01:00Z' },
+    { id: 'deleted-player-id', fullName: 'Deleted Guy', jerseyNumber: 22 },
+  ];
+  const deduped = deduplicatePlayers(testPlayers, ['deleted-player-id']);
+  assert.equal(deduped.length, 2, 'Should deduplicate down to exactly 2 players');
+  const moses = deduped.find((p) => p.fullName === 'Moses Kamau');
+  assert.equal(moses?.id, 'uuid-moses-canonical', 'Temporary client ID must be upgraded to canonical UUID');
+
+  // 2. Integration verification: Sequential and Repeated save_player requests
+  const adminUser = {
+    id: 'admin-tester-1',
+    fullName: 'Test Admin',
+    email: 'admin@ngindawarriorsfc.co.ke',
+    roleCode: 'SUPER_ADMIN' as const,
+    tokenVersion: 1,
+    isActive: true,
+  };
+  const token = signAdminSession(adminUser);
+
+  // First save: New player "Victor Wanyama" jersey 67
+  const initialSaveReq = new NextRequest('http://localhost:3000/api/admin/action', {
+    method: 'POST',
+    headers: {
+      'authorization': `Bearer ${token}`,
+      'origin': 'http://localhost:3000',
+    },
+    body: JSON.stringify({
+      action: 'save_player',
+      payload: {
+        fullName: 'Victor Wanyama',
+        jerseyNumber: 67,
+        positionGroup: 'Midfielders',
+        specificRole: 'Defensive Midfielder',
+        publicationStatus: 'published',
+      },
+    }),
+  });
+  const res1 = await postAdminAction(initialSaveReq);
+  assert.equal(res1.status, 200);
+  const data1 = await res1.json();
+  assert.ok(data1.player.id);
+  const savedPlayerId = data1.player.id;
+
+  // Second save: Repeat save for exact same player (e.g. user pressed save and synchronize again)
+  const repeatSaveReq = new NextRequest('http://localhost:3000/api/admin/action', {
+    method: 'POST',
+    headers: {
+      'authorization': `Bearer ${token}`,
+      'origin': 'http://localhost:3000',
+    },
+    body: JSON.stringify({
+      action: 'save_player',
+      payload: {
+        id: 'player-temp-duplicate-id-999', // Simulating client-side temp or mismatch
+        fullName: 'Victor Wanyama',
+        jerseyNumber: 67,
+        positionGroup: 'Midfielders',
+        specificRole: 'Defensive Midfielder',
+        appearances: 5,
+        clientPlayers: [
+          { id: 'player-temp-duplicate-id-999', fullName: 'Victor Wanyama', jerseyNumber: 67 },
+          { id: savedPlayerId, fullName: 'Victor Wanyama', jerseyNumber: 67 },
+        ],
+      },
+    }),
+  });
+  const res2 = await postAdminAction(repeatSaveReq);
+  assert.equal(res2.status, 200);
+
+  // Verify that Victor Wanyama exists EXACTLY ONCE in database
+  const dbAfter = readDatabase();
+  const vPlayers = dbAfter.players.filter(
+    (p) => p.fullName.trim().toLowerCase() === 'victor wanyama' && Number(p.jerseyNumber) === 67
+  );
+  assert.equal(
+    vPlayers.length,
+    1,
+    `Player Victor Wanyama must exist exactly once in database, but found ${vPlayers.length}`
+  );
+  assert.equal(vPlayers[0].appearances, 5, 'Player stats must be updated on deduplicated record');
+});

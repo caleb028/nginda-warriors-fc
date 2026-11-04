@@ -7,6 +7,7 @@ import {
   Player,
   PositionGroup,
   PublicationStatus,
+  createUuid,
 } from '@nginda-warriors/shared';
 import {
   Award,
@@ -253,9 +254,10 @@ export function FootballModules({
               return;
             }
             setIsSavingPlayer(true);
+            const targetPlayerId = editingPlayerId || createUuid();
             try {
               await onMutate('save_player', {
-                id: editingPlayerId || undefined,
+                id: targetPlayerId,
                 fullName: savedName,
                 jerseyNumber: savedJersey,
                 positionGroup,

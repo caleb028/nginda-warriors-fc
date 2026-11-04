@@ -7,6 +7,7 @@ import {
   getPublicWebsiteSnapshot,
   extractAdminToken,
   verifyAdminSessionToken,
+  deduplicatePlayers,
 } from '@nginda-warriors/shared/server';
 
 const HYPOTHETICAL_PLAYER_IDS = new Set([
@@ -56,18 +57,10 @@ export async function POST(req: NextRequest) {
         ? body.database.players
         : [];
       const deletedSet = new Set(mergedDeleted);
-      const playerMap = new Map<string, any>();
-      for (const p of currentDb.players || []) {
-        if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-          playerMap.set(p.id, p);
-        }
-      }
-      for (const p of incomingPlayers) {
-        if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-          playerMap.set(p.id, p);
-        }
-      }
-      const safePlayers = Array.from(playerMap.values());
+      const safePlayers = deduplicatePlayers(
+        [...incomingPlayers, ...(currentDb.players || [])],
+        deletedSet
+      );
 
       const nextDb = {
         ...currentDb,
@@ -91,20 +84,14 @@ export async function POST(req: NextRequest) {
     } else if (body.player && typeof body.player === 'object' && body.player.id) {
       const db = readDatabase();
       db.players = Array.isArray(db.players) ? db.players : [];
-      // If player was previously deleted, un-tombstone it upon deliberate re-creation
       if (db.deletedPlayerIds) {
         db.deletedPlayerIds = db.deletedPlayerIds.filter((id) => id !== body.player.id);
       }
-      const idx = db.players.findIndex((p) => p.id === body.player.id);
-      if (idx >= 0) {
-        db.players[idx] = body.player;
-      } else {
-        db.players.push(body.player);
-      }
+      db.players = deduplicatePlayers([body.player, ...db.players], db.deletedPlayerIds);
       writeDatabase(db);
     } else if (Array.isArray(body.players)) {
       const db = readDatabase();
-      db.players = body.players;
+      db.players = deduplicatePlayers(body.players, db.deletedPlayerIds);
       writeDatabase(db);
     } else if (body.fixture && typeof body.fixture === 'object' && body.fixture.id) {
       const db = readDatabase();

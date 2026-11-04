@@ -6,6 +6,7 @@ import {
   assertAuthorizedAdmin,
   assertValidCsrfOrigin,
   createUuid,
+  deduplicatePlayers,
   extractAdminToken,
   readDatabase,
   recalculateStandingsFromVerifiedFixtures,
@@ -137,7 +138,12 @@ export async function POST(req: NextRequest) {
         const incomingDb = payload.database as Parameters<typeof writeDatabase>[0];
         const db = readDatabase();
         if (Array.isArray(incomingDb.players)) {
-          db.players = incomingDb.players;
+          const deletedSet = new Set([
+            ...(db.deletedPlayerIds || []),
+            ...(incomingDb.deletedPlayerIds || []),
+          ]);
+          db.players = deduplicatePlayers(incomingDb.players, deletedSet);
+          db.deletedPlayerIds = Array.from(deletedSet);
         }
         if (Array.isArray(incomingDb.staff) && incomingDb.staff.length > 0) {
           db.staff = incomingDb.staff;
@@ -180,33 +186,32 @@ export async function POST(req: NextRequest) {
       }
 
       // Merge server players and client players to survive serverless container transitions
+      const rawPlayers = [
+        ...(Array.isArray(payload.clientPlayers) ? payload.clientPlayers : []),
+        ...(db.players || []),
+      ];
+      const mergedPlayers = deduplicatePlayers(rawPlayers, deletedSet);
       const playerMap = new Map<string, any>();
-      for (const p of db.players || []) {
-        if (p && p.id && !deletedSet.has(p.id)) {
-          playerMap.set(p.id, p);
-        }
-      }
-      if (Array.isArray(payload.clientPlayers)) {
-        for (const cp of payload.clientPlayers) {
-          if (cp && cp.id && !deletedSet.has(cp.id) && !HYPOTHETICAL_PLAYER_IDS.has(cp.id)) {
-            if (!playerMap.has(cp.id)) {
-              playerMap.set(cp.id, cp);
-            }
-          }
-        }
+      for (const p of mergedPlayers) {
+        playerMap.set(p.id, p);
       }
 
       // Identify whether we are editing an existing player
       let targetId = payload.id;
-      if (!targetId || targetId.startsWith('temp-') || targetId.startsWith('player-temp-') || targetId.startsWith('player-1')) {
-        const normName = String(payload.fullName || '').trim().toLowerCase();
-        const normJersey = Number(payload.jerseyNumber);
-        const existingMatch = Array.from(playerMap.values()).find(
-          (p) =>
-            p.fullName.trim().toLowerCase() === normName &&
-            Number(p.jerseyNumber) === normJersey
-        );
-        targetId = existingMatch ? existingMatch.id : createUuid();
+      const normName = String(payload.fullName || '').trim().toLowerCase();
+      const normJersey = Number(payload.jerseyNumber);
+
+      // Check if player exists by ID or by identity (name + jersey)
+      const existingMatch = Array.from(playerMap.values()).find(
+        (p) =>
+          (targetId && p.id === targetId) ||
+          (p.fullName?.trim().toLowerCase() === normName && Number(p.jerseyNumber) === normJersey)
+      );
+
+      if (existingMatch) {
+        targetId = existingMatch.id;
+      } else if (!targetId || targetId.startsWith('temp-') || targetId.startsWith('player-temp-') || targetId.startsWith('player-1')) {
+        targetId = createUuid();
       }
 
       const existingPlayer = playerMap.get(targetId);
@@ -247,8 +252,7 @@ export async function POST(req: NextRequest) {
       deletedSet.delete(targetId);
       db.deletedPlayerIds = Array.from(deletedSet);
 
-      playerMap.set(targetId, playerRecord);
-      db.players = Array.from(playerMap.values());
+      db.players = deduplicatePlayers([playerRecord, ...mergedPlayers], deletedSet);
       db.clubSettings.updatedAt = now;
 
       recordAuditLog(db, {

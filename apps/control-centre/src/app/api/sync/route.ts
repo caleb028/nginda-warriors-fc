@@ -5,6 +5,7 @@ import {
   getDatabaseTimestamp,
   extractAdminToken,
   verifyAdminSessionToken,
+  deduplicatePlayers,
 } from '@nginda-warriors/shared/server';
 
 const HYPOTHETICAL_PLAYER_IDS = new Set([
@@ -53,18 +54,10 @@ export async function POST(req: NextRequest) {
         ? body.database.players
         : [];
       const deletedSet = new Set(mergedDeleted);
-      const playerMap = new Map<string, any>();
-      for (const p of currentDb.players || []) {
-        if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-          playerMap.set(p.id, p);
-        }
-      }
-      for (const p of incomingPlayers) {
-        if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-          playerMap.set(p.id, p);
-        }
-      }
-      const safePlayers = Array.from(playerMap.values());
+      const safePlayers = deduplicatePlayers(
+        [...incomingPlayers, ...(currentDb.players || [])],
+        deletedSet
+      );
       const nextDb = {
         ...currentDb,
         ...body.database,
@@ -72,6 +65,17 @@ export async function POST(req: NextRequest) {
         deletedPlayerIds: mergedDeleted,
       };
       writeDatabase(nextDb);
+    } else if (body.player && typeof body.player === 'object' && body.player.id) {
+      const db = readDatabase();
+      if (db.deletedPlayerIds) {
+        db.deletedPlayerIds = db.deletedPlayerIds.filter((id) => id !== body.player.id);
+      }
+      db.players = deduplicatePlayers([body.player, ...(db.players || [])], db.deletedPlayerIds);
+      writeDatabase(db);
+    } else if (Array.isArray(body.players)) {
+      const db = readDatabase();
+      db.players = deduplicatePlayers(body.players, db.deletedPlayerIds);
+      writeDatabase(db);
     } else if (body.fixture && typeof body.fixture === 'object') {
       const db = readDatabase();
       const idx = db.fixtures.findIndex((f) => f.id === body.fixture.id);

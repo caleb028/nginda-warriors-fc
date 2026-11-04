@@ -6,6 +6,9 @@ import {
   ClubCrest,
   NgindaDatabaseSchema,
   slugify,
+  createUuid,
+  deduplicatePlayers,
+  HYPOTHETICAL_PLAYER_IDS,
 } from '@nginda-warriors/shared';
 import { AuthAndBootstrapGate } from '../components/AuthAndBootstrapGate';
 import { FootballModules } from '../components/FootballModules';
@@ -125,12 +128,6 @@ const SIDEBAR_GROUPS: SidebarNavGroup[] = [
   },
 ];
 
-const HYPOTHETICAL_PLAYER_IDS = new Set([
-  'player-collins-kariuki-1',
-  'player-kelvin-njoroge-4',
-  'player-brian-mwangi-7',
-  'player-dennis-kamau-11',
-]);
 
 export default function ControlCentreApp() {
   const [bootstrapped, setBootstrapped] = useState<boolean | null>(null);
@@ -229,19 +226,12 @@ export default function ControlCentreApp() {
                   serverDb.deletedPlayerIds = mergedDeleted;
                 }
 
-                // Take the union of players across local storage and server by ID
-                const playerMap = new Map<string, any>();
-                for (const p of (localParsed?.players || [])) {
-                  if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-                    playerMap.set(p.id, p);
-                  }
-                }
-                for (const p of (serverDb?.players || [])) {
-                  if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-                    playerMap.set(p.id, p);
-                  }
-                }
-                const mergedPlayers = Array.from(playerMap.values());
+                // Deduplicate players across local storage and server canonically
+                const combinedPlayers = [
+                  ...(localParsed?.players || []),
+                  ...(serverDb?.players || []),
+                ];
+                const mergedPlayers = deduplicatePlayers(combinedPlayers, deletedSet);
                 activeDb = {
                   ...serverDb,
                   players: mergedPlayers,
@@ -322,26 +312,21 @@ export default function ControlCentreApp() {
           }
         } catch {}
       }
+      const combinedDeleted = Array.from(
+        new Set([
+          ...(Array.isArray(payload.deletedPlayerIds) ? (payload.deletedPlayerIds as string[]) : []),
+          ...(database?.deletedPlayerIds || []),
+        ])
+      );
       const combined = [
         ...(Array.isArray(payload.clientPlayers) ? (payload.clientPlayers as any[]) : []),
         ...(database?.players || []),
         ...storedPlayers,
       ];
-      const pMap = new Map<string, any>();
-      for (const p of combined) {
-        if (p && p.id && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-          pMap.set(p.id, p);
-        }
-      }
       payload = {
         ...payload,
-        clientPlayers: Array.from(pMap.values()),
-        deletedPlayerIds: Array.from(
-          new Set([
-            ...(Array.isArray(payload.deletedPlayerIds) ? (payload.deletedPlayerIds as string[]) : []),
-            ...(database?.deletedPlayerIds || []),
-          ])
-        ),
+        clientPlayers: deduplicatePlayers(combined, combinedDeleted),
+        deletedPlayerIds: combinedDeleted,
       };
     }
 
@@ -421,17 +406,30 @@ export default function ControlCentreApp() {
         });
         isOptimistic = true;
       } else if (action === 'save_player') {
-        if (payload.id) {
-          const pIdx = nextDb.players.findIndex((p) => p.id === payload.id);
-          if (pIdx >= 0) {
-            nextDb.players[pIdx] = { ...nextDb.players[pIdx], ...(payload as any) };
-            isOptimistic = true;
-          }
+        const normName = String(payload.fullName || '').trim().toLowerCase();
+        const normJersey = Number(payload.jerseyNumber);
+        const playerPayloadId = payload.id ? String(payload.id) : undefined;
+
+        // Check if player exists by ID or by identity (name + jersey)
+        const pIdx = nextDb.players.findIndex(
+          (p) =>
+            (playerPayloadId && p.id === playerPayloadId) ||
+            (p.fullName?.trim().toLowerCase() === normName && Number(p.jerseyNumber) === normJersey)
+        );
+
+        if (pIdx >= 0) {
+          nextDb.players[pIdx] = {
+            ...nextDb.players[pIdx],
+            ...(payload as any),
+            id: playerPayloadId || nextDb.players[pIdx].id,
+            updatedAt: new Date().toISOString(),
+          };
+          isOptimistic = true;
         } else if (payload.fullName) {
-          const tempId = `player-${Date.now()}`;
-          const slug = `${slugify(String(payload.fullName))}-${payload.jerseyNumber}`;
+          const newId = playerPayloadId || createUuid();
+          const slug = `${slugify(String(payload.fullName))}-${payload.jerseyNumber || 99}`;
           nextDb.players.push({
-            id: tempId,
+            id: newId,
             slug,
             fullName: String(payload.fullName).trim(),
             jerseyNumber: Number(payload.jerseyNumber || 99),
@@ -457,6 +455,7 @@ export default function ControlCentreApp() {
           });
           isOptimistic = true;
         }
+        nextDb.players = deduplicatePlayers(nextDb.players, nextDb.deletedPlayerIds);
       } else if (action === 'save_staff') {
         if (payload.id) {
           const sIdx = nextDb.staff.findIndex((s) => s.id === payload.id);
@@ -679,33 +678,22 @@ export default function ControlCentreApp() {
       } else {
         let confirmedDb = data.database || optimisticDb;
         if (action === 'save_player' && confirmedDb) {
-          const deletedSet = new Set([
-            ...(previousDb?.deletedPlayerIds || []),
-            ...(confirmedDb.deletedPlayerIds || []),
-          ]);
-          const playerMap = new Map<string, any>();
-          // Preserve all known non-deleted players
-          for (const p of (optimisticDb?.players || [])) {
-            if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-              playerMap.set(p.id, p);
-            }
-          }
-          for (const p of (previousDb?.players || [])) {
-            if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-              playerMap.set(p.id, p);
-            }
-          }
-          for (const p of (confirmedDb.players || [])) {
-            if (p && p.id && !deletedSet.has(p.id) && !HYPOTHETICAL_PLAYER_IDS.has(p.id)) {
-              playerMap.set(p.id, p);
-            }
-          }
-          if (data.player && data.player.id) {
-            playerMap.set(data.player.id, data.player);
-          }
+          const mergedDeleted = Array.from(
+            new Set([
+              ...(previousDb?.deletedPlayerIds || []),
+              ...(confirmedDb.deletedPlayerIds || []),
+            ])
+          );
+          const combinedPlayers = [
+            ...(data.player ? [data.player] : []),
+            ...(confirmedDb.players || []),
+            ...(optimisticDb?.players || []),
+            ...(previousDb?.players || []),
+          ];
           confirmedDb = {
             ...confirmedDb,
-            players: Array.from(playerMap.values()),
+            players: deduplicatePlayers(combinedPlayers, mergedDeleted),
+            deletedPlayerIds: mergedDeleted,
           };
         }
         if (confirmedDb) {
