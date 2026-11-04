@@ -260,7 +260,8 @@ export default function ControlCentreApp() {
 
                   fetch('/api/sync', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders(),
+                    credentials: 'include',
                     body: JSON.stringify({ database: activeDb }),
                   }).catch(() => null);
                 }
@@ -723,15 +724,18 @@ export default function ControlCentreApp() {
           const payloadStr = JSON.stringify({ database: confirmedDb });
 
           // 1. Direct fetch to public-website and control-centre sync endpoints
+          const syncHeaders = getAuthHeaders();
           fetch(`${origin}/api/sync`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: syncHeaders,
+            credentials: 'include',
             body: payloadStr,
           }).catch(() => null);
 
           fetch(`${origin}/manage/api/sync`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: syncHeaders,
+            credentials: 'include',
             body: payloadStr,
           }).catch(() => null);
 
@@ -740,7 +744,8 @@ export default function ControlCentreApp() {
           revalPaths.forEach((p) => {
             fetch(`${origin}/api/revalidate`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: syncHeaders,
+              credentials: 'include',
               body: JSON.stringify({ path: p }),
             }).catch(() => null);
           });
@@ -748,13 +753,15 @@ export default function ControlCentreApp() {
           // 3. Fallback relative fetches
           fetch('/api/sync', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: syncHeaders,
+            credentials: 'include',
             body: payloadStr,
           }).catch(() => null);
 
           fetch('/manage/api/sync', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: syncHeaders,
+            credentials: 'include',
             body: payloadStr,
           }).catch(() => null);
 

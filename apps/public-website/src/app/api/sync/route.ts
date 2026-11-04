@@ -5,6 +5,8 @@ import {
   writeDatabase,
   getDatabaseTimestamp,
   getPublicWebsiteSnapshot,
+  extractAdminToken,
+  verifyAdminSessionToken,
 } from '@nginda-warriors/shared/server';
 
 const HYPOTHETICAL_PLAYER_IDS = new Set([
@@ -14,7 +16,31 @@ const HYPOTHETICAL_PLAYER_IDS = new Set([
   'player-dennis-kamau-11',
 ]);
 
+function isAuthorizedSyncRequest(req: NextRequest): boolean {
+  const syncSecret = req.headers.get('x-sync-secret');
+  const configuredSecret =
+    process.env.ADMIN_JWT_SECRET || 'nginda-warriors-fc-control-centre-server-jwt-secret-key-2024';
+  if (syncSecret && syncSecret === configuredSecret) {
+    return true;
+  }
+  const token = extractAdminToken(req);
+  if (token) {
+    const session = verifyAdminSessionToken(token);
+    if (session && session.userId && session.roleCode) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export async function POST(req: NextRequest) {
+  if (!isAuthorizedSyncRequest(req)) {
+    return NextResponse.json(
+      { ok: false, error: 'Unauthorized: Admin authentication or internal sync secret required.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await req.json().catch(() => ({}));
 
@@ -150,7 +176,6 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const db = readDatabase();
   const snapshot = getPublicWebsiteSnapshot();
   return NextResponse.json(
     {
@@ -158,10 +183,9 @@ export async function GET(req: NextRequest) {
       changed: true,
       updatedAt: currentTs,
       snapshot,
-      database: db,
-      fixturesCount: db.fixtures?.length ?? 0,
-      playersCount: db.players?.length ?? 0,
-      articlesCount: db.articles?.length ?? 0,
+      fixturesCount: snapshot.fixtures?.length ?? 0,
+      playersCount: snapshot.players?.length ?? 0,
+      articlesCount: snapshot.articles?.length ?? 0,
       status: 'ready',
     },
     {

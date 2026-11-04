@@ -28,16 +28,20 @@ export function ScrollDynamicsHUD() {
     return () => clearTimeout(timer);
   }, [pathname]);
 
-  // High-performance 60/120fps passive RAF scroll listener with ZERO parent re-renders
+  // High-performance passive RAF scroll listener with zero layout thrashing
   useEffect(() => {
     let ticking = false;
+    let cachedDocHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+
+    const onResize = () => {
+      cachedDocHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    };
+
+    window.addEventListener('resize', onResize, { passive: true });
 
     const updateScrollDOM = () => {
       const currentScrollY = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const innerHeight = window.innerHeight;
-      const docHeight = scrollHeight - innerHeight;
-      const progress = docHeight > 0 ? Math.min(100, Math.max(0, (currentScrollY / docHeight) * 100)) : 0;
+      const progress = Math.min(100, Math.max(0, (currentScrollY / cachedDocHeight) * 100));
 
       // 1. Hardware-accelerated top reading progress bar via GPU scaleX
       if (barRef.current) {
@@ -75,7 +79,10 @@ export function ScrollDynamicsHUD() {
 
     updateScrollDOM();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
   return (
@@ -96,9 +103,9 @@ export function ScrollDynamicsHUD() {
         style={{ transform: 'scaleX(0)' }}
       />
 
-      {/* Floating Dynamic Scroll Controller HUD (Elevated safely above mobile bottom nav) */}
+      {/* Floating Dynamic Scroll Controller HUD (Hidden on mobile to prevent thumb interference, active on tablet & desktop) */}
       <div
-        className={`fixed bottom-20 xl:bottom-8 right-4 sm:right-6 z-40 flex flex-col items-center gap-2 transition-all duration-300 pointer-events-auto ${
+        className={`hidden sm:flex fixed bottom-20 xl:bottom-8 right-4 sm:right-6 z-40 flex-col items-center gap-2 transition-all duration-300 pointer-events-auto ${
           showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
       >

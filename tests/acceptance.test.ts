@@ -698,3 +698,47 @@ test('Criteria 27: Multi-Platform Assets - PWA Manifest & Capacitor Configuratio
   const androidManifest = path.join(__dirname, '..', 'apps', 'public-website', 'android', 'app', 'src', 'main', 'AndroidManifest.xml');
   assert.ok(fs.existsSync(androidManifest), 'Android Manifest must exist for native Android distribution');
 });
+
+test('Criteria 28: Endpoint Security - Sync & Revalidate Authentication & Sensitive Data Masking', async () => {
+  const { GET: getSyncHandler, POST: postSyncHandler } = await import(
+    '../apps/public-website/src/app/api/sync/route'
+  );
+  const { POST: postRevalidateHandler } = await import(
+    '../apps/public-website/src/app/api/revalidate/route'
+  );
+  const { NextRequest } = await import('next/server');
+
+  // 1. Unauthenticated POST to /api/sync must be rejected with 401
+  const unauthSyncReq = new NextRequest('http://localhost:3000/api/sync', {
+    method: 'POST',
+    body: JSON.stringify({ database: {} }),
+  });
+  const unauthSyncRes = await postSyncHandler(unauthSyncReq);
+  assert.equal(unauthSyncRes.status, 401, 'Unauthenticated POST to /api/sync must return 401');
+
+  // 2. Unauthenticated POST to /api/revalidate must be rejected with 401
+  const unauthRevalReq = new NextRequest('http://localhost:3000/api/revalidate', {
+    method: 'POST',
+    body: JSON.stringify({ path: '/' }),
+  });
+  const unauthRevalRes = await postRevalidateHandler(unauthRevalReq);
+  assert.equal(unauthRevalRes.status, 401, 'Unauthenticated POST to /api/revalidate must return 401');
+
+  // 3. Authenticated POST with x-sync-secret must succeed
+  const secret = process.env.ADMIN_JWT_SECRET || 'nginda-warriors-fc-control-centre-server-jwt-secret-key-2024';
+  const authSyncReq = new NextRequest('http://localhost:3000/api/sync', {
+    method: 'POST',
+    headers: { 'x-sync-secret': secret },
+    body: JSON.stringify({}),
+  });
+  const authSyncRes = await postSyncHandler(authSyncReq);
+  assert.equal(authSyncRes.status, 200, 'Authenticated POST to /api/sync must return 200');
+
+  // 4. GET /api/sync must return public snapshot and NOT leak raw database or users
+  const getReq = new NextRequest('http://localhost:3000/api/sync', { method: 'GET' });
+  const getRes = await getSyncHandler(getReq);
+  assert.equal(getRes.status, 200);
+  const json = await getRes.json();
+  assert.ok(json.snapshot, 'Snapshot must be present');
+  assert.equal(json.database, undefined, 'Raw database must NOT be exposed in GET /api/sync');
+});

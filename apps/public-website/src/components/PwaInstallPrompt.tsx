@@ -53,12 +53,6 @@ export function PwaInstallPrompt({ crestUrl }: { crestUrl?: string }) {
 
     window.addEventListener('beforeinstallprompt', handler);
 
-    // If on iOS and not standalone, show prompt after 3s
-    if (isIosDevice) {
-      const timer = setTimeout(() => setShowPrompt(true), 3000);
-      return () => clearTimeout(timer);
-    }
-
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 

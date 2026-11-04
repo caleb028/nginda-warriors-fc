@@ -12,6 +12,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH !== undefined
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: basePath || '',
+  poweredByHeader: false,
+  compress: true,
   transpilePackages: ['@nginda-warriors/shared'],
   typescript: {
     ignoreBuildErrors: true,
@@ -30,6 +32,10 @@ const nextConfig = {
             value: 'DENY',
           },
           {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
           },
@@ -42,9 +48,17 @@ const nextConfig = {
             value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'same-origin',
+          },
+          {
             key: 'Content-Security-Policy',
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' https: data:; connect-src 'self' https: wss:; frame-src 'none'; object-src 'none'; base-uri 'self';",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' https: data:; connect-src 'self' https: wss:; frame-src 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;",
           },
         ],
       },

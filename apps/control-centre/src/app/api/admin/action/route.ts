@@ -54,6 +54,13 @@ async function saveDatabaseAndSync(
   const payload = JSON.stringify({ database: db, path });
   const rootPayload = JSON.stringify({ database: db, path: '/' });
 
+  const syncSecret =
+    process.env.ADMIN_JWT_SECRET || 'nginda-warriors-fc-control-centre-server-jwt-secret-key-2024';
+  const syncHeaders = {
+    'Content-Type': 'application/json',
+    'x-sync-secret': syncSecret,
+  };
+
   const targets = Array.from(new Set(syncTargets));
   const syncPromises = targets.flatMap((baseUrl) => {
     const urls = [
@@ -64,7 +71,7 @@ async function saveDatabaseAndSync(
     return urls.flatMap((u) => [
       fetch(u, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: syncHeaders,
         body: payload,
         signal: AbortSignal.timeout(3000),
       }).catch(() => null),
@@ -72,7 +79,7 @@ async function saveDatabaseAndSync(
         ? [
             fetch(u, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: syncHeaders,
               body: rootPayload,
               signal: AbortSignal.timeout(3000),
             }).catch(() => null),

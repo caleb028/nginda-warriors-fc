@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readDatabase, writeDatabase, getDatabaseTimestamp } from '@nginda-warriors/shared/server';
+import {
+  readDatabase,
+  writeDatabase,
+  getDatabaseTimestamp,
+  extractAdminToken,
+  verifyAdminSessionToken,
+} from '@nginda-warriors/shared/server';
 
 const HYPOTHETICAL_PLAYER_IDS = new Set([
   'player-collins-kariuki-1',
@@ -8,7 +14,31 @@ const HYPOTHETICAL_PLAYER_IDS = new Set([
   'player-dennis-kamau-11',
 ]);
 
+function isAuthorizedSyncRequest(req: NextRequest): boolean {
+  const syncSecret = req.headers.get('x-sync-secret');
+  const configuredSecret =
+    process.env.ADMIN_JWT_SECRET || 'nginda-warriors-fc-control-centre-server-jwt-secret-key-2024';
+  if (syncSecret && syncSecret === configuredSecret) {
+    return true;
+  }
+  const token = extractAdminToken(req);
+  if (token) {
+    const session = verifyAdminSessionToken(token);
+    if (session && session.userId && session.roleCode) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export async function POST(req: NextRequest) {
+  if (!isAuthorizedSyncRequest(req)) {
+    return NextResponse.json(
+      { ok: false, error: 'Unauthorized: Admin authentication or internal sync secret required.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await req.json().catch(() => ({}));
     if (body.database && typeof body.database === 'object') {

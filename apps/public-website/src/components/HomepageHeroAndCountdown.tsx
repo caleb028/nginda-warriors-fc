@@ -535,8 +535,35 @@ export function MatchKickoffCountdown({ kickoffIso }: { kickoffIso: string }) {
       });
     };
     update();
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
+
+    let id: ReturnType<typeof setInterval> | null = null;
+    const startTimer = () => {
+      if (!id) {
+        id = setInterval(() => {
+          if (typeof document === 'undefined' || document.visibilityState === 'visible') {
+            update();
+          }
+        }, 1000);
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        update();
+        startTimer();
+      } else if (id) {
+        clearInterval(id);
+        id = null;
+      }
+    };
+
+    startTimer();
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      if (id) clearInterval(id);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
   }, [kickoffIso]);
 
   if (timeLeft.isPast) {

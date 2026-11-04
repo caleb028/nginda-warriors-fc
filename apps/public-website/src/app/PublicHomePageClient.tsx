@@ -541,6 +541,8 @@ export function PublicHomePageClient({
                     <img
                       src="/uploads/hero-matchday-warriors.jpg"
                       alt="Nginda Warriors FC Matchday Squad"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -558,6 +560,8 @@ export function PublicHomePageClient({
                     <img
                       src="/uploads/team-huddle-red-warriors.jpg"
                       alt="Nginda Warriors FC Red Kits Unity Circle"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -575,6 +579,8 @@ export function PublicHomePageClient({
                     <img
                       src="/uploads/team-huddle-warriors.jpg"
                       alt="Nginda Warriors FC Pre-Match Huddle"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -592,6 +598,8 @@ export function PublicHomePageClient({
                     <img
                       src="/uploads/club-official-patron.jpg"
                       alt="Nginda Warriors FC Club Presentation"
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -629,6 +637,8 @@ export function PublicHomePageClient({
                           <img
                             src={player.photoUrl}
                             alt={player.fullName}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out"
                           />
                         ) : (
@@ -688,6 +698,8 @@ export function PublicHomePageClient({
                     <img
                       src={gafferPhoto}
                       alt={`Team Gaffer ${gafferName}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-top hover:scale-105 transition-transform"
                     />
                   </div>
@@ -752,6 +764,8 @@ export function PublicHomePageClient({
                           <img
                             src={article.featuredImageUrl}
                             alt={article.headline}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (
@@ -902,6 +916,8 @@ export function PublicHomePageClient({
                         <img
                           src={sponsor.logoUrl}
                           alt={sponsor.businessName}
+                          loading="lazy"
+                          decoding="async"
                           className="h-14 object-contain mb-2"
                         />
                       ) : null}

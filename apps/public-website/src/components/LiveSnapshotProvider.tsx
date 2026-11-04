@@ -106,16 +106,6 @@ export function LiveSnapshotProvider({
               players: mergedPlayers,
             });
           }
-          if (data.database) {
-            const mergedDb = {
-              ...data.database,
-              players: mergedPlayers,
-            };
-            try {
-              localStorage.setItem('nginda_live_database', JSON.stringify(mergedDb));
-              localStorage.setItem('nginda_db_timestamp', String(lastUpdatedRef.current));
-            } catch {}
-          }
         }
       }
     } catch {
@@ -125,29 +115,14 @@ export function LiveSnapshotProvider({
     }
   }, []);
 
-  // 2. Initial Mount Check from localStorage (runs ONCE on mount, zero re-render cycles)
+  // 2. Initial Mount Check (runs ONCE on mount, zero re-render cycles)
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('nginda_live_database');
-      const storedTs = localStorage.getItem('nginda_db_timestamp');
-      if (stored) {
-        const parsedDb = JSON.parse(stored);
-        if (parsedDb && typeof parsedDb === 'object') {
-          const freshSnap = buildPublicSnapshot(parsedDb);
-          const localCount = freshSnap.players?.length || 0;
-          const initialCount = initialSnapshot.players?.length || 0;
-
-          if (localCount >= initialCount && localCount > 0) {
-            setSnapshot(freshSnap);
-            playerCountRef.current = localCount;
-            if (storedTs) {
-              lastUpdatedRef.current = Number(storedTs);
-            }
-          }
-        }
+      // Clean up legacy bloated storage to free mobile device memory
+      if (typeof window !== 'undefined' && 'localStorage' in window) {
+        localStorage.removeItem('nginda_live_database');
       }
     } catch {}
-
     // Initial server verification
     refreshNow();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,8 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { readDatabase, writeDatabase } from '@nginda-warriors/shared/server';
+import {
+  readDatabase,
+  writeDatabase,
+  extractAdminToken,
+  verifyAdminSessionToken,
+} from '@nginda-warriors/shared/server';
+
+function isAuthorizedRevalidateRequest(req: NextRequest): boolean {
+  const syncSecret = req.headers.get('x-sync-secret');
+  const configuredSecret =
+    process.env.ADMIN_JWT_SECRET || 'nginda-warriors-fc-control-centre-server-jwt-secret-key-2024';
+  if (syncSecret && syncSecret === configuredSecret) {
+    return true;
+  }
+  const token = extractAdminToken(req);
+  if (token) {
+    const session = verifyAdminSessionToken(token);
+    if (session && session.userId && session.roleCode) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export async function POST(req: NextRequest) {
+  if (!isAuthorizedRevalidateRequest(req)) {
+    return NextResponse.json(
+      { ok: false, error: 'Unauthorized: Admin authentication or internal sync secret required.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await req.json().catch(() => ({}));
     if (body.database && typeof body.database === 'object') {
