@@ -48,16 +48,16 @@ export function AuthAndBootstrapGate({
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center px-4 py-12">
+    <div className="min-h-screen bg-slate-900 flex flex-col justify-center items-center px-3.5 py-6 sm:py-12">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl border border-slate-800 overflow-hidden">
         {/* Top Branded Header */}
-        <div className="bg-black text-white p-8 text-center border-b border-[#262626]">
+        <div className="bg-black text-white p-6 sm:p-8 text-center border-b border-[#262626]">
           <div className="flex justify-center mb-4">
             <div className="p-3 rounded-2xl bg-[#0D0D0D] border border-[#FDE100]/40 shadow-xl flex items-center justify-center">
-              <ClubCrest size={76} customCrestUrl={crestUrl} />
+              <ClubCrest size={68} customCrestUrl={crestUrl} />
             </div>
           </div>
-          <span className="inline-block px-3 py-1 rounded-full bg-[#FDE100]/15 border border-[#FDE100]/30 text-[#FDE100] font-pedals font-athletic font-black text-xs uppercase tracking-widest mb-2">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#FDE100]/15 border border-[#FDE100]/30 text-[#FDE100] font-pedals font-athletic font-black text-[11px] sm:text-xs uppercase tracking-widest mb-2">
             CONTROL CENTRE • CLUB ADMINISTRATION
           </span>
           <h1 className="font-pedals font-athletic text-2xl sm:text-3xl font-black uppercase tracking-wide text-white">
@@ -69,7 +69,7 @@ export function AuthAndBootstrapGate({
         </div>
 
         {/* Clean Sign In Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 sm:p-8 space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase text-slate-700 mb-1">
               Administrator Email *
@@ -108,7 +108,7 @@ export function AuthAndBootstrapGate({
           <button
             type="submit"
             disabled={loading}
-            className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-base uppercase tracking-wider shadow-md transition disabled:opacity-50"
+            className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-[#08783E] hover:bg-[#063B25] text-white font-pedals font-athletic font-black text-base uppercase tracking-wider shadow-md transition disabled:opacity-50 active:scale-95"
           >
             <KeyRound className="w-5 h-5 text-[#F5D000]" />
             <span>{loading ? 'Signing In...' : 'Sign In to Control Centre'}</span>

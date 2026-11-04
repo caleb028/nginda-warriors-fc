@@ -830,19 +830,28 @@ export default function ControlCentreApp() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex overflow-x-hidden w-full max-w-full">
+      {/* Mobile Drawer Backdrop Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* 1. CLEAN WHITE SIDEBAR NAVIGATION */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 bg-white text-slate-800 flex flex-col justify-between border-r border-slate-200 shadow-sm transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white text-slate-800 flex flex-col justify-between border-r border-slate-200 shadow-xl lg:shadow-sm transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="overflow-y-auto flex-1">
           {/* Sidebar Crest & Header */}
-          <div className="p-5 border-b border-slate-200 bg-white sticky top-0 z-10 flex items-center justify-between">
+          <div className="p-4 sm:p-5 border-b border-slate-200 bg-white sticky top-0 z-10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <ClubCrest size={46} customCrestUrl={clubSettings.crestUrl} />
+              <ClubCrest size={42} customCrestUrl={clubSettings.crestUrl} />
               <div>
-                <h1 className="font-pedals font-athletic text-lg font-black uppercase text-slate-900 leading-tight">
+                <h1 className="font-pedals font-athletic text-base sm:text-lg font-black uppercase text-slate-900 leading-tight">
                   CONTROL CENTRE
                 </h1>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-[#08783E]">
@@ -853,14 +862,15 @@ export default function ControlCentreApp() {
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-1 text-slate-400 hover:text-slate-800"
+              className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Close Navigation Menu"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Sidebar Nav Groups */}
-          <nav className="p-4 space-y-6">
+          <nav className="p-3 sm:p-4 space-y-5 pb-6">
             {SIDEBAR_GROUPS.map((grp) => (
               <div key={grp.group} className="space-y-1">
                 <span className="px-3 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
@@ -878,15 +888,15 @@ export default function ControlCentreApp() {
                           setActiveModule(item.id);
                           setSidebarOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition min-h-[44px] ${
                           isActive
                             ? 'bg-[#08783E]/10 text-[#08783E] font-black border-r-2 border-[#08783E]'
-                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200'
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
-                          <Icon className={`w-4 h-4 ${isActive ? 'text-[#08783E]' : 'text-slate-400'}`} />
-                          <span>{item.label}</span>
+                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#08783E]' : 'text-slate-400'}`} />
+                          <span className="truncate">{item.label}</span>
                         </div>
                         {item.id === 'notifications' && unreadNotifications > 0 && (
                           <span className="px-1.5 py-0.2 rounded-full bg-red-600 text-white text-[10px] font-black">
@@ -903,7 +913,7 @@ export default function ControlCentreApp() {
         </div>
 
         {/* Sidebar Footer User Badge */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200">
+        <div className="p-4 bg-slate-50 border-t border-slate-200 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="flex items-center justify-between">
             <div className="overflow-hidden pr-2">
               <p className="font-pedals font-athletic text-sm font-bold uppercase text-slate-900 truncate">
@@ -916,8 +926,9 @@ export default function ControlCentreApp() {
             <button
               type="button"
               onClick={handleLogout}
-              className="p-2 rounded-lg bg-slate-100 text-slate-600 hover:text-red-600 hover:bg-red-50 transition"
+              className="p-2.5 rounded-lg bg-slate-100 text-slate-600 hover:text-red-600 hover:bg-red-50 transition min-h-[40px] min-w-[40px] flex items-center justify-center"
               title="Sign Out"
+              aria-label="Sign Out"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -926,31 +937,37 @@ export default function ControlCentreApp() {
       </aside>
 
       {/* 2. MAIN APPLICATION WORKSPACE */}
-      <div className="flex-1 lg:pl-72 flex flex-col min-h-screen">
+      <div className="flex-1 lg:pl-72 flex flex-col min-h-screen max-w-full overflow-x-hidden">
         {/* Top Navigation Bar */}
-        <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-xs h-16 flex items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-xs h-16 flex items-center justify-between px-3 sm:px-6">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100"
+              className="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+              aria-label="Open Navigation Menu"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h2 className="font-pedals font-athletic text-2xl font-black uppercase text-slate-900">
+            <h2 className="font-pedals font-athletic text-base sm:text-2xl font-black uppercase text-slate-900 truncate">
               {activeModule.replace(/-/g, ' ')}
             </h2>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Quick Action Buttons */}
             <button
               type="button"
               onClick={() => setActiveModule('match-centre')}
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-[#08783E] font-pedals font-athletic font-black text-[11px] sm:text-xs uppercase tracking-wider transition min-h-[38px]"
+              className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg font-pedals font-athletic font-black text-[11px] sm:text-xs uppercase tracking-wider transition min-h-[38px] ${
+                activeModule === 'match-centre'
+                  ? 'bg-[#08783E] text-white shadow-xs'
+                  : 'bg-slate-900 text-white hover:bg-[#08783E]'
+              }`}
             >
-              <Zap className="w-3.5 h-3.5 text-[#F5D000]" />
-              <span className="inline">⚡ 60s Score</span>
+              <Zap className="w-3.5 h-3.5 text-[#F5D000] fill-[#F5D000]" />
+              <span className="hidden xs:inline">⚡</span>
+              <span>Score</span>
             </button>
             <button
               type="button"
@@ -973,12 +990,13 @@ export default function ControlCentreApp() {
             <button
               type="button"
               onClick={() => setActiveModule('notifications')}
-              className="relative p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+              className="relative p-2 rounded-xl text-slate-600 hover:bg-slate-100 min-h-[40px] min-w-[40px] flex items-center justify-center"
               title="Notifications"
+              aria-label="Notifications"
             >
               <Bell className="w-5 h-5" />
               {unreadNotifications > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-600" />
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-red-600 border-2 border-white" />
               )}
             </button>
 
@@ -993,19 +1011,21 @@ export default function ControlCentreApp() {
               }
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition border border-slate-200 hover:border-slate-300"
+              className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-pedals font-athletic font-bold text-xs uppercase transition border border-slate-200 hover:border-slate-300 min-h-[40px]"
               title="Open Official Public Website"
+              aria-label="Public Website"
             >
-              <Globe className="w-3.5 h-3.5 text-[#08783E]" />
-              <span className="hidden sm:inline">Public Site</span>
+              <Globe className="w-4 h-4 text-[#08783E]" />
+              <span className="hidden md:inline">Public Site</span>
             </a>
 
             {/* Quick Sign Out Button */}
             <button
               type="button"
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 transition"
+              className="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition min-h-[40px] min-w-[40px] flex items-center justify-center"
               title="Sign Out of Control Centre"
+              aria-label="Sign Out"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -1014,15 +1034,15 @@ export default function ControlCentreApp() {
 
         {/* Live Synchronized Alert Notification */}
         {statusNotice && (
-          <div className="bg-[#08783E]/10 border-b border-[#08783E]/30 px-4 py-2.5 text-xs text-[#08783E] font-bold flex items-center justify-between">
+          <div className="bg-[#08783E]/10 border-b border-[#08783E]/30 px-3 sm:px-4 py-2.5 text-xs text-[#08783E] font-bold flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#08783E]" />
+              <CheckCircle2 className="w-4 h-4 text-[#08783E] shrink-0" />
               <span>{statusNotice}</span>
             </div>
             <button
               type="button"
               onClick={() => setStatusNotice('')}
-              className="text-slate-500 hover:text-slate-800"
+              className="text-slate-500 hover:text-slate-800 p-1 min-h-[32px] min-w-[32px] flex items-center justify-center"
             >
               ✕
             </button>
@@ -1030,25 +1050,25 @@ export default function ControlCentreApp() {
         )}
 
         {/* Main Workspace Body */}
-        <main className="p-4 sm:p-6 lg:p-8 flex-1 pb-20 lg:pb-8">
+        <main className="p-3.5 sm:p-6 lg:p-8 flex-1 pb-24 lg:pb-8 max-w-full overflow-x-hidden">
           {activeModule === 'dashboard' ? (
             /* OVERVIEW DASHBOARD */
             <div className="space-y-8">
               {/* Header Hero Banner - Crisp White */}
-              <div className="bg-white text-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm border-t-4 border-t-[#08783E] flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="bg-white text-slate-900 p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm border-t-4 border-t-[#08783E] flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
                 <div>
-                  <span className="px-3 py-0.5 rounded-full bg-[#08783E]/10 text-[#08783E] font-pedals font-athletic font-black text-xs uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#08783E]/10 text-[#08783E] font-pedals font-athletic font-black text-[11px] sm:text-xs uppercase tracking-wider">
                     OPERATIONAL DASHBOARD • EST. {clubSettings.establishedYear}
                   </span>
-                  <h2 className="font-pedals font-athletic text-4xl sm:text-5xl font-black uppercase text-slate-950 mt-2">
+                  <h2 className="font-pedals font-athletic text-2xl sm:text-4xl lg:text-5xl font-black uppercase text-slate-950 mt-1 sm:mt-2">
                     WELCOME, {session.fullName}
                   </h2>
-                  <p className="text-slate-600 text-sm mt-1">
+                  <p className="text-slate-600 text-xs sm:text-sm mt-1">
                     System Owner & Super Administrator • Full authorized control of Nginda Warriors FC modules.
                   </p>
                 </div>
-                <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 shadow-xs flex items-center justify-center">
-                  <ClubCrest size={72} customCrestUrl={clubSettings.crestUrl} />
+                <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 shadow-xs flex items-center justify-center shrink-0">
+                  <ClubCrest size={56} customCrestUrl={clubSettings.crestUrl} />
                 </div>
               </div>
 
@@ -1218,47 +1238,61 @@ export default function ControlCentreApp() {
           )}
         </main>
 
-        {/* Mobile Admin Quick Match-Day Action Strip */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-xl px-3 py-1.5 flex items-center justify-around">
+        {/* Mobile Admin Quick Match-Day & Navigation Bar */}
+        <nav
+          aria-label="Mobile Navigation Bar"
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-xl px-2 py-1 flex items-center justify-around pb-[max(0.375rem,env(safe-area-inset-bottom))]"
+        >
+          <button
+            type="button"
+            onClick={() => setActiveModule('dashboard')}
+            className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl text-[10px] font-athletic font-bold uppercase min-h-[48px] min-w-[56px] transition active:scale-95 ${
+              activeModule === 'dashboard' ? 'text-[#08783E] font-black' : 'text-slate-600'
+            }`}
+          >
+            <LayoutDashboard className={`w-5 h-5 mb-0.5 ${activeModule === 'dashboard' ? 'text-[#08783E]' : 'text-slate-500'}`} />
+            <span>Home</span>
+          </button>
           <button
             type="button"
             onClick={() => setActiveModule('match-centre')}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] transition ${
+            className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl text-[10px] font-athletic font-bold uppercase min-h-[48px] min-w-[56px] transition active:scale-95 ${
               activeModule === 'match-centre' ? 'text-[#08783E] font-black' : 'text-slate-600'
             }`}
           >
-            <Zap className="w-5 h-5 text-[#F5D000] fill-[#F5D000]" />
+            <Zap className="w-5 h-5 mb-0.5 text-[#F5D000] fill-[#F5D000]" />
             <span>⚡ Score</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveModule('players')}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] transition ${
+            className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl text-[10px] font-athletic font-bold uppercase min-h-[48px] min-w-[56px] transition active:scale-95 ${
               activeModule === 'players' ? 'text-[#08783E] font-black' : 'text-slate-600'
             }`}
           >
-            <Users className="w-5 h-5 text-[#08783E]" />
-            <span>Players</span>
+            <Users className={`w-5 h-5 mb-0.5 ${activeModule === 'players' ? 'text-[#08783E]' : 'text-slate-500'}`} />
+            <span>Squad</span>
           </button>
           <button
             type="button"
-            onClick={() => setActiveModule('news')}
-            className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] transition ${
-              activeModule === 'news' ? 'text-[#08783E] font-black' : 'text-slate-600'
+            onClick={() => setActiveModule('fixtures')}
+            className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl text-[10px] font-athletic font-bold uppercase min-h-[48px] min-w-[56px] transition active:scale-95 ${
+              activeModule === 'fixtures' || activeModule === 'results' ? 'text-[#08783E] font-black' : 'text-slate-600'
             }`}
           >
-            <Newspaper className="w-5 h-5 text-slate-700" />
-            <span>News</span>
+            <Calendar className={`w-5 h-5 mb-0.5 ${activeModule === 'fixtures' || activeModule === 'results' ? 'text-[#08783E]' : 'text-slate-500'}`} />
+            <span>Matches</span>
           </button>
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="flex flex-col items-center justify-center py-1 px-2 rounded-lg text-[10px] font-athletic font-bold uppercase min-h-[44px] min-w-[50px] text-slate-600"
+            className="flex flex-col items-center justify-center py-1 px-1.5 rounded-xl text-[10px] font-athletic font-bold uppercase min-h-[48px] min-w-[56px] text-slate-700 hover:text-slate-900 transition active:scale-95"
+            aria-label="Open Navigation Menu"
           >
-            <Menu className="w-5 h-5 text-slate-600" />
+            <Menu className="w-5 h-5 mb-0.5 text-slate-700" />
             <span>Menu</span>
           </button>
-        </div>
+        </nav>
       </div>
     </div>
   );

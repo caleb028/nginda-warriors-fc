@@ -680,7 +680,7 @@ export function FootballModules({
 
           {db.players.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm">
+              <table className="w-full min-w-[640px] text-left border-collapse text-sm">
                 <thead>
                   <tr className="bg-[#EEF7EF] text-[#063B25] font-athletic uppercase text-xs font-bold">
                     <th className="py-3 px-4">#</th>
@@ -1499,17 +1499,19 @@ export function FootballModules({
                       <button
                         type="button"
                         onClick={() => setQuickHomeScore(Math.max(0, quickHomeScore - 1))}
-                        className="w-10 h-10 rounded-lg bg-[#063B25] text-white font-bold text-xl"
+                        className="w-12 h-12 rounded-xl bg-[#063B25] text-white font-bold text-2xl active:scale-95 transition flex items-center justify-center shadow-xs"
+                        aria-label="Decrease Home Score"
                       >
                         -
                       </button>
-                      <span className="font-athletic text-5xl font-black text-[#F5D000]">
+                      <span className="font-athletic text-5xl sm:text-6xl font-black text-[#F5D000] min-w-[3ch] text-center">
                         {quickHomeScore}
                       </span>
                       <button
                         type="button"
                         onClick={() => setQuickHomeScore(quickHomeScore + 1)}
-                        className="w-10 h-10 rounded-lg bg-[#F5D000] text-[#063B25] font-black text-xl"
+                        className="w-12 h-12 rounded-xl bg-[#F5D000] text-[#063B25] font-black text-2xl active:scale-95 transition flex items-center justify-center shadow-xs"
+                        aria-label="Increase Home Score"
                       >
                         +
                       </button>
@@ -1548,17 +1550,19 @@ export function FootballModules({
                       <button
                         type="button"
                         onClick={() => setQuickAwayScore(Math.max(0, quickAwayScore - 1))}
-                        className="w-10 h-10 rounded-lg bg-[#063B25] text-white font-bold text-xl"
+                        className="w-12 h-12 rounded-xl bg-[#063B25] text-white font-bold text-2xl active:scale-95 transition flex items-center justify-center shadow-xs"
+                        aria-label="Decrease Away Score"
                       >
                         -
                       </button>
-                      <span className="font-athletic text-5xl font-black text-[#F5D000]">
+                      <span className="font-athletic text-5xl sm:text-6xl font-black text-[#F5D000] min-w-[3ch] text-center">
                         {quickAwayScore}
                       </span>
                       <button
                         type="button"
                         onClick={() => setQuickAwayScore(quickAwayScore + 1)}
-                        className="w-10 h-10 rounded-lg bg-[#F5D000] text-[#063B25] font-black text-xl"
+                        className="w-12 h-12 rounded-xl bg-[#F5D000] text-[#063B25] font-black text-2xl active:scale-95 transition flex items-center justify-center shadow-xs"
+                        aria-label="Increase Away Score"
                       >
                         +
                       </button>
@@ -1673,7 +1677,7 @@ export function FootballModules({
               <h4 className="font-athletic text-2xl font-black uppercase text-[#063B25]">
                 Record Matchday Lineup ({activeFix.lineups.length} Added)
               </h4>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <input
                   type="text"
                   required
@@ -1957,50 +1961,52 @@ export function FootballModules({
           </h4>
         </div>
         {db.standings.length > 0 ? (
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="bg-[#EEF7EF] text-[#063B25] font-athletic uppercase text-xs font-bold">
-                <th className="py-2.5 px-4">Pos</th>
-                <th className="py-2.5 px-4">Club</th>
-                <th className="py-2.5 px-3 text-center">P</th>
-                <th className="py-2.5 px-3 text-center">W/D/L</th>
-                <th className="py-2.5 px-3 text-center">GD</th>
-                <th className="py-2.5 px-4 text-center">PTS</th>
-                <th className="py-2.5 px-3 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {db.standings.map((r) => (
-                <tr
-                  key={r.id}
-                  className={r.isNgindaWarriors ? 'bg-[#08783E] text-white font-bold' : ''}
-                >
-                  <td className="py-2.5 px-4">{r.position}</td>
-                  <td className="py-2.5 px-4">{r.clubName}</td>
-                  <td className="py-2.5 px-3 text-center">{r.played}</td>
-                  <td className="py-2.5 px-3 text-center">
-                    {r.won}/{r.drawn}/{r.lost}
-                  </td>
-                  <td className="py-2.5 px-3 text-center">{r.goalDifference}</td>
-                  <td className="py-2.5 px-4 text-center font-black">{r.points}</td>
-                  <td className="py-2.5 px-3 text-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (confirm(`Remove ${r.clubName} from standings?`)) {
-                          onMutate('delete_standing_row', { id: r.id });
-                        }
-                      }}
-                      className="p-1 rounded text-red-500 hover:text-white hover:bg-red-600 transition"
-                      title="Delete Row"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[540px] text-left border-collapse text-sm">
+              <thead>
+                <tr className="bg-[#EEF7EF] text-[#063B25] font-athletic uppercase text-xs font-bold">
+                  <th className="py-2.5 px-4">Pos</th>
+                  <th className="py-2.5 px-4">Club</th>
+                  <th className="py-2.5 px-3 text-center">P</th>
+                  <th className="py-2.5 px-3 text-center">W/D/L</th>
+                  <th className="py-2.5 px-3 text-center">GD</th>
+                  <th className="py-2.5 px-4 text-center">PTS</th>
+                  <th className="py-2.5 px-3 text-center">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {db.standings.map((r) => (
+                  <tr
+                    key={r.id}
+                    className={r.isNgindaWarriors ? 'bg-[#08783E] text-white font-bold' : ''}
+                  >
+                    <td className="py-2.5 px-4">{r.position}</td>
+                    <td className="py-2.5 px-4">{r.clubName}</td>
+                    <td className="py-2.5 px-3 text-center">{r.played}</td>
+                    <td className="py-2.5 px-3 text-center">
+                      {r.won}/{r.drawn}/{r.lost}
+                    </td>
+                    <td className="py-2.5 px-3 text-center">{r.goalDifference}</td>
+                    <td className="py-2.5 px-4 text-center font-black">{r.points}</td>
+                    <td className="py-2.5 px-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (confirm(`Remove ${r.clubName} from standings?`)) {
+                            onMutate('delete_standing_row', { id: r.id });
+                          }
+                        }}
+                        className="p-1 rounded text-red-500 hover:text-white hover:bg-red-600 transition"
+                        title="Delete Row"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="p-8 text-center text-sm text-gray-500">
             <Award className="w-8 h-8 text-[#08783E] mx-auto mb-2" />

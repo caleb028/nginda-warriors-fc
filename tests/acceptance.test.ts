@@ -838,3 +838,33 @@ test('Criteria 30: Save Player Deduplication Guarantee & Identity Resolution', a
   );
   assert.equal(vPlayers[0].appearances, 5, 'Player stats must be updated on deduplicated record');
 });
+
+test('Criteria 31: Admin Dashboard Mobile Compatibility & Responsive Architecture', async () => {
+  // 1. Layout Viewport Validation
+  const layoutPath = path.join(__dirname, '..', 'apps', 'control-centre', 'src', 'app', 'layout.tsx');
+  const layoutSrc = fs.readFileSync(layoutPath, 'utf8');
+  assert.ok(layoutSrc.includes("width: 'device-width'"), 'Viewport must include device-width');
+  assert.ok(layoutSrc.includes("viewportFit: 'cover'"), 'Viewport must include viewportFit: cover');
+
+  // 2. Mobile Touch & iOS Auto-Zoom Prevention CSS Rules
+  const cssPath = path.join(__dirname, '..', 'apps', 'control-centre', 'src', 'app', 'globals.css');
+  const cssSrc = fs.readFileSync(cssPath, 'utf8');
+  assert.ok(cssSrc.includes('font-size: 16px !important'), 'Mobile CSS must prevent iOS 120% input auto-zoom');
+  assert.ok(cssSrc.includes('min-height: 44px'), 'Mobile CSS must guarantee 44px minimum touch targets');
+
+  // 3. Mobile Navigation & Drawer Dismissibility
+  const pagePath = path.join(__dirname, '..', 'apps', 'control-centre', 'src', 'app', 'page.tsx');
+  const pageSrc = fs.readFileSync(pagePath, 'utf8');
+  assert.ok(pageSrc.includes('sidebarOpen &&'), 'Must render backdrop overlay when drawer is open on mobile');
+  assert.ok(pageSrc.includes('aria-label="Mobile Navigation Bar"'), 'Must render dedicated mobile navigation bar');
+  assert.ok(pageSrc.includes("setActiveModule('dashboard')"), 'Mobile bar must allow instant 1-tap return to Home');
+  assert.ok(pageSrc.includes("setActiveModule('match-centre')"), 'Mobile bar must allow instant 1-tap score updating');
+  assert.ok(pageSrc.includes("setActiveModule('players')"), 'Mobile bar must allow instant 1-tap squad management');
+  assert.ok(pageSrc.includes("setActiveModule('fixtures')"), 'Mobile bar must allow instant 1-tap fixture management');
+
+  // 4. Standings and Data Table Overflow Protection
+  const footballPath = path.join(__dirname, '..', 'apps', 'control-centre', 'src', 'components', 'FootballModules.tsx');
+  const footballSrc = fs.readFileSync(footballPath, 'utf8');
+  assert.ok(footballSrc.includes('overflow-x-auto'), 'Data tables must be wrapped in overflow-x-auto');
+  assert.ok(footballSrc.includes('min-w-[540px]'), 'League standings must enforce minimum table width for clean scrolling');
+});

@@ -499,7 +499,7 @@ export function CommercialAndCommunityModules({
           </div>
           {db.donations.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm">
+              <table className="w-full min-w-[620px] text-left border-collapse text-sm">
                 <thead>
                   <tr className="bg-[#EEF7EF] text-[#063B25] font-athletic uppercase text-xs">
                     <th className="py-3 px-4">Date</th>
